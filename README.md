@@ -6,6 +6,8 @@ A lightweight, zero-dependency datepicker with a modular plugin architecture.
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Size](https://img.shields.io/badge/core%20size-~27.3KB%20gzipped-brightgreen)
 
+[Live Demo](https://bw-ui.github.io/bw-datepicker)
+
 ## ✨ Features
 
 - 🪶 **Lightweight** - Core is only ~27.3KB gzipped
