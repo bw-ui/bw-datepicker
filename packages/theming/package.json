@@ -1,6 +1,6 @@
 {
   "name": "@bw-ui/datepicker-theming",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Theming plugin for @bw-ui/datepicker - Dark mode, CSS variables, custom themes",
   "main": "dist/bw-theming.min.js",
   "module": "dist/bw-theming.esm.min.js",
@@ -12,8 +12,7 @@
     "./css": "./dist/bw-theming.min.css"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "build": "node build.js"
