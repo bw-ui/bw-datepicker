@@ -49,15 +49,17 @@ export class KeyboardNav {
 
     // Make all day buttons focusable
     const days = this.pickerElement.querySelectorAll('.bw-datepicker__day');
-    days.forEach(day => {
+    days.forEach((day) => {
       if (!day.disabled) {
         day.setAttribute('tabindex', '0');
       }
     });
 
     // Make nav buttons focusable
-    const buttons = this.pickerElement.querySelectorAll('button, [data-action]');
-    buttons.forEach(btn => {
+    const buttons = this.pickerElement.querySelectorAll(
+      'button, [data-action]'
+    );
+    buttons.forEach((btn) => {
       btn.setAttribute('tabindex', '0');
     });
 
@@ -259,7 +261,7 @@ export class KeyboardNav {
       '.bw-datepicker__day:not(:disabled)'
     );
     if (firstDay) {
-      firstDay.focus();
+      firstDay.focus({ preventScroll: true });
       this.announceFocusedDate(firstDay);
     }
   }
@@ -280,27 +282,24 @@ export class KeyboardNav {
   }
 
   setInitialFocus() {
-    // Focus selected date if exists
     const selectedDay = this.pickerElement.querySelector(
       '.bw-datepicker__day--selected:not(:disabled)'
     );
     if (selectedDay) {
       selectedDay.setAttribute('tabindex', '0');
-      selectedDay.focus();
+      selectedDay.focus({ preventScroll: true });
       return;
     }
 
-    // Focus today
     const today = this.pickerElement.querySelector(
       '.bw-datepicker__day--today:not(:disabled)'
     );
     if (today) {
       today.setAttribute('tabindex', '0');
-      today.focus();
+      today.focus({ preventScroll: true });
       return;
     }
 
-    // Focus first day
     this.focusFirstAvailableDay();
   }
 
