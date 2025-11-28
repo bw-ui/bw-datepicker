@@ -1,6 +1,6 @@
 {
   "name": "@bw-ui/datepicker-mobile",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Mobile plugin - Touch support, swipe gestures, orientation handling",
   "main": "dist/bw-mobile.min.js",
   "module": "dist/bw-mobile.esm.min.js",
@@ -12,8 +12,7 @@
     "./css": "./dist/bw-mobile.min.css"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "build": "node build.js"

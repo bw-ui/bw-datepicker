@@ -1,16 +1,17 @@
 import * as esbuild from 'esbuild';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 
-const minifyCSS = (css) => css
-  .replace(/\/\*[\s\S]*?\*\//g, '')
-  .replace(/\s+/g, ' ')
-  .replace(/\s*([{}:;,])\s*/g, '$1')
-  .replace(/;}/g, '}')
-  .trim();
+const minifyCSS = (css) =>
+  css
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/\s*([{}:;,])\s*/g, '$1')
+    .replace(/;}/g, '}')
+    .trim();
 
 async function build() {
   console.log('📦 Building @bw-ui/datepicker...');
-  
+
   if (!existsSync('dist')) mkdirSync('dist');
 
   // IIFE (for <script> tag)
@@ -19,7 +20,7 @@ async function build() {
     outfile: 'dist/bw-datepicker.min.js',
     bundle: true,
     minify: true,
-    sourcemap: true,
+    sourcemap: false,
     format: 'iife',
     globalName: 'BW',
     platform: 'browser',
@@ -32,7 +33,7 @@ async function build() {
     outfile: 'dist/bw-datepicker.esm.min.js',
     bundle: true,
     minify: true,
-    sourcemap: true,
+    sourcemap: false,
     format: 'esm',
     platform: 'browser',
     target: ['es2020'],

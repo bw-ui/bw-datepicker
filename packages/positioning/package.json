@@ -1,6 +1,6 @@
 {
   "name": "@bw-ui/datepicker-positioning",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Positioning plugin - Auto-flip, collision detection, viewport constraints",
   "main": "dist/bw-positioning.min.js",
   "module": "dist/bw-positioning.esm.min.js",
@@ -11,8 +11,7 @@
     }
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "build": "node build.js"

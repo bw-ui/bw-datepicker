@@ -1,7 +1,13 @@
 import * as esbuild from 'esbuild';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 
-const minifyCSS = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').replace(/\s*([{}:;,])\s*/g, '$1').replace(/;}/g, '}').trim();
+const minifyCSS = (css) =>
+  css
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/\s*([{}:;,])\s*/g, '$1')
+    .replace(/;}/g, '}')
+    .trim();
 
 async function build() {
   console.log('📦 Building @bw-ui/datepicker-accessibility...');
@@ -10,15 +16,24 @@ async function build() {
   await esbuild.build({
     entryPoints: ['src/plugin.js'],
     outfile: 'dist/bw-accessibility.min.js',
-    bundle: true, minify: true, sourcemap: true,
-    format: 'iife', globalName: 'BWAccessibility', platform: 'browser', target: ['es2020'],
+    bundle: true,
+    minify: true,
+    sourcemap: false,
+    format: 'iife',
+    globalName: 'BWAccessibility',
+    platform: 'browser',
+    target: ['es2020'],
   });
 
   await esbuild.build({
     entryPoints: ['src/plugin.js'],
     outfile: 'dist/bw-accessibility.esm.min.js',
-    bundle: true, minify: true, sourcemap: true,
-    format: 'esm', platform: 'browser', target: ['es2020'],
+    bundle: true,
+    minify: true,
+    sourcemap: false,
+    format: 'esm',
+    platform: 'browser',
+    target: ['es2020'],
   });
 
   try {
