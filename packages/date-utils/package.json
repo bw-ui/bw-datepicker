@@ -1,0 +1,28 @@
+{
+  "name": "@bw-ui/datepicker-date-utils",
+  "version": "1.0.0",
+  "description": "Date utilities plugin - Advanced parsing, formatting, calculations",
+  "main": "dist/bw-date-utils.min.js",
+  "module": "dist/bw-date-utils.esm.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/bw-date-utils.esm.min.js",
+      "require": "./dist/bw-date-utils.min.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "node build.js"
+  },
+  "peerDependencies": {
+    "@bw-ui/datepicker": "^1.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  },
+  "license": "MIT",
+  "type": "module"
+}

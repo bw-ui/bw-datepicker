@@ -1,0 +1,29 @@
+{
+  "name": "@bw-ui/datepicker-mobile",
+  "version": "1.0.0",
+  "description": "Mobile plugin - Touch support, swipe gestures, orientation handling",
+  "main": "dist/bw-mobile.min.js",
+  "module": "dist/bw-mobile.esm.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/bw-mobile.esm.min.js",
+      "require": "./dist/bw-mobile.min.js"
+    },
+    "./css": "./dist/bw-mobile.min.css"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "node build.js"
+  },
+  "peerDependencies": {
+    "@bw-ui/datepicker": "^1.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  },
+  "license": "MIT",
+  "type": "module"
+}

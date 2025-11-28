@@ -1,0 +1,39 @@
+{
+  "name": "bw-ui-datepicker",
+  "version": "0.2.0",
+  "description": "Black & White UI DatePicker - Lightweight, modular datepicker with plugin architecture",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "node build.js",
+    "build:core": "cd packages/core && node build.js",
+    "build:theming": "cd packages/theming && node build.js",
+    "build:accessibility": "cd packages/accessibility && node build.js",
+    "build:positioning": "cd packages/positioning && node build.js",
+    "build:mobile": "cd packages/mobile && node build.js",
+    "build:input-handler": "cd packages/input-handler && node build.js",
+    "build:date-utils": "cd packages/date-utils && node build.js"
+  },
+  "keywords": [
+    "datepicker",
+    "calendar",
+    "date",
+    "vanilla-js",
+    "no-dependencies",
+    "lightweight",
+    "plugin",
+    "modular"
+  ],
+  "author": "BW UI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AnsKaz-dev/bw-ui-datepicker"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  },
+  "type": "module"
+}

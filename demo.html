@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BW DatePicker v0.2.0 - Demo</title>
+  <link rel="stylesheet" href="./packages/core/dist/bw-datepicker.min.css">
+  <link rel="stylesheet" href="./packages/theming/dist/bw-theming.min.css">
+  <link rel="stylesheet" href="./packages/accessibility/dist/bw-accessibility.min.css">
+  <link rel="stylesheet" href="./packages/mobile/dist/bw-mobile.min.css">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f5f5f5;
+    }
+    h1 { margin-bottom: 10px; }
+    .badge {
+      display: inline-block;
+      background: #1a1a1a;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-bottom: 30px;
+    }
+    .demo-section {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .demo-section h3 { margin-top: 0; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+    .form-group input {
+      width: 100%;
+      max-width: 300px;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .form-group input:focus { outline: none; border-color: #1a1a1a; }
+    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+    .btn {
+      padding: 8px 16px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn:hover { background: #f0f0f0; }
+    .output {
+      margin-top: 15px;
+      padding: 12px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+    .plugins-used {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .plugin-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🗓️ BW DatePicker</h1>
+  <span class="badge">v0.2.0 - Plugin Architecture</span>
+
+  <!-- Demo 1: Full Featured -->
+  <div class="demo-section">
+    <h3>✨ Full Featured</h3>
+    <p>All plugins enabled: theming, accessibility, positioning, mobile, input-handler</p>
+    <div class="form-group">
+      <label for="demo-full">Select Date:</label>
+      <input type="text" id="demo-full" placeholder="Click or type" autocomplete="off">
+    </div>
+    <div class="btn-group">
+      <button class="btn" onclick="fullPicker.open()">Open</button>
+      <button class="btn" onclick="fullPicker.close()">Close</button>
+      <button class="btn" onclick="fullPicker.today()">Today</button>
+      <button class="btn" onclick="fullPicker.clear()">Clear</button>
+      <button class="btn" onclick="fullPicker.toggleTheme()">Toggle Theme</button>
+    </div>
+    <div class="output" id="output-full">Selected: none</div>
+    <div class="plugins-used">
+      <span class="plugin-tag">theming</span>
+      <span class="plugin-tag">accessibility</span>
+      <span class="plugin-tag">positioning</span>
+      <span class="plugin-tag">mobile</span>
+      <span class="plugin-tag">input-handler</span>
+    </div>
+  </div>
+
+  <!-- Demo 2: Core Only -->
+  <div class="demo-section">
+    <h3>🪶 Core Only (~8KB)</h3>
+    <p>No plugins - just the essential datepicker</p>
+    <div class="form-group">
+      <label for="demo-core">Select Date:</label>
+      <input type="text" id="demo-core" placeholder="Click to open">
+    </div>
+    <div class="output" id="output-core">Selected: none</div>
+    <div class="plugins-used">
+      <span class="plugin-tag">core only</span>
+    </div>
+  </div>
+
+  <!-- Demo 3: Modal Mode -->
+  <div class="demo-section">
+    <h3>🔲 Modal Mode</h3>
+    <p>Opens as a centered modal overlay</p>
+    <div class="form-group">
+      <label for="demo-modal">Select Date:</label>
+      <input type="text" id="demo-modal" placeholder="Click to open modal">
+    </div>
+    <div class="output" id="output-modal">Selected: none</div>
+  </div>
+
+  <!-- Demo 4: Inline Mode -->
+  <div class="demo-section">
+    <h3>📅 Inline Mode</h3>
+    <p>Always visible calendar</p>
+    <div class="form-group">
+      <label for="demo-inline">Synced Input:</label>
+      <input type="text" id="demo-inline" placeholder="Value syncs with calendar">
+    </div>
+    <div class="output" id="output-inline">Selected: none</div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="./packages/core/dist/bw-datepicker.min.js"></script>
+  <script src="./packages/theming/dist/bw-theming.min.js"></script>
+  <script src="./packages/accessibility/dist/bw-accessibility.min.js"></script>
+  <script src="./packages/positioning/dist/bw-positioning.min.js"></script>
+  <script src="./packages/mobile/dist/bw-mobile.min.js"></script>
+  <script src="./packages/input-handler/dist/bw-input-handler.min.js"></script>
+
+  <script>
+    const { BWDatePicker } = BW;
+
+    // Demo 1: Full Featured
+    window.fullPicker = new BWDatePicker('#demo-full', {
+      mode: 'popup',
+      format: 'DD/MM/YYYY',
+    })
+    .use(BWTheming.ThemingPlugin, { theme: 'light' })
+    .use(BWAccessibility.AccessibilityPlugin)
+    .use(BWPositioning.PositioningPlugin)
+    .use(BWMobile.MobilePlugin)
+    .use(BWInputHandler.InputHandlerPlugin, { format: 'DD/MM/YYYY' });
+
+    fullPicker.on('date:changed', ({ date }) => {
+      document.getElementById('output-full').textContent = 
+        `Selected: ${date ? date.toDateString() : 'none'}`;
+    });
+
+    // Demo 2: Core Only
+    window.corePicker = new BWDatePicker('#demo-core', {
+      mode: 'popup',
+    });
+    corePicker.on('date:changed', ({ date }) => {
+      document.getElementById('output-core').textContent = 
+        `Selected: ${date ? date.toDateString() : 'none'}`;
+    });
+
+    // Demo 3: Modal Mode
+    window.modalPicker = new BWDatePicker('#demo-modal', {
+      mode: 'modal',
+    })
+    .use(BWTheming.ThemingPlugin, { theme: 'dark' })
+    .use(BWAccessibility.AccessibilityPlugin);
+
+    modalPicker.on('date:changed', ({ date }) => {
+      document.getElementById('output-modal').textContent = 
+        `Selected: ${date ? date.toDateString() : 'none'}`;
+    });
+
+    // Demo 4: Inline Mode
+    window.inlinePicker = new BWDatePicker('#demo-inline', {
+      mode: 'inline',
+    })
+    .use(BWTheming.ThemingPlugin, { theme: 'light' });
+
+    inlinePicker.on('date:changed', ({ date }) => {
+      document.getElementById('output-inline').textContent = 
+        `Selected: ${date ? date.toDateString() : 'none'}`;
+    });
+
+    console.log('✅ BW DatePicker v0.2.0 Demo loaded');
+  </script>
+</body>
+</html>

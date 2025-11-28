@@ -1,0 +1,101 @@
+/**
+ * ============================================================================
+ * Black & White: UI Engineering
+ * Mobile & Responsive Styles
+ * ============================================================================
+ * 
+ * Mobile-optimized styles and touch interactions
+ * 
+ * @version 1.0.0
+ * @license MIT
+ * ============================================================================
+ */
+
+/* ==================== MOBILE BREAKPOINT ==================== */
+@media (max-width: 640px) {
+  /* Container */
+  .bw-datepicker {
+    width: var(--bw-datepicker-width-mobile);
+    max-width: 100%;
+    padding: var(--bw-spacing-3);
+  }
+
+  /* Larger touch targets */
+  .bw-datepicker__day {
+    width: var(--bw-size-cell-mobile);
+    height: var(--bw-size-cell-mobile);
+    font-size: var(--bw-font-size-base);
+  }
+
+  .bw-datepicker__nav-button {
+    width: var(--bw-size-button);
+    height: var(--bw-size-button);
+  }
+
+  /* Modal takes full screen on mobile */
+  .bw-datepicker--modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: none;
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bw-datepicker--modal .bw-datepicker__calendar {
+    flex: 1;
+    align-content: center;
+  }
+}
+
+/* ==================== TOUCH OPTIMIZATIONS ==================== */
+@media (pointer: coarse) {
+  /* Increase touch target sizes */
+  .bw-datepicker__day {
+    width: var(--bw-size-cell-mobile);
+    height: var(--bw-size-cell-mobile);
+  }
+
+  /* Remove hover states on touch devices */
+  .bw-datepicker__day:hover:not(:disabled):not(.bw-datepicker__day--selected) {
+    background: transparent;
+  }
+
+  .bw-datepicker__nav-button:hover:not(:disabled) {
+    background: transparent;
+  }
+
+  /* Add active (touch) states instead */
+  .bw-datepicker__day:active:not(:disabled) {
+    background: var(--bw-color-active);
+    transform: scale(0.95);
+  }
+
+  .bw-datepicker__nav-button:active:not(:disabled) {
+    background: var(--bw-color-active);
+    transform: scale(0.95);
+  }
+}
+
+/* ==================== LANDSCAPE ORIENTATION ==================== */
+@media (max-width: 640px) and (orientation: landscape) {
+  .bw-datepicker {
+    padding: var(--bw-spacing-2);
+  }
+
+  .bw-datepicker__header {
+    min-height: 40px;
+    padding-bottom: var(--bw-spacing-2);
+  }
+
+  .bw-datepicker__footer {
+    min-height: 40px;
+    padding-top: var(--bw-spacing-2);
+  }
+}

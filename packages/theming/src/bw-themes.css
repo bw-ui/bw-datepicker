@@ -1,0 +1,61 @@
+/**
+ * ============================================================================
+ * @bw-ui/datepicker-theming
+ * Theme System: Light & Dark Modes
+ * ============================================================================
+ */
+
+/* ==================== DARK THEME ==================== */
+[data-bw-theme='dark'] {
+  /* Picker */
+  --bw-picker-bg: #1e293b;
+  --bw-picker-border: #334155;
+  --bw-picker-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+
+  /* Text */
+  --bw-text-primary: #f1f5f9;
+  --bw-text-secondary: #cbd5e1;
+  --bw-text-disabled: #64748b;
+
+  /* Buttons */
+  --bw-btn-hover-bg: #334155;
+
+  /* Days */
+  --bw-day-hover-bg: #334155;
+  --bw-day-selected-bg: #3b82f6;
+  --bw-day-selected-text: #ffffff;
+  --bw-day-today-border: #3b82f6;
+}
+
+/* ==================== AUTO THEME (System Preference) ==================== */
+@media (prefers-color-scheme: dark) {
+  [data-bw-theme='auto'] {
+    --bw-picker-bg: #1e293b;
+    --bw-picker-border: #334155;
+    --bw-picker-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    --bw-text-primary: #f1f5f9;
+    --bw-text-secondary: #cbd5e1;
+    --bw-text-disabled: #64748b;
+    --bw-btn-hover-bg: #334155;
+    --bw-day-hover-bg: #334155;
+    --bw-day-selected-bg: #3b82f6;
+    --bw-day-selected-text: #ffffff;
+    --bw-day-today-border: #3b82f6;
+  }
+}
+
+/* ==================== HIGH CONTRAST MODE ==================== */
+@media (prefers-contrast: high) {
+  .bw-datepicker {
+    border-width: 2px;
+  }
+
+  .bw-datepicker__day:focus-visible {
+    outline-width: 3px;
+    outline-offset: 1px;
+  }
+
+  .bw-datepicker__day--selected {
+    border: 2px solid var(--bw-day-selected-bg);
+  }
+}

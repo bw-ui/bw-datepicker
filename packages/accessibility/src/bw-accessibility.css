@@ -1,0 +1,93 @@
+/**
+ * ============================================================================
+ * Black & White: UI Engineering
+ * Accessibility Enhancements
+ * ============================================================================
+ * 
+ * WCAG 2.1 AA compliant styles
+ * Screen reader and keyboard navigation support
+ * 
+ * @version 1.0.0
+ * @license MIT
+ * ============================================================================
+ */
+
+/* ==================== SCREEN READER ONLY ==================== */
+.bw-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ==================== FOCUS VISIBLE (Keyboard Only) ==================== */
+.bw-datepicker *:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.bw-datepicker *:focus-visible {
+  outline: 2px solid var(--bw-color-primary);
+  outline-offset: 2px;
+  z-index: var(--bw-z-above);
+}
+
+/* ==================== HIGH CONTRAST MODE ==================== */
+@media (prefers-contrast: high) {
+  .bw-datepicker {
+    border-width: 2px;
+  }
+
+  .bw-datepicker__day--selected {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
+  }
+
+  .bw-datepicker__day:focus-visible {
+    outline-width: 3px;
+  }
+}
+
+/* ==================== REDUCED MOTION ==================== */
+@media (prefers-reduced-motion: reduce) {
+  .bw-datepicker * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==================== LIVE REGION ==================== */
+.bw-datepicker__live-region {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ==================== KEYBOARD FOCUS INDICATORS ==================== */
+.bw-datepicker__day[data-bw-focused='true'] {
+  outline: 2px solid var(--bw-color-primary);
+  outline-offset: 2px;
+  z-index: var(--bw-z-above);
+}
+
+/* ==================== DISABLED STATE CLARITY ==================== */
+.bw-datepicker__day--disabled {
+  text-decoration: line-through;
+}
+
+/* ==================== TOUCH TARGET SIZE (WCAG 2.5.5) ==================== */
+@media (pointer: coarse) {
+  .bw-datepicker__day,
+  .bw-datepicker__nav-button,
+  .bw-datepicker__button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
