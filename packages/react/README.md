@@ -69,6 +69,8 @@ All BW DatePicker plugins work with the React wrapper:
 npm install @bw-ui/datepicker-theming @bw-ui/datepicker-locale
 ```
 
+{% raw %}
+
 ```jsx
 import { BWDatePicker } from '@bw-ui/datepicker-react';
 import { ThemingPlugin } from '@bw-ui/datepicker-theming';
@@ -92,6 +94,8 @@ function App() {
   );
 }
 ```
+
+{% endraw %}
 
 ### Available Plugins
 
@@ -156,6 +160,8 @@ function App() {
 
 ### Styling
 
+{% raw %}
+
 ```jsx
 <BWDatePicker
   className="my-container" // Container class
@@ -164,6 +170,8 @@ function App() {
   inputStyle={{ padding: 10 }} // Input styles
 />
 ```
+
+{% endraw %}
 
 ## 🛠️ Ref Methods
 
@@ -208,6 +216,8 @@ function App() {
 
 ## 🎣 Hook API
 
+{% raw %}
+
 ```jsx
 const {
   ref, // Attach to input
@@ -234,6 +244,8 @@ const {
   onClose: () => {},
 });
 ```
+
+{% endraw %}
 
 ## 📘 TypeScript
 
