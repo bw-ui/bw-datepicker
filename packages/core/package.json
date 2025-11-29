@@ -1,6 +1,6 @@
 {
   "name": "@bw-ui/datepicker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Lightweight, zero-dependency datepicker with plugin architecture",
   "main": "dist/bw-datepicker.min.js",
   "module": "dist/bw-datepicker.esm.min.js",
@@ -13,7 +13,8 @@
     "./css": "./dist/bw-datepicker.min.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "src/index.d.ts"
   ],
   "scripts": {
     "build": "node build.js"

@@ -18,7 +18,10 @@
  * @description Dynamic CSS injection and management
  */
 
-const DATA_ATTRIBUTES = { THEME: 'data-bw-theme', INSTANCE: 'data-bw-instance' };
+const DATA_ATTRIBUTES = {
+  THEME: 'data-bw-theme',
+  INSTANCE: 'data-bw-instance',
+};
 
 export class StyleInjector {
   /**

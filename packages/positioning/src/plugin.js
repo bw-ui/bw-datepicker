@@ -1,46 +1,71 @@
 /**
  * @bw-ui/datepicker-positioning
- * Positioning Plugin - Auto-flip, collision detection, viewport constraints
  */
 
 import { Positioner } from './Positioner.js';
-import { AutoFlip } from './AutoFlip.js';
-import { Collision } from './Collision.js';
-import { ViewportDetector } from './ViewportDetector.js';
 
 export const PositioningPlugin = {
   name: 'positioning',
-  
+
   init(api, options = {}) {
     const opts = api.getOptions();
     if (opts.mode === 'inline' || opts.mode === 'modal') return null;
 
     const positioner = new Positioner({
-      placement: options.placement || opts.placement || 'bottom',
-      alignment: options.alignment || opts.alignment || 'left',
-      autoFlip: options.autoFlip !== false,
+      placement: options.placement || 'bottom',
+      alignment: options.alignment || 'left',
+      autoFlip: options.autoFlip === true,
       offset: options.offset || { x: 0, y: 8 },
       constrainToViewport: options.constrainToViewport !== false,
       margin: options.margin || 8,
+      zIndex: options.zIndex || 1000,
+      onPosition: options.onPosition || null,
     });
 
     const eventBus = api.getEventBus();
     const pickerEl = api.getPickerElement();
     const inputEl = api.getInputElement();
 
+    let scrollHandler = null;
+    let resizeHandler = null;
+
+    const doPosition = () => {
+      positioner.position(pickerEl, inputEl);
+    };
+
     eventBus.on('picker:opened', () => {
       if (pickerEl && inputEl) {
-        positioner.position(pickerEl, inputEl);
+        requestAnimationFrame(doPosition);
+
+        // Add scroll/resize handlers
+        scrollHandler = () => doPosition();
+        resizeHandler = () => doPosition();
+        window.addEventListener('scroll', scrollHandler, {
+          passive: true,
+          capture: true,
+        });
+        window.addEventListener('resize', resizeHandler, { passive: true });
+      }
+    });
+
+    eventBus.on('picker:closed', () => {
+      if (scrollHandler) {
+        window.removeEventListener('scroll', scrollHandler, { capture: true });
+        scrollHandler = null;
+      }
+      if (resizeHandler) {
+        window.removeEventListener('resize', resizeHandler);
+        resizeHandler = null;
       }
     });
 
     return positioner;
   },
-  
+
   destroy(instance) {
     instance?.destroy?.();
-  }
+  },
 };
 
-export { Positioner, AutoFlip, Collision, ViewportDetector };
+export { Positioner };
 export default PositioningPlugin;

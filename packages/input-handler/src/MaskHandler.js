@@ -20,10 +20,10 @@ export class MaskHandler {
 
   applyMask(input, previousValue = '') {
     if (!input) return '';
-    
+
     // Remove non-digits
     let cleaned = String(input).replace(/\D/g, '');
-    
+
     if (cleaned.length === 0) return '';
 
     // Limit to 8 digits (DDMMYYYY)
@@ -31,7 +31,7 @@ export class MaskHandler {
 
     // Build result with delimiters
     let result = '';
-    
+
     for (let i = 0; i < cleaned.length; i++) {
       // Add delimiter after DD (position 2) and MM (position 4)
       if (i === 2 || i === 4) {
@@ -45,17 +45,17 @@ export class MaskHandler {
 
   getCursorPosition(input, cursorPos, previousValue) {
     const digits = input.replace(/\D/g, '');
-    
+
     // Auto-advance after completing day or month
     if (digits.length === 2 && cursorPos === 2) return 3;
     if (digits.length === 4 && cursorPos === 5) return 6;
-    
+
     return cursorPos;
   }
 
   parse(input) {
     if (!input) return null;
-    
+
     const cleaned = String(input).replace(/\D/g, '');
     if (cleaned.length < 8) return null;
 

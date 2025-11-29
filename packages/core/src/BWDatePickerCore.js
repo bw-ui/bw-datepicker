@@ -169,11 +169,11 @@ export class DatePickerCore {
    * @param {Object|Function} plugin - Plugin object or class
    * @returns {DatePickerCore}
    */
-  use(plugin) {
+  use(plugin, options = {}) {
     if (!this.#pluginSystem) {
       this.#pluginSystem = new PluginSystem(this);
     }
-    this.#pluginSystem.register(plugin);
+    this.#pluginSystem.register(plugin, options);
     return this;
   }
 

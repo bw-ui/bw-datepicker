@@ -1,6 +1,6 @@
 {
   "name": "@bw-ui/datepicker-input-handler",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Input handler plugin - Masking, validation, manual input",
   "main": "dist/bw-input-handler.min.js",
   "module": "dist/bw-input-handler.esm.min.js",
@@ -10,8 +10,10 @@
       "require": "./dist/bw-input-handler.min.js"
     }
   },
+  "types": "src/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "src/index.d.ts"
   ],
   "scripts": {
     "build": "node build.js"
@@ -23,5 +25,13 @@
     "esbuild": "^0.20.0"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bw-ui/bw-datepicker"
+  },
+  "bugs": {
+    "url": "https://github.com/bw-ui/bw-datepicker/issues"
+  },
+  "homepage": "https://github.com/bw-ui/bw-datepicker",
   "type": "module"
 }

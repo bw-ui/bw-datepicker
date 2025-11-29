@@ -5,7 +5,10 @@
 
 import { ViewportDetector } from './ViewportDetector.js';
 import { Collision } from './Collision.js';
-const DATA_ATTRIBUTES = { THEME: 'data-bw-theme', INSTANCE: 'data-bw-instance' };
+const DATA_ATTRIBUTES = {
+  THEME: 'data-bw-theme',
+  INSTANCE: 'data-bw-instance',
+};
 
 export class AutoFlip {
   /**
@@ -130,24 +133,23 @@ export class AutoFlip {
     const { placement = 'bottom', alignment = 'left' } = preferences;
     const { x = 0, y = 4 } = offsets;
 
-    // Get available space
     const space = ViewportDetector.getAvailableSpace(triggerElement);
     const pickerRect = pickerElement.getBoundingClientRect();
 
-    // Determine best vertical placement
+    // Start with user's preferred placement
     let finalPlacement = placement;
-    if (
-      placement === 'bottom' &&
-      space.bottom < pickerRect.height &&
-      space.top > space.bottom
-    ) {
-      finalPlacement = 'top';
-    } else if (
-      placement === 'top' &&
-      space.top < pickerRect.height &&
-      space.bottom > space.top
-    ) {
-      finalPlacement = 'bottom';
+
+    // Only flip if there's NOT enough space for preferred placement
+    if (placement === 'bottom' && space.bottom < pickerRect.height) {
+      // Not enough space below, check if top has more
+      if (space.top > space.bottom) {
+        finalPlacement = 'top';
+      }
+    } else if (placement === 'top' && space.top < pickerRect.height) {
+      // Not enough space above, check if bottom has more
+      if (space.bottom > space.top) {
+        finalPlacement = 'bottom';
+      }
     }
 
     // Calculate vertical position
@@ -158,14 +160,15 @@ export class AutoFlip {
       y
     );
 
-    // Determine best horizontal alignment
+    // Keep user's alignment preference
     let finalAlignment = alignment;
     const triggerRect = triggerElement.getBoundingClientRect();
+    const viewport = ViewportDetector.getViewportDimensions();
 
+    // Only change alignment if it overflows
     if (
       alignment === 'left' &&
-      triggerRect.left + pickerRect.width >
-        space.left + triggerRect.width + space.right
+      triggerRect.left + pickerRect.width > viewport.width
     ) {
       finalAlignment = 'right';
     } else if (

@@ -99,3 +99,8 @@
     padding-top: var(--bw-spacing-2);
   }
 }
+/* ==================== TOUCH FEEDBACK ==================== */
+.bw-active {
+  background: var(--bw-color-active, rgba(0, 0, 0, 0.1)) !important;
+  transform: scale(0.95);
+}

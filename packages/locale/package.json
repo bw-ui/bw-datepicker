@@ -1,16 +1,9 @@
 {
-  "name": "@bw-ui/datepicker-accessibility",
-  "version": "1.0.4",
-  "description": "Accessibility plugin - Keyboard nav, ARIA, focus trap, screen readers",
-  "main": "dist/bw-accessibility.min.js",
-  "module": "dist/bw-accessibility.esm.min.js",
-  "exports": {
-    ".": {
-      "import": "./dist/bw-accessibility.esm.min.js",
-      "require": "./dist/bw-accessibility.min.js"
-    },
-    "./css": "./dist/bw-accessibility.min.css"
-  },
+  "name": "@bw-ui/datepicker-locale",
+  "version": "1.0.1",
+  "description": "Locale plugin for BW DatePicker - Internationalization support with 15+ languages",
+  "main": "dist/bw-locale.min.js",
+  "module": "dist/bw-locale.esm.min.js",
   "types": "src/index.d.ts",
   "files": [
     "dist",
@@ -19,13 +12,25 @@
   "scripts": {
     "build": "node build.js"
   },
+  "keywords": [
+    "datepicker",
+    "locale",
+    "i18n",
+    "internationalization",
+    "localization",
+    "translation",
+    "bw-ui",
+    "calendar",
+    "plugin"
+  ],
+  "author": "BW UI",
+  "license": "MIT",
   "peerDependencies": {
     "@bw-ui/datepicker": "^1.0.0"
   },
   "devDependencies": {
     "esbuild": "^0.20.0"
   },
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/bw-ui/bw-datepicker"

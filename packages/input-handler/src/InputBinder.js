@@ -38,10 +38,14 @@ export class InputBinder {
 
     this.attachListeners();
     this.setPlaceholder();
+    this.listenToPickerChanges();
   }
 
   attachListeners() {
-    if (!this.options.allowManualInput) return;
+    if (!this.options.allowManualInput) {
+      this.inputElement.setAttribute('readonly', 'true');
+      return;
+    }
 
     this.listeners.input = this.handleInput.bind(this);
     this.listeners.keydown = this.handleKeydown.bind(this);
@@ -59,10 +63,10 @@ export class InputBinder {
   handleInput(e) {
     const input = e.target;
     const value = input.value;
-    
+
     // Apply mask
     const masked = this.maskHandler.applyMask(value, this.previousValue);
-    
+
     // Update input
     input.value = masked;
     this.previousValue = masked;
@@ -105,7 +109,9 @@ export class InputBinder {
   handlePaste(e) {
     e.preventDefault();
 
-    const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+    const pastedText = (e.clipboardData || window.clipboardData).getData(
+      'text'
+    );
     const cleaned = pastedText.replace(/\D/g, '');
 
     if (cleaned.length >= 6) {
@@ -187,7 +193,10 @@ export class InputBinder {
     if (!errorEl || !errorEl.classList.contains('bw-datepicker-input__error')) {
       errorEl = document.createElement('div');
       errorEl.className = 'bw-datepicker-input__error';
-      this.inputElement.parentNode.insertBefore(errorEl, this.inputElement.nextSibling);
+      this.inputElement.parentNode.insertBefore(
+        errorEl,
+        this.inputElement.nextSibling
+      );
     }
 
     errorEl.textContent = message;
@@ -221,8 +230,20 @@ export class InputBinder {
     });
   }
 
+  listenToPickerChanges() {
+    if (this.controller && this.controller.on) {
+      this.controller.on('date:changed', ({ date }) => {
+        if (date) {
+          const formatted = this.maskHandler.formatDate(date);
+          this.inputElement.value = formatted;
+          this.previousValue = formatted;
+        }
+      });
+    }
+  }
+
   destroy() {
-    Object.keys(this.listeners).forEach(key => {
+    Object.keys(this.listeners).forEach((key) => {
       this.inputElement.removeEventListener(key, this.listeners[key]);
     });
     this.clearError();

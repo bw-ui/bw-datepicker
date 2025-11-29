@@ -24,7 +24,7 @@ export class PluginSystem {
    * Register a plugin
    * @param {Object} plugin - Plugin with name, init, destroy
    */
-  register(plugin) {
+  register(plugin, options = {}) {
     if (!plugin?.name) {
       throw new Error('Plugin must have a name');
     }
@@ -43,7 +43,7 @@ export class PluginSystem {
 
     // Initialize if init function exists
     if (plugin.init) {
-      entry.instance = plugin.init(this.#createApi(), plugin.options || {});
+      entry.instance = plugin.init(this.#createApi(), options);
     }
 
     return true;

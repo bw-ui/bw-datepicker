@@ -3,257 +3,1969 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BW DatePicker v1.0.0 - Demo</title>
+    <title>BW DatePicker | Black & White UI Engineering</title>
 
-    <!-- CDN CSS -->
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- BW DatePicker Core CSS -->
     <link
       rel="stylesheet"
-      href="https://unpkg.com/@bw-ui/datepicker@1.0.0/dist/bw-datepicker.min.css"
+      href="https://unpkg.com/@bw-ui/datepicker/dist/bw-datepicker.min.css"
     />
     <link
       rel="stylesheet"
-      href="https://unpkg.com/@bw-ui/datepicker-theming@1.0.0/dist/bw-theming.min.css"
+      href="https://unpkg.com/@bw-ui/datepicker-theming/dist/bw-themes.min.css"
     />
     <link
       rel="stylesheet"
-      href="https://unpkg.com/@bw-ui/datepicker-accessibility@1.0.0/dist/bw-accessibility.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/@bw-ui/datepicker-mobile@1.0.0/dist/bw-mobile.min.css"
+      href="https://unpkg.com/@bw-ui/datepicker-accessibility/dist/bw-accessibility.min.css"
     />
 
     <style>
+      :root {
+        --bg-primary: #0a0a0a;
+        --bg-secondary: #111111;
+        --bg-card: #161616;
+        --bg-code: #0d0d0d;
+        --border-color: #2a2a2a;
+        --border-hover: #3a3a3a;
+        --text-primary: #ffffff;
+        --text-secondary: #888888;
+        --text-muted: #555555;
+        --accent: #ffffff;
+        --accent-dim: rgba(255, 255, 255, 0.1);
+        --success: #22c55e;
+        --gradient-1: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 8px 48px rgba(0, 0, 0, 0.5);
+        --radius-sm: 6px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+      }
+
       * {
+        margin: 0;
+        padding: 0;
         box-sizing: border-box;
       }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-          sans-serif;
-        max-width: 900px;
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      /* Noise overlay */
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        opacity: 0.03;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      /* Header */
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: rgba(10, 10, 10, 0.8);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .header-inner {
+        max-width: 1400px;
         margin: 0 auto;
-        padding: 40px 20px;
-        background: #f5f5f5;
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
-      h1 {
-        margin-bottom: 10px;
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        color: var(--text-primary);
       }
-      .badge {
-        display: inline-block;
-        background: #1a1a1a;
-        color: white;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        margin-bottom: 30px;
+
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--text-primary);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
-      .demo-section {
-        background: white;
-        border-radius: 12px;
-        padding: 24px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      .logo-icon svg {
+        width: 20px;
+        height: 20px;
       }
-      .demo-section h3 {
-        margin-top: 0;
+
+      .logo-text {
+        font-weight: 600;
+        font-size: 1.125rem;
+        letter-spacing: -0.02em;
       }
-      .form-group {
-        margin-bottom: 15px;
+
+      .logo-text span {
+        color: var(--text-secondary);
+        font-weight: 400;
       }
-      .form-group label {
-        display: block;
-        margin-bottom: 5px;
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .nav a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.875rem;
         font-weight: 500;
+        transition: color 0.2s;
       }
-      .form-group input {
-        width: 100%;
-        max-width: 300px;
-        padding: 10px 12px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 14px;
+
+      .nav a:hover {
+        color: var(--text-primary);
       }
-      .form-group input:focus {
-        outline: none;
-        border-color: #1a1a1a;
+
+      .nav-cta {
+        background: var(--text-primary);
+        color: var(--bg-primary) !important;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
       }
-      .btn-group {
+
+      .nav-cta:hover {
+        opacity: 0.9;
+      }
+
+      /* Hero */
+      .hero {
+        padding: 10rem 2rem 6rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 800px;
+        height: 800px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.03) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        font-size: 0.813rem;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+      }
+
+      .hero-badge-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--success);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .hero h1 {
+        font-size: clamp(2.5rem, 8vw, 5rem);
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+      }
+
+      .hero h1 span {
+        background: linear-gradient(135deg, #fff 0%, #888 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto 3rem;
+        font-weight: 400;
+      }
+
+      .hero-stats {
         display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 15px;
+        justify-content: center;
+        gap: 4rem;
+        margin-bottom: 3rem;
       }
+
+      .stat {
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      .stat-label {
+        font-size: 0.813rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .hero-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
       .btn {
-        padding: 8px 16px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        background: white;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.875rem 1.5rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.938rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
         cursor: pointer;
-        font-size: 14px;
+        border: none;
       }
-      .btn:hover {
-        background: #f0f0f0;
+
+      .btn-primary {
+        background: var(--text-primary);
+        color: var(--bg-primary);
       }
-      .output {
-        margin-top: 15px;
-        padding: 12px;
-        background: #f9f9f9;
-        border-radius: 6px;
-        font-family: monospace;
-        font-size: 13px;
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
       }
-      .plugins-used {
+
+      .btn-secondary {
+        background: transparent;
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+      }
+
+      .btn-secondary:hover {
+        background: var(--bg-card);
+        border-color: var(--border-hover);
+      }
+
+      /* Install Banner */
+      .install-banner {
+        max-width: 600px;
+        margin: 3rem auto 0;
+        background: var(--bg-code);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 1rem 1.5rem;
         display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 10px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
       }
-      .plugin-tag {
-        font-size: 11px;
-        padding: 2px 8px;
-        background: #e0e0e0;
-        border-radius: 4px;
+
+      .install-cmd {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+      }
+
+      .install-cmd span {
+        color: var(--success);
+      }
+
+      .copy-btn {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        padding: 0.5rem 0.75rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+      }
+
+      .copy-btn:hover {
+        background: var(--border-color);
+        color: var(--text-primary);
+      }
+
+      .copy-btn.copied {
+        background: var(--success);
+        border-color: var(--success);
+        color: #fff;
+      }
+
+      /* Section */
+      .section {
+        padding: 6rem 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+
+      .section-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--text-muted);
+        margin-bottom: 0.75rem;
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin-bottom: 1rem;
+      }
+
+      .section-subtitle {
+        font-size: 1.125rem;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* Demo Grid */
+      .demo-grid {
+        display: grid;
+        gap: 2rem;
+      }
+
+      .demo-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        transition: all 0.3s;
+      }
+
+      .demo-card:hover {
+        border-color: var(--border-hover);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .demo-card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .demo-card-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .demo-card-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--accent-dim);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .demo-card-icon svg {
+        width: 20px;
+        height: 20px;
+        stroke: var(--text-primary);
+      }
+
+      .demo-card-title h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.125rem;
+      }
+
+      .demo-card-title p {
+        font-size: 0.813rem;
+        color: var(--text-secondary);
+      }
+
+      .demo-card-badge {
+        font-size: 0.688rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.375rem 0.75rem;
+        background: var(--accent-dim);
+        border-radius: 100px;
+        color: var(--text-secondary);
+      }
+
+      .demo-card-body {
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+
+      @media (max-width: 900px) {
+        .demo-card-body {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .demo-preview {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+        background: var(--bg-secondary);
+        border-radius: var(--radius-md);
+        padding: 2rem;
+      }
+
+      .demo-preview label {
+        font-size: 0.813rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      .demo-preview input {
+        width: 100%;
+        max-width: 280px;
+        padding: 0.875rem 1rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        color: var(--text-primary);
+        font-size: 0.938rem;
+        font-family: inherit;
+        outline: none;
+        transition: all 0.2s;
+      }
+
+      .demo-preview input:focus {
+        border-color: var(--text-primary);
+        box-shadow: 0 0 0 3px var(--accent-dim);
+      }
+
+      .demo-preview input::placeholder {
+        color: var(--text-muted);
+      }
+
+      /* Code Block */
+      .demo-code {
+        position: relative;
+      }
+
+      .code-block {
+        background: var(--bg-code);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+
+      .code-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .code-dots {
+        display: flex;
+        gap: 0.375rem;
+      }
+
+      .code-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--border-color);
+      }
+
+      .code-dot:nth-child(1) {
+        background: #ff5f56;
+      }
+      .code-dot:nth-child(2) {
+        background: #ffbd2e;
+      }
+      .code-dot:nth-child(3) {
+        background: #27ca40;
+      }
+
+      .code-copy {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        padding: 0.375rem 0.625rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-size: 0.688rem;
+        font-weight: 600;
+        font-family: inherit;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+      }
+
+      .code-copy:hover {
+        background: var(--border-color);
+        color: var(--text-primary);
+      }
+
+      .code-copy.copied {
+        background: var(--success);
+        border-color: var(--success);
+        color: #fff;
+      }
+
+      .code-copy svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .code-content {
+        padding: 1rem 1.25rem;
+        overflow-x: auto;
+      }
+
+      .code-content pre {
+        margin: 0;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.813rem;
+        line-height: 1.7;
+      }
+
+      .code-content code {
+        color: var(--text-secondary);
+      }
+
+      /* Syntax Highlighting */
+      .token-keyword {
+        color: #c792ea;
+      }
+      .token-string {
+        color: #c3e88d;
+      }
+      .token-number {
+        color: #f78c6c;
+      }
+      .token-comment {
+        color: #546e7a;
+      }
+      .token-function {
+        color: #82aaff;
+      }
+      .token-property {
+        color: #ffcb6b;
+      }
+      .token-operator {
+        color: #89ddff;
+      }
+      .token-punctuation {
+        color: #89ddff;
+      }
+      .token-class {
+        color: #ffcb6b;
+      }
+
+      /* Packages Grid */
+      .packages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+      }
+
+      .package-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        transition: all 0.2s;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+
+      .package-card:hover {
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
+      }
+
+      .package-name {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.875rem;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .package-desc {
+        font-size: 0.813rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+      }
+
+      .package-meta {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+
+      /* Footer */
+      .footer {
+        border-top: 1px solid var(--border-color);
+        padding: 4rem 2rem;
+        text-align: center;
+      }
+
+      .footer-logo {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+
+      .footer-text {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-bottom: 2rem;
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+      }
+
+      .footer-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: color 0.2s;
+      }
+
+      .footer-links a:hover {
+        color: var(--text-primary);
+      }
+
+      /* Scroll animations */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeIn 0.6s ease forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .delay-1 {
+        animation-delay: 0.1s;
+      }
+      .delay-2 {
+        animation-delay: 0.2s;
+      }
+      .delay-3 {
+        animation-delay: 0.3s;
+      }
+      .delay-4 {
+        animation-delay: 0.4s;
+      }
+
+      /* Dark theme overrides for datepicker */
+      .bw-datepicker {
+        --bw-picker-bg: #1a1a1a;
+        --bw-picker-border: #2a2a2a;
+        --bw-text-primary: #ffffff;
+        --bw-text-secondary: #888888;
+        --bw-day-hover-bg: #2a2a2a;
+        --bw-day-selected-bg: #ffffff;
+        --bw-day-selected-text: #000000;
+        --bw-btn-hover-bg: #2a2a2a;
       }
     </style>
   </head>
   <body>
-    <h1>🗓️ BW DatePicker</h1>
-    <span class="badge">v1.0.0 - Plugin Architecture</span>
-
-    <!-- Demo 1: Full Featured -->
-    <div class="demo-section">
-      <h3>✨ Full Featured</h3>
-      <p>
-        All plugins enabled: theming, accessibility, positioning, mobile,
-        input-handler
-      </p>
-      <div class="form-group">
-        <label for="demo-full">Select Date:</label>
-        <input
-          type="text"
-          id="demo-full"
-          placeholder="Click or type"
-          autocomplete="off"
-        />
+    <!-- Header -->
+    <header class="header">
+      <div class="header-inner">
+        <a href="#" class="logo">
+          <div class="logo-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#000"
+              stroke-width="2.5"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          </div>
+          <span class="logo-text">BW DatePicker <span>v1.0</span></span>
+        </a>
+        <nav class="nav">
+          <a href="#demos">Demos</a>
+          <a href="#packages">Packages</a>
+          <a href="https://github.com/bw-ui/bw-datepicker" target="_blank"
+            >GitHub</a
+          >
+          <a
+            href="https://www.npmjs.com/package/@bw-ui/datepicker"
+            target="_blank"
+            class="nav-cta"
+            >npm</a
+          >
+        </nav>
       </div>
-      <div class="btn-group">
-        <button class="btn" onclick="fullPicker.open()">Open</button>
-        <button class="btn" onclick="fullPicker.close()">Close</button>
-        <button class="btn" onclick="fullPicker.today()">Today</button>
-        <button class="btn" onclick="fullPicker.clear()">Clear</button>
-        <button class="btn" onclick="fullPicker.toggleTheme()">
-          Toggle Theme
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge fade-in">
+        <span class="hero-badge-dot"></span>
+        Production Ready
+      </div>
+      <h1 class="fade-in delay-1"><span>BW DatePicker</span></h1>
+      <p class="hero-subtitle fade-in delay-2">
+        A lightweight, zero-dependency datepicker with a powerful plugin
+        architecture. Built for modern web applications.
+      </p>
+      <div class="hero-stats fade-in delay-3">
+        <div class="stat">
+          <div class="stat-value">~8KB</div>
+          <div class="stat-label">Core Size</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Dependencies</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">7</div>
+          <div class="stat-label">Plugins</div>
+        </div>
+      </div>
+      <div class="hero-actions fade-in delay-4">
+        <a href="#demos" class="btn btn-primary">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+          View Demos
+        </a>
+        <a
+          href="https://github.com/AmaanBilwar/bw-datepicker"
+          target="_blank"
+          class="btn btn-secondary"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+            />
+          </svg>
+          GitHub
+        </a>
+      </div>
+      <div class="install-banner fade-in delay-4">
+        <code class="install-cmd"
+          ><span>npm</span> install @bw-ui/datepicker</code
+        >
+        <button class="copy-btn" data-copy="npm install @bw-ui/datepicker">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2" />
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+          </svg>
+          Copy
         </button>
       </div>
-      <div class="output" id="output-full">Selected: none</div>
-      <div class="plugins-used">
-        <span class="plugin-tag">theming</span>
-        <span class="plugin-tag">accessibility</span>
-        <span class="plugin-tag">positioning</span>
-        <span class="plugin-tag">mobile</span>
-        <span class="plugin-tag">input-handler</span>
-      </div>
-    </div>
+    </section>
 
-    <!-- Demo 2: Core Only -->
-    <div class="demo-section">
-      <h3>🪶 Core Only (~27.3KB)</h3>
-      <p>No plugins - just the essential datepicker</p>
-      <div class="form-group">
-        <label for="demo-core">Select Date:</label>
-        <input type="text" id="demo-core" placeholder="Click to open" />
+    <!-- Demos Section -->
+    <section class="section" id="demos">
+      <div class="section-header">
+        <div class="section-label">Live Examples</div>
+        <h2 class="section-title">Interactive Demos</h2>
+        <p class="section-subtitle">
+          Try each plugin configuration. Click on input fields to open the
+          datepicker.
+        </p>
       </div>
-      <div class="output" id="output-core">Selected: none</div>
-      <div class="plugins-used">
-        <span class="plugin-tag">core only</span>
-      </div>
-    </div>
 
-    <!-- Demo 3: Dark Mode -->
-    <div class="demo-section">
-      <h3>🌙 Dark Mode</h3>
-      <p>Dark theme with accessibility</p>
-      <div class="form-group">
-        <label for="demo-dark">Select Date:</label>
-        <input type="text" id="demo-dark" placeholder="Click to open" />
-      </div>
-      <div class="output" id="output-dark">Selected: none</div>
-    </div>
+      <div class="demo-grid">
+        <!-- Core Demo -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">
+              <div class="demo-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+              </div>
+              <div>
+                <h3>Core</h3>
+                <p>Basic datepicker functionality</p>
+              </div>
+            </div>
+            <span class="demo-card-badge">Required</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-preview">
+              <label for="demo-core">Select a date</label>
+              <input
+                type="text"
+                id="demo-core"
+                placeholder="YYYY-MM-DD"
+                readonly
+              />
+            </div>
+            <div class="demo-code">
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="code-dots">
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                  </div>
+                  <button class="code-copy" data-code="core">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path
+                        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                      />
+                    </svg>
+                    Copy
+                  </button>
+                </div>
+                <div class="code-content">
+                  <pre><code><span class="token-keyword">import</span> { <span class="token-class">BWDatePicker</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker'</span><span class="token-punctuation">;</span>
+<span class="token-keyword">import</span> <span class="token-string">'@bw-ui/datepicker/css'</span><span class="token-punctuation">;</span>
 
-    <!-- Demo 4: Inline Mode -->
-    <div class="demo-section">
-      <h3>📅 Inline Mode</h3>
-      <p>Always visible calendar</p>
-      <div class="form-group">
-        <label for="demo-inline">Synced Input:</label>
-        <input
-          type="text"
-          id="demo-inline"
-          placeholder="Value syncs with calendar"
-        />
-      </div>
-      <div class="output" id="output-inline">Selected: none</div>
-    </div>
+<span class="token-keyword">const</span> picker <span class="token-operator">=</span> <span class="token-keyword">new</span> <span class="token-class">BWDatePicker</span><span class="token-punctuation">(</span><span class="token-string">'#date-input'</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span>
+  <span class="token-property">mode</span><span class="token-punctuation">:</span> <span class="token-string">'popup'</span><span class="token-punctuation">,</span>
+  <span class="token-property">format</span><span class="token-punctuation">:</span> <span class="token-string">'YYYY-MM-DD'</span><span class="token-punctuation">,</span>
+<span class="token-punctuation">}</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <!-- CDN Scripts -->
-    <script src="https://unpkg.com/@bw-ui/datepicker@1.0.0/dist/bw-datepicker.min.js"></script>
-    <script src="https://unpkg.com/@bw-ui/datepicker-theming@1.0.0/dist/bw-theming.min.js"></script>
-    <script src="https://unpkg.com/@bw-ui/datepicker-accessibility@1.0.0/dist/bw-accessibility.min.js"></script>
-    <script src="https://unpkg.com/@bw-ui/datepicker-mobile@1.0.0/dist/bw-mobile.min.js"></script>
-    <script src="https://unpkg.com/@bw-ui/datepicker-input-handler@1.0.0/dist/bw-input-handler.min.js"></script>
+        <!-- Theming Demo -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">
+              <div class="demo-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <circle cx="12" cy="12" r="5" />
+                  <path
+                    d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3>Theming</h3>
+                <p>Dark mode & CSS variables</p>
+              </div>
+            </div>
+            <span class="demo-card-badge">Plugin</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-preview">
+              <label for="demo-theming">Dark theme enabled</label>
+              <input
+                type="text"
+                id="demo-theming"
+                placeholder="YYYY-MM-DD"
+                readonly
+              />
+            </div>
+            <div class="demo-code">
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="code-dots">
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                  </div>
+                  <button class="code-copy" data-code="theming">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path
+                        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                      />
+                    </svg>
+                    Copy
+                  </button>
+                </div>
+                <div class="code-content">
+                  <pre><code><span class="token-keyword">import</span> { <span class="token-class">ThemingPlugin</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker-theming'</span><span class="token-punctuation">;</span>
+
+picker<span class="token-punctuation">.</span><span class="token-function">use</span><span class="token-punctuation">(</span><span class="token-class">ThemingPlugin</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span>
+  <span class="token-property">theme</span><span class="token-punctuation">:</span> <span class="token-string">'dark'</span><span class="token-punctuation">,</span>
+  <span class="token-property">autoDetect</span><span class="token-punctuation">:</span> <span class="token-keyword">true</span><span class="token-punctuation">,</span>
+  <span class="token-property">persist</span><span class="token-punctuation">:</span> <span class="token-keyword">true</span><span class="token-punctuation">,</span>
+<span class="token-punctuation">}</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Positioning Demo -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">
+              <div class="demo-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <path
+                    d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"
+                  />
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                  <line x1="12" y1="22.08" x2="12" y2="12" />
+                </svg>
+              </div>
+              <div>
+                <h3>Positioning</h3>
+                <p>Auto-flip & viewport collision</p>
+              </div>
+            </div>
+            <span class="demo-card-badge">Plugin</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-preview">
+              <label for="demo-positioning">Top placement with auto-flip</label>
+              <input
+                type="text"
+                id="demo-positioning"
+                placeholder="YYYY-MM-DD"
+                readonly
+              />
+            </div>
+            <div class="demo-code">
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="code-dots">
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                  </div>
+                  <button class="code-copy" data-code="positioning">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path
+                        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                      />
+                    </svg>
+                    Copy
+                  </button>
+                </div>
+                <div class="code-content">
+                  <pre><code><span class="token-keyword">import</span> { <span class="token-class">PositioningPlugin</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker-positioning'</span><span class="token-punctuation">;</span>
+
+picker<span class="token-punctuation">.</span><span class="token-function">use</span><span class="token-punctuation">(</span><span class="token-class">PositioningPlugin</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span>
+  <span class="token-property">placement</span><span class="token-punctuation">:</span> <span class="token-string">'top'</span><span class="token-punctuation">,</span>
+  <span class="token-property">alignment</span><span class="token-punctuation">:</span> <span class="token-string">'left'</span><span class="token-punctuation">,</span>
+  <span class="token-property">autoFlip</span><span class="token-punctuation">:</span> <span class="token-keyword">true</span><span class="token-punctuation">,</span>
+  <span class="token-property">offset</span><span class="token-punctuation">:</span> <span class="token-punctuation">{</span> <span class="token-property">x</span><span class="token-punctuation">:</span> <span class="token-number">0</span><span class="token-punctuation">,</span> <span class="token-property">y</span><span class="token-punctuation">:</span> <span class="token-number">8</span> <span class="token-punctuation">}</span><span class="token-punctuation">,</span>
+<span class="token-punctuation">}</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accessibility Demo -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">
+              <div class="demo-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <circle cx="12" cy="4" r="2" />
+                  <path d="M12 6v6M8 18l4-6 4 6M6 10h12" />
+                </svg>
+              </div>
+              <div>
+                <h3>Accessibility</h3>
+                <p>Keyboard nav, ARIA, focus trap</p>
+              </div>
+            </div>
+            <span class="demo-card-badge">Plugin</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-preview">
+              <label for="demo-accessibility">Use arrow keys to navigate</label>
+              <input
+                type="text"
+                id="demo-accessibility"
+                placeholder="YYYY-MM-DD"
+                readonly
+              />
+            </div>
+            <div class="demo-code">
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="code-dots">
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                  </div>
+                  <button class="code-copy" data-code="accessibility">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path
+                        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                      />
+                    </svg>
+                    Copy
+                  </button>
+                </div>
+                <div class="code-content">
+                  <pre><code><span class="token-keyword">import</span> { <span class="token-class">AccessibilityPlugin</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker-accessibility'</span><span class="token-punctuation">;</span>
+
+picker<span class="token-punctuation">.</span><span class="token-function">use</span><span class="token-punctuation">(</span><span class="token-class">AccessibilityPlugin</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span>
+  <span class="token-property">enableKeyboardNav</span><span class="token-punctuation">:</span> <span class="token-keyword">true</span><span class="token-punctuation">,</span>
+  <span class="token-property">enableFocusTrap</span><span class="token-punctuation">:</span> <span class="token-keyword">true</span><span class="token-punctuation">,</span>
+  <span class="token-property">enableAnnouncer</span><span class="token-punctuation">:</span> <span class="token-keyword">true</span><span class="token-punctuation">,</span>
+<span class="token-punctuation">}</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Locale Demo -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">
+              <div class="demo-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <path
+                    d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3>Locale</h3>
+                <p>17+ languages, i18n support</p>
+              </div>
+            </div>
+            <span class="demo-card-badge">Plugin</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-preview">
+              <label for="demo-locale">French locale</label>
+              <input
+                type="text"
+                id="demo-locale"
+                placeholder="JJ/MM/AAAA"
+                readonly
+              />
+            </div>
+            <div class="demo-code">
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="code-dots">
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                  </div>
+                  <button class="code-copy" data-code="locale">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path
+                        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                      />
+                    </svg>
+                    Copy
+                  </button>
+                </div>
+                <div class="code-content">
+                  <pre><code><span class="token-keyword">import</span> { <span class="token-class">LocalePlugin</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker-locale'</span><span class="token-punctuation">;</span>
+
+picker<span class="token-punctuation">.</span><span class="token-function">use</span><span class="token-punctuation">(</span><span class="token-class">LocalePlugin</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span>
+  <span class="token-property">locale</span><span class="token-punctuation">:</span> <span class="token-string">'fr-FR'</span><span class="token-punctuation">,</span>
+  <span class="token-property">firstDayOfWeek</span><span class="token-punctuation">:</span> <span class="token-number">1</span><span class="token-punctuation">,</span>
+<span class="token-punctuation">}</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Demo -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">
+              <div class="demo-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <rect x="5" y="2" width="14" height="20" rx="2" />
+                  <line x1="12" y1="18" x2="12" y2="18" />
+                </svg>
+              </div>
+              <div>
+                <h3>Mobile</h3>
+                <p>Touch & swipe gestures</p>
+              </div>
+            </div>
+            <span class="demo-card-badge">Plugin</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-preview">
+              <label for="demo-mobile">Swipe to change months</label>
+              <input
+                type="text"
+                id="demo-mobile"
+                placeholder="YYYY-MM-DD"
+                readonly
+              />
+            </div>
+            <div class="demo-code">
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="code-dots">
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                  </div>
+                  <button class="code-copy" data-code="mobile">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path
+                        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                      />
+                    </svg>
+                    Copy
+                  </button>
+                </div>
+                <div class="code-content">
+                  <pre><code><span class="token-keyword">import</span> { <span class="token-class">MobilePlugin</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker-mobile'</span><span class="token-punctuation">;</span>
+
+picker<span class="token-punctuation">.</span><span class="token-function">use</span><span class="token-punctuation">(</span><span class="token-class">MobilePlugin</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span>
+  <span class="token-property">enableTouch</span><span class="token-punctuation">:</span> <span class="token-keyword">true</span><span class="token-punctuation">,</span>
+  <span class="token-property">enableSwipe</span><span class="token-punctuation">:</span> <span class="token-keyword">true</span><span class="token-punctuation">,</span>
+  <span class="token-property">swipeThreshold</span><span class="token-punctuation">:</span> <span class="token-number">50</span><span class="token-punctuation">,</span>
+<span class="token-punctuation">}</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Handler Demo -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">
+              <div class="demo-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <path d="M4 7V4h16v3M9 20h6M12 4v16" />
+                </svg>
+              </div>
+              <div>
+                <h3>Input Handler</h3>
+                <p>Input masking & validation</p>
+              </div>
+            </div>
+            <span class="demo-card-badge">Plugin</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-preview">
+              <label for="demo-input">Type or select a date</label>
+              <input type="text" id="demo-input" placeholder="DD/MM/YYYY" />
+            </div>
+            <div class="demo-code">
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="code-dots">
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                  </div>
+                  <button class="code-copy" data-code="input">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path
+                        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                      />
+                    </svg>
+                    Copy
+                  </button>
+                </div>
+                <div class="code-content">
+                  <pre><code><span class="token-keyword">import</span> { <span class="token-class">InputHandlerPlugin</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker-input-handler'</span><span class="token-punctuation">;</span>
+
+picker<span class="token-punctuation">.</span><span class="token-function">use</span><span class="token-punctuation">(</span><span class="token-class">InputHandlerPlugin</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span>
+  <span class="token-property">format</span><span class="token-punctuation">:</span> <span class="token-string">'DD/MM/YYYY'</span><span class="token-punctuation">,</span>
+  <span class="token-property">enableMask</span><span class="token-punctuation">:</span> <span class="token-keyword">true</span><span class="token-punctuation">,</span>
+  <span class="token-property">validateOnBlur</span><span class="token-punctuation">:</span> <span class="token-keyword">true</span><span class="token-punctuation">,</span>
+<span class="token-punctuation">}</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Date Utils Demo -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">
+              <div class="demo-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <path
+                    d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3>Date Utils</h3>
+                <p>Date manipulation utilities</p>
+              </div>
+            </div>
+            <span class="demo-card-badge">Plugin</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-preview">
+              <label for="demo-utils">Utility functions available</label>
+              <input
+                type="text"
+                id="demo-utils"
+                placeholder="YYYY-MM-DD"
+                readonly
+              />
+            </div>
+            <div class="demo-code">
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="code-dots">
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                  </div>
+                  <button class="code-copy" data-code="utils">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path
+                        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                      />
+                    </svg>
+                    Copy
+                  </button>
+                </div>
+                <div class="code-content">
+                  <pre><code><span class="token-keyword">import</span> { <span class="token-class">DateUtilsPlugin</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker-date-utils'</span><span class="token-punctuation">;</span>
+
+picker<span class="token-punctuation">.</span><span class="token-function">use</span><span class="token-punctuation">(</span><span class="token-class">DateUtilsPlugin</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span>
+
+<span class="token-keyword">const</span> utils <span class="token-operator">=</span> picker<span class="token-punctuation">.</span><span class="token-function">getPlugin</span><span class="token-punctuation">(</span><span class="token-string">'date-utils'</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span>
+utils<span class="token-punctuation">.</span>calculator<span class="token-punctuation">.</span><span class="token-function">addDays</span><span class="token-punctuation">(</span><span class="token-keyword">new</span> <span class="token-class">Date</span><span class="token-punctuation">()</span><span class="token-punctuation">,</span> <span class="token-number">7</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Example -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">
+              <div class="demo-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <polygon
+                    points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"
+                  />
+                  <line x1="12" y1="22" x2="12" y2="15.5" />
+                  <polyline points="22 8.5 12 15.5 2 8.5" />
+                  <polyline points="2 15.5 12 8.5 22 15.5" />
+                  <line x1="12" y1="2" x2="12" y2="8.5" />
+                </svg>
+              </div>
+              <div>
+                <h3>Full Example</h3>
+                <p>All plugins combined</p>
+              </div>
+            </div>
+            <span class="demo-card-badge">Complete</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-preview">
+              <label for="demo-full">Complete datepicker</label>
+              <input
+                type="text"
+                id="demo-full"
+                placeholder="YYYY-MM-DD"
+                readonly
+              />
+            </div>
+            <div class="demo-code">
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="code-dots">
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                  </div>
+                  <button class="code-copy" data-code="full">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path
+                        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                      />
+                    </svg>
+                    Copy
+                  </button>
+                </div>
+                <div class="code-content">
+                  <pre><code><span class="token-keyword">import</span> { <span class="token-class">BWDatePicker</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker'</span><span class="token-punctuation">;</span>
+<span class="token-keyword">import</span> { <span class="token-class">ThemingPlugin</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker-theming'</span><span class="token-punctuation">;</span>
+<span class="token-keyword">import</span> { <span class="token-class">PositioningPlugin</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker-positioning'</span><span class="token-punctuation">;</span>
+<span class="token-keyword">import</span> { <span class="token-class">AccessibilityPlugin</span> } <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker-accessibility'</span><span class="token-punctuation">;</span>
+
+<span class="token-keyword">const</span> picker <span class="token-operator">=</span> <span class="token-keyword">new</span> <span class="token-class">BWDatePicker</span><span class="token-punctuation">(</span><span class="token-string">'#date'</span><span class="token-punctuation">)</span>
+  <span class="token-punctuation">.</span><span class="token-function">use</span><span class="token-punctuation">(</span><span class="token-class">ThemingPlugin</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span> <span class="token-property">theme</span><span class="token-punctuation">:</span> <span class="token-string">'dark'</span> <span class="token-punctuation">}</span><span class="token-punctuation">)</span>
+  <span class="token-punctuation">.</span><span class="token-function">use</span><span class="token-punctuation">(</span><span class="token-class">PositioningPlugin</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span> <span class="token-property">autoFlip</span><span class="token-punctuation">:</span> <span class="token-keyword">true</span> <span class="token-punctuation">}</span><span class="token-punctuation">)</span>
+  <span class="token-punctuation">.</span><span class="token-function">use</span><span class="token-punctuation">(</span><span class="token-class">AccessibilityPlugin</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inline Demo -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">
+              <div class="demo-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <line x1="3" y1="9" x2="21" y2="9" />
+                </svg>
+              </div>
+              <div>
+                <h3>Inline Mode</h3>
+                <p>Always visible calendar</p>
+              </div>
+            </div>
+            <span class="demo-card-badge">Mode</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-preview" style="min-height: 320px">
+              <div id="demo-inline"></div>
+            </div>
+            <div class="demo-code">
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="code-dots">
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                  </div>
+                  <button class="code-copy" data-code="inline">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path
+                        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                      />
+                    </svg>
+                    Copy
+                  </button>
+                </div>
+                <div class="code-content">
+                  <pre><code><span class="token-keyword">new</span> <span class="token-class">BWDatePicker</span><span class="token-punctuation">(</span><span class="token-string">'#calendar'</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span>
+  <span class="token-property">mode</span><span class="token-punctuation">:</span> <span class="token-string">'inline'</span><span class="token-punctuation">,</span>
+<span class="token-punctuation">}</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Demo -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">
+              <div class="demo-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <rect x="2" y="4" width="20" height="16" rx="2" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                </svg>
+              </div>
+              <div>
+                <h3>Modal Mode</h3>
+                <p>Centered overlay dialog</p>
+              </div>
+            </div>
+            <span class="demo-card-badge">Mode</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-preview">
+              <label for="demo-modal">Click to open modal</label>
+              <input
+                type="text"
+                id="demo-modal"
+                placeholder="YYYY-MM-DD"
+                readonly
+              />
+            </div>
+            <div class="demo-code">
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="code-dots">
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                    <span class="code-dot"></span>
+                  </div>
+                  <button class="code-copy" data-code="modal">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path
+                        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                      />
+                    </svg>
+                    Copy
+                  </button>
+                </div>
+                <div class="code-content">
+                  <pre><code><span class="token-keyword">new</span> <span class="token-class">BWDatePicker</span><span class="token-punctuation">(</span><span class="token-string">'#date'</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span>
+  <span class="token-property">mode</span><span class="token-punctuation">:</span> <span class="token-string">'modal'</span><span class="token-punctuation">,</span>
+<span class="token-punctuation">}</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Packages Section -->
+    <section class="section" id="packages">
+      <div class="section-header">
+        <div class="section-label">npm Packages</div>
+        <h2 class="section-title">All Packages</h2>
+        <p class="section-subtitle">
+          Install only what you need. Each plugin is a separate package.
+        </p>
+      </div>
+
+      <div class="packages-grid">
+        <a
+          href="https://www.npmjs.com/package/@bw-ui/datepicker"
+          target="_blank"
+          class="package-card"
+        >
+          <div class="package-name">@bw-ui/datepicker</div>
+          <div class="package-desc">Core datepicker with plugin system</div>
+          <div class="package-meta">
+            <span>~8KB</span>
+            <span>Required</span>
+          </div>
+        </a>
+        <a
+          href="https://www.npmjs.com/package/@bw-ui/datepicker-theming"
+          target="_blank"
+          class="package-card"
+        >
+          <div class="package-name">@bw-ui/datepicker-theming</div>
+          <div class="package-desc">
+            Dark mode, CSS variables, theme persistence
+          </div>
+          <div class="package-meta">
+            <span>~3KB</span>
+            <span>Plugin</span>
+          </div>
+        </a>
+        <a
+          href="https://www.npmjs.com/package/@bw-ui/datepicker-positioning"
+          target="_blank"
+          class="package-card"
+        >
+          <div class="package-name">@bw-ui/datepicker-positioning</div>
+          <div class="package-desc">
+            Auto-flip, viewport collision, smart placement
+          </div>
+          <div class="package-meta">
+            <span>~2KB</span>
+            <span>Plugin</span>
+          </div>
+        </a>
+        <a
+          href="https://www.npmjs.com/package/@bw-ui/datepicker-accessibility"
+          target="_blank"
+          class="package-card"
+        >
+          <div class="package-name">@bw-ui/datepicker-accessibility</div>
+          <div class="package-desc">Keyboard navigation, ARIA, focus trap</div>
+          <div class="package-meta">
+            <span>~4KB</span>
+            <span>Plugin</span>
+          </div>
+        </a>
+        <a
+          href="https://www.npmjs.com/package/@bw-ui/datepicker-locale"
+          target="_blank"
+          class="package-card"
+        >
+          <div class="package-name">@bw-ui/datepicker-locale</div>
+          <div class="package-desc">
+            17+ languages, i18n, custom translations
+          </div>
+          <div class="package-meta">
+            <span>~5KB</span>
+            <span>Plugin</span>
+          </div>
+        </a>
+        <a
+          href="https://www.npmjs.com/package/@bw-ui/datepicker-mobile"
+          target="_blank"
+          class="package-card"
+        >
+          <div class="package-name">@bw-ui/datepicker-mobile</div>
+          <div class="package-desc">Touch support, swipe gestures</div>
+          <div class="package-meta">
+            <span>~3KB</span>
+            <span>Plugin</span>
+          </div>
+        </a>
+        <a
+          href="https://www.npmjs.com/package/@bw-ui/datepicker-input-handler"
+          target="_blank"
+          class="package-card"
+        >
+          <div class="package-name">@bw-ui/datepicker-input-handler</div>
+          <div class="package-desc">
+            Input masking, validation, auto-correct
+          </div>
+          <div class="package-meta">
+            <span>~3KB</span>
+            <span>Plugin</span>
+          </div>
+        </a>
+        <a
+          href="https://www.npmjs.com/package/@bw-ui/datepicker-date-utils"
+          target="_blank"
+          class="package-card"
+        >
+          <div class="package-name">@bw-ui/datepicker-date-utils</div>
+          <div class="package-desc">Date manipulation, formatting, parsing</div>
+          <div class="package-meta">
+            <span>~6KB</span>
+            <span>Plugin</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-logo">BW DatePicker</div>
+      <p class="footer-text">Built with ❤️ by Black & White UI Engineering</p>
+      <div class="footer-links">
+        <a href="https://github.com/AmaanBilwar/bw-datepicker" target="_blank"
+          >GitHub</a
+        >
+        <a
+          href="https://www.npmjs.com/package/@bw-ui/datepicker"
+          target="_blank"
+          >npm</a
+        >
+        <a
+          href="https://github.com/AmaanBilwar/bw-datepicker/issues"
+          target="_blank"
+          >Issues</a
+        >
+        <a
+          href="https://github.com/AmaanBilwar/bw-datepicker/blob/main/LICENSE"
+          target="_blank"
+          >MIT License</a
+        >
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/@bw-ui/datepicker"></script>
+
+    <script src="https://unpkg.com/@bw-ui/datepicker-theming/dist/bw-theming.min.js"></script>
+    <script src="https://unpkg.com/@bw-ui/datepicker-positioning/dist/bw-positioning.min.js"></script>
+    <script src="https://unpkg.com/@bw-ui/datepicker-accessibility/dist/bw-accessibility.min.js"></script>
+    <script src="https://unpkg.com/@bw-ui/datepicker-locale/dist/bw-locale.min.js"></script>
+    <script src="https://unpkg.com/@bw-ui/datepicker-mobile/dist/bw-mobile.min.js"></script>
+    <script src="https://unpkg.com/@bw-ui/datepicker-input-handler/dist/bw-input-handler.min.js"></script>
+    <script src="https://unpkg.com/@bw-ui/datepicker-date-utils/dist/bw-date-utils.min.js"></script>
 
     <script>
-      const { BWDatePicker } = BW;
+      // Code snippets for copy functionality
+      const codeSnippets = {
+        core: `import { BWDatePicker } from '@bw-ui/datepicker';
+import '@bw-ui/datepicker/css';
 
-      // Demo 1: Full Featured
-      window.fullPicker = new BWDatePicker('#demo-full', {
-        mode: 'popup',
-        format: 'DD/MM/YYYY',
-      })
-        .use(BWTheming.ThemingPlugin, { theme: 'light' })
-        .use(BWInputHandler.InputHandlerPlugin, { format: 'DD/MM/YYYY' });
+const picker = new BWDatePicker('#date-input', {
+  mode: 'popup',
+  format: 'YYYY-MM-DD',
+});`,
+        theming: `import { ThemingPlugin } from '@bw-ui/datepicker-theming';
 
-      fullPicker.on('date:changed', ({ date }) => {
-        document.getElementById('output-full').textContent = `Selected: ${
-          date ? date.toDateString() : 'none'
-        }`;
+picker.use(ThemingPlugin, {
+  theme: 'dark',
+  autoDetect: true,
+  persist: true,
+});`,
+        positioning: `import { PositioningPlugin } from '@bw-ui/datepicker-positioning';
+
+picker.use(PositioningPlugin, {
+  placement: 'top',
+  alignment: 'left',
+  autoFlip: true,
+  offset: { x: 0, y: 8 },
+});`,
+        accessibility: `import { AccessibilityPlugin } from '@bw-ui/datepicker-accessibility';
+
+picker.use(AccessibilityPlugin, {
+  enableKeyboardNav: true,
+  enableFocusTrap: true,
+  enableAnnouncer: true,
+});`,
+        locale: `import { LocalePlugin } from '@bw-ui/datepicker-locale';
+
+picker.use(LocalePlugin, {
+  locale: 'fr-FR',
+  firstDayOfWeek: 1,
+});`,
+        mobile: `import { MobilePlugin } from '@bw-ui/datepicker-mobile';
+
+picker.use(MobilePlugin, {
+  enableTouch: true,
+  enableSwipe: true,
+  swipeThreshold: 50,
+});`,
+        input: `import { InputHandlerPlugin } from '@bw-ui/datepicker-input-handler';
+
+picker.use(InputHandlerPlugin, {
+  format: 'DD/MM/YYYY',
+  enableMask: true,
+  validateOnBlur: true,
+});`,
+        utils: `import { DateUtilsPlugin } from '@bw-ui/datepicker-date-utils';
+
+picker.use(DateUtilsPlugin);
+
+const utils = picker.getPlugin('date-utils');
+utils.calculator.addDays(new Date(), 7);`,
+        full: `import { BWDatePicker } from '@bw-ui/datepicker';
+import { ThemingPlugin } from '@bw-ui/datepicker-theming';
+import { PositioningPlugin } from '@bw-ui/datepicker-positioning';
+import { AccessibilityPlugin } from '@bw-ui/datepicker-accessibility';
+
+const picker = new BW.BWDatePicker('#demo-full')
+          .use(BWPositioning.PositioningPlugin, { autoFlip: true })
+          .use(BWTheming.ThemingPlugin, { theme: 'dark' })
+          .use(BWAccessibility.AccessibilityPlugin, {
+            enableKeyboardNav: true,
+            enableFocusTrap: false,
+            enableAnnouncer: false,
+          });`,
+        inline: `new BWDatePicker('#calendar', {
+  mode: 'inline',
+});`,
+        modal: `new BWDatePicker('#date', {
+  mode: 'modal',
+});`,
+      };
+
+      // Initialize datepickers
+      window.addEventListener('load', function () {
+        // Core demo
+        new BW.BWDatePicker('#demo-core', {
+          mode: 'popup',
+          format: 'YYYY-MM-DD',
+        }).use(BWPositioning.PositioningPlugin, {
+          placement: 'bottom',
+          autoFlip: true,
+        });
+
+        // Theming demo
+        new BW.BWDatePicker('#demo-theming', {
+          mode: 'popup',
+        })
+          .use(BWPositioning.PositioningPlugin, {
+            placement: 'bottom',
+            autoFlip: true,
+          })
+          .use(BWTheming.ThemingPlugin, {
+            theme: 'dark',
+          });
+
+        // Positioning demo
+        new BW.BWDatePicker('#demo-positioning', {
+          mode: 'popup',
+        }).use(BWPositioning.PositioningPlugin, {
+          placement: 'top',
+          alignment: 'left',
+          autoFlip: true,
+        });
+
+        // Accessibility demo
+        new BW.BWDatePicker('#demo-accessibility', {
+          mode: 'popup',
+        })
+          .use(BWPositioning.PositioningPlugin, {
+            placement: 'bottom',
+            autoFlip: true,
+          })
+          .use(BWAccessibility.AccessibilityPlugin, {
+            enableKeyboardNav: false,
+            enableFocusTrap: false,
+            enableAnnouncer: false,
+            enableAria: true,
+          });
+
+        // Locale demo
+        new BW.BWDatePicker('#demo-locale', {
+          mode: 'popup',
+        })
+          .use(BWPositioning.PositioningPlugin, {
+            placement: 'bottom',
+            autoFlip: true,
+          })
+          .use(BWLocale.LocalePlugin, {
+            locale: 'fr-FR',
+          });
+
+        // Mobile demo
+        new BW.BWDatePicker('#demo-mobile', {
+          mode: 'popup',
+        })
+          .use(BWPositioning.PositioningPlugin, {
+            placement: 'bottom',
+            autoFlip: true,
+          })
+          .use(BWMobile.MobilePlugin, {
+            enableTouch: true,
+            enableSwipe: true,
+          });
+
+        // Input handler demo
+        new BW.BWDatePicker('#demo-input', {
+          mode: 'popup',
+        })
+          .use(BWPositioning.PositioningPlugin, {
+            placement: 'bottom',
+            autoFlip: true,
+          })
+          .use(BWInputHandler.InputHandlerPlugin, {
+            format: 'DD/MM/YYYY',
+            allowManualInput: true,
+          });
+
+        // Date utils demo
+        new BW.BWDatePicker('#demo-utils', {
+          mode: 'popup',
+        })
+          .use(BWPositioning.PositioningPlugin, {
+            placement: 'bottom',
+            autoFlip: true,
+          })
+          .use(BWDateUtils.DateUtilsPlugin);
+
+        // Full demo
+        new BW.BWDatePicker('#demo-full', {
+          mode: 'popup',
+        })
+          .use(BWPositioning.PositioningPlugin, { autoFlip: true })
+          .use(BWTheming.ThemingPlugin, { theme: 'dark' });
+
+        // Inline demo
+        new BW.BWDatePicker('#demo-inline', {
+          mode: 'inline',
+        });
+
+        // Modal demo
+        new BW.BWDatePicker('#demo-modal', {
+          mode: 'modal',
+        });
+        // Copy functionality
+        document.querySelectorAll('.code-copy').forEach((btn) => {
+          btn.addEventListener('click', function () {
+            const code = codeSnippets[this.dataset.code];
+            navigator.clipboard.writeText(code).then(() => {
+              this.classList.add('copied');
+              this.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg> Copied!`;
+              setTimeout(() => {
+                this.classList.remove('copied');
+                this.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg> Copy`;
+              }, 2000);
+            });
+          });
+        });
+
+        // Install banner copy
+        document.querySelectorAll('.copy-btn').forEach((btn) => {
+          btn.addEventListener('click', function () {
+            navigator.clipboard.writeText(this.dataset.copy).then(() => {
+              this.classList.add('copied');
+              this.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg> Copied!`;
+              setTimeout(() => {
+                this.classList.remove('copied');
+                this.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg> Copy`;
+              }, 2000);
+            });
+          });
+        });
       });
-
-      // Demo 2: Core Only
-      window.corePicker = new BWDatePicker('#demo-core', {
-        mode: 'popup',
-      });
-      corePicker.on('date:changed', ({ date }) => {
-        document.getElementById('output-core').textContent = `Selected: ${
-          date ? date.toDateString() : 'none'
-        }`;
-      });
-
-      // Demo 3: Dark Mode
-      window.darkPicker = new BWDatePicker('#demo-dark', {
-        mode: 'popup',
-      })
-        .use(BWTheming.ThemingPlugin, { theme: 'dark' })
-        .use(BWAccessibility.AccessibilityPlugin);
-
-      darkPicker.on('date:changed', ({ date }) => {
-        document.getElementById('output-dark').textContent = `Selected: ${
-          date ? date.toDateString() : 'none'
-        }`;
-      });
-
-      // Demo 4: Inline Mode
-      window.inlinePicker = new BWDatePicker('#demo-inline', {
-        mode: 'inline',
-      }).use(BWTheming.ThemingPlugin, { theme: 'light' });
-
-      inlinePicker.on('date:changed', ({ date }) => {
-        document.getElementById('output-inline').textContent = `Selected: ${
-          date ? date.toDateString() : 'none'
-        }`;
-      });
-
-      console.log('✅ BW DatePicker v1.0.0 Demo loaded');
     </script>
   </body>
 </html>

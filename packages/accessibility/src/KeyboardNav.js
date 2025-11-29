@@ -261,7 +261,7 @@ export class KeyboardNav {
       '.bw-datepicker__day:not(:disabled)'
     );
     if (firstDay) {
-      firstDay.focus({ preventScroll: true });
+      firstDay.focus();
       this.announceFocusedDate(firstDay);
     }
   }
@@ -282,24 +282,27 @@ export class KeyboardNav {
   }
 
   setInitialFocus() {
+    // Focus selected date if exists
     const selectedDay = this.pickerElement.querySelector(
       '.bw-datepicker__day--selected:not(:disabled)'
     );
     if (selectedDay) {
       selectedDay.setAttribute('tabindex', '0');
-      selectedDay.focus({ preventScroll: true });
+      selectedDay.focus();
       return;
     }
 
+    // Focus today
     const today = this.pickerElement.querySelector(
       '.bw-datepicker__day--today:not(:disabled)'
     );
     if (today) {
       today.setAttribute('tabindex', '0');
-      today.focus({ preventScroll: true });
+      today.focus();
       return;
     }
 
+    // Focus first day
     this.focusFirstAvailableDay();
   }
 

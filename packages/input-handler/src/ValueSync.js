@@ -4,7 +4,6 @@
  * Syncs input value with datepicker
  * ============================================================================
  */
-
 export class ValueSync {
   constructor(inputElement, controller, options = {}) {
     this.inputElement = inputElement;
@@ -16,10 +15,12 @@ export class ValueSync {
   syncToPicker(date) {
     if (!date || !this.controller) return;
 
-    // Use setDate instead of selectDate
     if (typeof this.controller.setDate === 'function') {
       this.controller.setDate(date);
     }
+
+    // Re-apply our format (picker might override)
+    this.syncFromPicker(date);
 
     if (this.onChange) {
       this.onChange(date);

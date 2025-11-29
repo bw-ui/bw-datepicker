@@ -18,19 +18,20 @@
   --bw-picker-border: #e0e0e0;
   --bw-picker-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   --bw-picker-radius: 8px;
-  --bw-picker-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  
+  --bw-picker-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    sans-serif;
+
   --bw-text-primary: #1a1a1a;
   --bw-text-secondary: #666666;
   --bw-text-disabled: #cccccc;
-  
+
   --bw-day-size: 36px;
   --bw-day-radius: 50%;
   --bw-day-hover-bg: #f5f5f5;
   --bw-day-selected-bg: #1a1a1a;
   --bw-day-selected-text: #ffffff;
   --bw-day-today-border: #1a1a1a;
-  
+
   --bw-btn-padding: 8px 16px;
   --bw-btn-radius: 4px;
   --bw-btn-hover-bg: #f0f0f0;
@@ -45,7 +46,8 @@
   border-radius: var(--bw-picker-radius);
   box-shadow: var(--bw-picker-shadow);
   color: var(--bw-text-primary);
-  width: 280px;
+  width: max-content;
+  max-width: 400px;
   user-select: none;
   z-index: 1000;
 }
@@ -153,7 +155,9 @@
   transition: all 0.15s;
 }
 
-button.bw-datepicker__day:hover:not(.bw-datepicker__day--disabled):not(.bw-datepicker__day--selected) {
+button.bw-datepicker__day:hover:not(.bw-datepicker__day--disabled):not(
+    .bw-datepicker__day--selected
+  ) {
   background: var(--bw-day-hover-bg);
 }
 

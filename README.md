@@ -2,33 +2,34 @@
 
 A lightweight, zero-dependency datepicker with a modular plugin architecture.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Size](https://img.shields.io/badge/core%20size-~27.3KB%20gzipped-brightgreen)
+![Version](https://img.shields.io/npm/v/@bw-ui/datepicker)
+![License](https://img.shields.io/npm/l/@bw-ui/datepicker)
+![Size](https://img.shields.io/bundlephobia/minzip/@bw-ui/datepicker)
 
-[Live Demo](https://bw-ui.github.io/bw-datepicker)
+[Live Demo](https://bw-ui.github.io/bw-datepicker) • [npm](https://www.npmjs.com/package/@bw-ui/datepicker)
 
 ## ✨ Features
 
-- 🪶 **Lightweight** - Core is only ~27.3KB gzipped
+- 🪶 **Lightweight** - Core is only ~27KB gzipped
 - 🔌 **Modular** - Use only what you need with plugins
 - 🎨 **Themeable** - Dark mode, CSS variables, custom themes
 - ♿ **Accessible** - Full keyboard navigation, ARIA support
 - 📱 **Mobile Ready** - Touch & swipe gestures
 - 🚀 **Zero Dependencies** - No external libraries required
 - 📦 **Multiple Formats** - ESM and IIFE builds
+- 🧩 **Extensible** - Create your own plugins
 
 ## 📦 Packages
 
-| Package                           | Description              | Size    |
-| --------------------------------- | ------------------------ | ------- |
-| `@bw-ui/datepicker`               | Core datepicker          | ~27.3KB |
-| `@bw-ui/datepicker-theming`       | Dark mode, CSS variables | ~11.5KB |
-| `@bw-ui/datepicker-accessibility` | Keyboard nav, ARIA       | ~18.8KB |
-| `@bw-ui/datepicker-positioning`   | Auto-flip, collision     | ~11.2KB |
-| `@bw-ui/datepicker-mobile`        | Touch, swipe gestures    | ~7.49KB |
-| `@bw-ui/datepicker-input-handler` | Input masking            | ~12.2KB |
-| `@bw-ui/datepicker-date-utils`    | Date parsing             | ~19KB   |
+| Package                           | Description              | Size    | Links                                                                |
+| --------------------------------- | ------------------------ | ------- | -------------------------------------------------------------------- |
+| `@bw-ui/datepicker`               | Core datepicker          | ~27.3KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker)               |
+| `@bw-ui/datepicker-theming`       | Dark mode, CSS variables | ~11.5KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-theming)       |
+| `@bw-ui/datepicker-accessibility` | Keyboard nav, ARIA       | ~18.8KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-accessibility) |
+| `@bw-ui/datepicker-positioning`   | Auto-flip, collision     | ~11.2KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-positioning)   |
+| `@bw-ui/datepicker-mobile`        | Touch, swipe gestures    | ~7.49KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-mobile)        |
+| `@bw-ui/datepicker-input-handler` | Input masking            | ~12.2KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-input-handler) |
+| `@bw-ui/datepicker-date-utils`    | Date parsing             | ~19KB   | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-date-utils)    |
 
 ## 🚀 Installation
 
@@ -56,13 +57,12 @@ const picker = new BWDatePicker('#date-input', {
   .use(ThemingPlugin, { theme: 'dark' })
   .use(AccessibilityPlugin);
 
-// Listen to events
 picker.on('date:changed', ({ date, dateISO }) => {
   console.log('Selected:', dateISO);
 });
 ```
 
-### Browser (Script Tag)
+### Browser (CDN)
 
 ```html
 <link
@@ -85,92 +85,40 @@ picker.on('date:changed', ({ date, dateISO }) => {
 </script>
 ```
 
-## ⚙️ Options
+## ⚙️ Core Options
 
 ```javascript
 const picker = new BWDatePicker('#date', {
-  // Display mode: 'popup' | 'modal' | 'inline'
-  mode: 'popup',
-
-  // Date format for display
-  format: 'DD/MM/YYYY',
-
-  // Minimum selectable date
-  minDate: new Date(),
-
-  // Maximum selectable date
-  maxDate: new Date('2025-12-31'),
-
-  // Disabled dates
-  disabledDates: [new Date('2025-12-25')],
+  mode: 'popup', // 'popup' | 'modal' | 'inline'
+  format: 'DD/MM/YYYY', // Display format
+  minDate: new Date(), // Minimum selectable date
+  maxDate: new Date('2025-12-31'), // Maximum selectable date
+  disabledDates: [], // Array of disabled dates
 });
 ```
 
-## 🔌 Plugin Options
-
-### Theming
+## 🛠️ API Methods
 
 ```javascript
-.use(ThemingPlugin, {
-  theme: 'dark',        // 'light' | 'dark' | 'auto'
-  persist: true,        // Save preference to localStorage
-  storageKey: 'theme'   // localStorage key
-})
-```
+// Open/Close
+picker.open();
+picker.close();
 
-### Accessibility
+// Date methods
+picker.setDate(date);
+picker.getDate();
+picker.clear();
+picker.today();
 
-```javascript
-.use(AccessibilityPlugin)
-// Keyboard shortcuts:
-// - Arrow keys: Navigate days
-// - Enter/Space: Select date
-// - Escape: Close picker
-// - Tab: Navigate elements
-// - PageUp/Down: Navigate months
-// - Shift+PageUp/Down: Navigate years
-```
+// Navigation
+picker.prevMonth();
+picker.nextMonth();
+picker.prevYear();
+picker.nextYear();
 
-### Positioning
-
-```javascript
-.use(PositioningPlugin, {
-  placement: 'bottom',  // 'top' | 'bottom' | 'left' | 'right'
-  alignment: 'left',    // 'left' | 'center' | 'right'
-  autoFlip: true,       // Flip when near edges
-  offset: { x: 0, y: 8 }
-})
-```
-
-### Mobile
-
-```javascript
-.use(MobilePlugin, {
-  touchFeedback: true   // Visual feedback on touch
-})
-// Swipe left: Next month
-// Swipe right: Previous month
-```
-
-### Input Handler
-
-```javascript
-.use(InputHandlerPlugin, {
-  format: 'DD/MM/YYYY',
-  allowManualInput: true,
-  validateOnBlur: true,
-  showErrors: true
-})
-```
-
-### Date Utils
-
-```javascript
-.use(DateUtilsPlugin)
-
-// Then use:
-picker.parseDate('25 Dec 2025');  // Returns Date object
-picker.formatDate(new Date());    // Returns formatted string
+// Lifecycle
+picker.refresh();
+picker.destroy();
 ```
 
 ## 📡 Events
@@ -179,51 +127,325 @@ picker.formatDate(new Date());    // Returns formatted string
 picker.on('date:changed', ({ date, dateISO, oldDate }) => {});
 picker.on('date:selected', ({ date, dateISO }) => {});
 picker.on('date:cleared', () => {});
-
 picker.on('picker:opened', () => {});
 picker.on('picker:closed', () => {});
-
 picker.on('nav:monthChanged', ({ month, year }) => {});
 picker.on('nav:yearChanged', ({ year }) => {});
 ```
 
-## 🛠️ API Methods
+## 🔌 Official Plugins
+
+### Theming
 
 ```javascript
-picker.open(); // Open the picker
-picker.close(); // Close the picker
-picker.setDate(date); // Set selected date
-picker.getDate(); // Get selected date
-picker.clear(); // Clear selection
-picker.destroy(); // Destroy instance
+import { ThemingPlugin } from '@bw-ui/datepicker-theming';
 
-picker.prevMonth(); // Go to previous month
-picker.nextMonth(); // Go to next month
-picker.prevYear(); // Go to previous year
-picker.nextYear(); // Go to next year
-picker.today(); // Select today
-
-picker.refresh(); // Re-render the picker
+.use(ThemingPlugin, {
+  theme: 'dark',        // 'light' | 'dark' | 'auto'
+  persist: true,        // Save to localStorage
+})
 ```
+
+[Full Documentation →](https://www.npmjs.com/package/@bw-ui/datepicker-theming)
+
+### Accessibility
+
+```javascript
+import { AccessibilityPlugin } from '@bw-ui/datepicker-accessibility';
+
+.use(AccessibilityPlugin)
+// Arrow keys, Tab, Enter, Escape, PageUp/Down
+```
+
+[Full Documentation →](https://www.npmjs.com/package/@bw-ui/datepicker-accessibility)
+
+### Positioning
+
+```javascript
+import { PositioningPlugin } from '@bw-ui/datepicker-positioning';
+
+.use(PositioningPlugin, {
+  placement: 'bottom',
+  autoFlip: true,
+})
+```
+
+[Full Documentation →](https://www.npmjs.com/package/@bw-ui/datepicker-positioning)
+
+### Mobile
+
+```javascript
+import { MobilePlugin } from '@bw-ui/datepicker-mobile';
+
+.use(MobilePlugin)
+// Swipe left/right for month navigation
+```
+
+[Full Documentation →](https://www.npmjs.com/package/@bw-ui/datepicker-mobile)
+
+### Input Handler
+
+```javascript
+import { InputHandlerPlugin } from '@bw-ui/datepicker-input-handler';
+
+.use(InputHandlerPlugin, {
+  format: 'DD/MM/YYYY',
+  allowManualInput: true,
+})
+```
+
+[Full Documentation →](https://www.npmjs.com/package/@bw-ui/datepicker-input-handler)
+
+### Date Utils
+
+```javascript
+import { DateUtilsPlugin } from '@bw-ui/datepicker-date-utils';
+
+.use(DateUtilsPlugin)
+picker.parseDate('25 Dec 2025');
+```
+
+[Full Documentation →](https://www.npmjs.com/package/@bw-ui/datepicker-date-utils)
+
+---
+
+## 🧩 Creating Your Own Plugin
+
+BW DatePicker has an open plugin architecture. You can create custom plugins to extend functionality.
+
+### Plugin Interface
+
+A plugin is an object with three properties:
+
+```javascript
+const MyPlugin = {
+  name: 'my-plugin', // Unique plugin name
+
+  init(api, options) {
+    // Called when plugin is registered
+    // api - provides access to datepicker internals
+    // options - user-provided options
+
+    // Return instance for cleanup (optional)
+    return {
+      /* your plugin instance */
+    };
+  },
+
+  destroy(instance) {
+    // Called when datepicker is destroyed
+    // Cleanup your plugin
+  },
+};
+```
+
+### API Object
+
+The `api` object passed to `init()` provides:
+
+```javascript
+{
+  datepicker,           // The datepicker instance
+  getEventBus(),        // Event emitter for listening/emitting events
+  getStateManager(),    // State management
+  getPickerElement(),   // The picker DOM element
+  getInputElement(),    // The input DOM element
+  getOptions(),         // User options
+}
+```
+
+### Simple Plugin Example
+
+```javascript
+// HighlightTodayPlugin.js
+export const HighlightTodayPlugin = {
+  name: 'highlight-today',
+
+  init(api, options = {}) {
+    const eventBus = api.getEventBus();
+    const color = options.color || '#ff0000';
+
+    // Listen for picker open
+    eventBus.on('picker:opened', () => {
+      const today = api
+        .getPickerElement()
+        .querySelector('.bw-datepicker__day--today');
+
+      if (today) {
+        today.style.backgroundColor = color;
+      }
+    });
+
+    return { color };
+  },
+
+  destroy(instance) {
+    // Cleanup if needed
+  },
+};
+
+// Usage
+picker.use(HighlightTodayPlugin, { color: '#00ff00' });
+```
+
+### Advanced Plugin Example
+
+```javascript
+// DateRangePlugin.js
+export const DateRangePlugin = {
+  name: 'date-range',
+
+  init(api, options = {}) {
+    const eventBus = api.getEventBus();
+    let startDate = null;
+    let endDate = null;
+
+    // Listen for date selection
+    eventBus.on('date:selected', ({ date }) => {
+      if (!startDate || (startDate && endDate)) {
+        // Start new range
+        startDate = date;
+        endDate = null;
+      } else {
+        // Complete range
+        endDate = date;
+
+        // Emit custom event
+        eventBus.emit('range:selected', {
+          start: startDate,
+          end: endDate,
+        });
+      }
+    });
+
+    // Add methods to datepicker
+    api.datepicker.getRange = () => ({ start: startDate, end: endDate });
+    api.datepicker.clearRange = () => {
+      startDate = null;
+      endDate = null;
+    };
+
+    return { getRange: () => ({ start: startDate, end: endDate }) };
+  },
+
+  destroy(instance) {
+    // Cleanup
+  },
+};
+
+// Usage
+picker.use(DateRangePlugin);
+picker.on('range:selected', ({ start, end }) => {
+  console.log('Range:', start, 'to', end);
+});
+```
+
+### Plugin with CSS
+
+```javascript
+// CustomStylePlugin.js
+export const CustomStylePlugin = {
+  name: 'custom-style',
+
+  init(api, options = {}) {
+    // Inject CSS
+    const style = document.createElement('style');
+    style.textContent = `
+      .bw-datepicker__day--selected {
+        background: ${options.selectedColor || '#007bff'} !important;
+        border-radius: ${options.borderRadius || '50%'} !important;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return { styleElement: style };
+  },
+
+  destroy(instance) {
+    instance.styleElement?.remove();
+  },
+};
+```
+
+### Available Events to Listen
+
+```javascript
+// Lifecycle
+'picker:opened';
+'picker:closed';
+
+// Date
+'date:changed'; // { date, dateISO, oldDate }
+'date:selected'; // { date, dateISO }
+'date:cleared';
+
+// Navigation
+'nav:monthChanged'; // { month, year }
+'nav:yearChanged'; // { year }
+
+// Render (for modifying HTML)
+'render:header'; // { html }
+'render:calendar'; // { html }
+'render:footer'; // { html }
+```
+
+### Publishing Your Plugin
+
+1. Create npm package:
+
+```json
+{
+  "name": "@yourname/bw-datepicker-myplugin",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "@bw-ui/datepicker": "^1.0.0"
+  }
+}
+```
+
+2. Export your plugin:
+
+```javascript
+export const MyPlugin = {
+  /* ... */
+};
+export default MyPlugin;
+```
+
+3. Publish:
+
+```bash
+npm publish --access public
+```
+
+---
 
 ## 🏗️ Development
 
 ```bash
-# Clone the repo
-git clone https://github.com/AnsKaz-dev/bw-ui-datepicker.git
-cd bw-ui-datepicker
+# Clone
+git clone https://github.com/bw-ui/bw-datepicker.git
+cd bw-datepicker
 
-# Install dependencies
+# Install
 npm install
 
-# Build all packages
+# Build all
 npm run build
 
-# Build specific package
+# Build specific
 npm run build:core
 npm run build:theming
 ```
 
 ## 📄 License
 
-MIT
+MIT © [BW UI](https://github.com/bw-ui)
+
+## 🤝 Contributing
+
+Contributions welcome! Feel free to submit issues and PRs.
+
+- 🐛 [Report Bug](https://github.com/bw-ui/bw-datepicker/issues)
+- 💡 [Request Feature](https://github.com/bw-ui/bw-datepicker/issues)
+- 📖 [Documentation](https://github.com/bw-ui/bw-datepicker)
