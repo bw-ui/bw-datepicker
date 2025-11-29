@@ -1,0 +1,51 @@
+{
+  "name": "@bw-ui/datepicker-react",
+  "version": "1.0.0",
+  "description": "React bindings for @bw-ui/datepicker - Component and hooks for React applications",
+  "main": "dist/bw-react.min.js",
+  "module": "dist/bw-react.esm.min.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/bw-react.esm.min.js",
+      "require": "./dist/bw-react.min.js",
+      "types": "./src/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src/index.d.ts"
+  ],
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": [
+    "datepicker",
+    "react",
+    "calendar",
+    "date",
+    "bw-ui",
+    "react-datepicker",
+    "react-component",
+    "hooks"
+  ],
+  "author": "BW UI",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0",
+    "@bw-ui/datepicker": "^1.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bw-ui/bw-datepicker"
+  },
+  "bugs": {
+    "url": "https://github.com/bw-ui/bw-datepicker/issues"
+  },
+  "homepage": "https://github.com/bw-ui/bw-datepicker",
+  "type": "module"
+}
