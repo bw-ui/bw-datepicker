@@ -18,18 +18,21 @@ A lightweight, zero-dependency datepicker with a modular plugin architecture.
 - 🚀 **Zero Dependencies** - No external libraries required
 - 📦 **Multiple Formats** - ESM and IIFE builds
 - 🧩 **Extensible** - Create your own plugins
+- ⚛️ **React Ready** - Official React bindings available
 
 ## 📦 Packages
 
 | Package                           | Description              | Size    | Links                                                                |
 | --------------------------------- | ------------------------ | ------- | -------------------------------------------------------------------- |
 | `@bw-ui/datepicker`               | Core datepicker          | ~27.3KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker)               |
+| `@bw-ui/datepicker-react`         | React bindings           | ~5.1KB  | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-react)         |
 | `@bw-ui/datepicker-theming`       | Dark mode, CSS variables | ~11.5KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-theming)       |
 | `@bw-ui/datepicker-accessibility` | Keyboard nav, ARIA       | ~18.8KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-accessibility) |
 | `@bw-ui/datepicker-positioning`   | Auto-flip, collision     | ~11.2KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-positioning)   |
 | `@bw-ui/datepicker-mobile`        | Touch, swipe gestures    | ~7.49KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-mobile)        |
 | `@bw-ui/datepicker-input-handler` | Input masking            | ~12.2KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-input-handler) |
 | `@bw-ui/datepicker-date-utils`    | Date parsing             | ~19KB   | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-date-utils)    |
+| `@bw-ui/datepicker-locale`        | Localization             | ~8KB    | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-locale)        |
 
 ## 🚀 Installation
 
@@ -84,6 +87,35 @@ picker.on('date:changed', ({ date, dateISO }) => {
   );
 </script>
 ```
+
+### React
+
+```bash
+npm install @bw-ui/datepicker @bw-ui/datepicker-react
+```
+
+```jsx
+import { useState } from 'react';
+import { BWDatePicker } from '@bw-ui/datepicker-react';
+import { ThemingPlugin } from '@bw-ui/datepicker-theming';
+import '@bw-ui/datepicker/css';
+import '@bw-ui/datepicker-theming/css';
+
+function App() {
+  const [date, setDate] = useState(null);
+
+  return (
+    <BWDatePicker
+      value={date}
+      onChange={setDate}
+      plugins={[ThemingPlugin]}
+      pluginOptions={{ theming: { theme: 'dark' } }}
+    />
+  );
+}
+```
+
+[Full React Documentation →](https://www.npmjs.com/package/@bw-ui/datepicker-react)
 
 ## ⚙️ Core Options
 
