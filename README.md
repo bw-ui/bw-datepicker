@@ -94,6 +94,8 @@ picker.on('date:changed', ({ date, dateISO }) => {
 npm install @bw-ui/datepicker @bw-ui/datepicker-react
 ```
 
+{% raw %}
+
 ```jsx
 import { useState } from 'react';
 import { BWDatePicker } from '@bw-ui/datepicker-react';
@@ -114,6 +116,8 @@ function App() {
   );
 }
 ```
+
+{% endraw %}
 
 [Full React Documentation →](https://www.npmjs.com/package/@bw-ui/datepicker-react)
 
