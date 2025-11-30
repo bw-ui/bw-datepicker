@@ -1,0 +1,52 @@
+{
+  "name": "@bw-ui/datepicker-vue",
+  "version": "1.0.0",
+  "description": "Vue bindings for @bw-ui/datepicker - Component and composables for Vue 3 applications",
+  "main": "dist/bw-vue.min.js",
+  "module": "dist/bw-vue.esm.min.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/bw-vue.esm.min.js",
+      "require": "./dist/bw-vue.min.js",
+      "types": "./src/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src/index.d.ts"
+  ],
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": [
+    "datepicker",
+    "vue",
+    "vue3",
+    "calendar",
+    "date",
+    "bw-ui",
+    "vue-datepicker",
+    "vue-component",
+    "composable"
+  ],
+  "author": "BW UI",
+  "license": "MIT",
+  "peerDependencies": {
+    "vue": ">=3.0.0",
+    "@bw-ui/datepicker": "^1.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0",
+    "esbuild-plugin-vue3": "^0.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bw-ui/bw-datepicker"
+  },
+  "bugs": {
+    "url": "https://github.com/bw-ui/bw-datepicker/issues"
+  },
+  "homepage": "https://github.com/bw-ui/bw-datepicker",
+  "type": "module"
+}

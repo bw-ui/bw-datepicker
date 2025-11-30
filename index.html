@@ -1728,7 +1728,6 @@ utils<span class="token-punctuation">.</span>calculator<span class="token-punctu
 
     <!-- Scripts -->
     <script src="https://unpkg.com/@bw-ui/datepicker"></script>
-
     <script src="https://unpkg.com/@bw-ui/datepicker-theming/dist/bw-theming.min.js"></script>
     <script src="https://unpkg.com/@bw-ui/datepicker-positioning/dist/bw-positioning.min.js"></script>
     <script src="https://unpkg.com/@bw-ui/datepicker-accessibility/dist/bw-accessibility.min.js"></script>
@@ -1853,13 +1852,15 @@ const picker = new BW.BWDatePicker('#demo-full')
           mode: 'popup',
         })
           .use(BWPositioning.PositioningPlugin, {
-            placement: 'bottom',
-            autoFlip: true,
+            placement: 'top',
+            alignment: 'right',
+            autoFlip: false,
+            constrainToViewport: false,
           })
           .use(BWAccessibility.AccessibilityPlugin, {
-            enableKeyboardNav: false,
-            enableFocusTrap: false,
-            enableAnnouncer: false,
+            enableKeyboardNav: true,
+            enableFocusTrap: true,
+            enableAnnouncer: true,
             enableAria: true,
           });
 
@@ -1916,7 +1917,13 @@ const picker = new BW.BWDatePicker('#demo-full')
           mode: 'popup',
         })
           .use(BWPositioning.PositioningPlugin, { autoFlip: true })
-          .use(BWTheming.ThemingPlugin, { theme: 'dark' });
+          .use(BWTheming.ThemingPlugin, { theme: 'light' })
+          .use(BWAccessibility.AccessibilityPlugin, {
+            enableKeyboardNav: true,
+            enableFocusTrap: true,
+            enableAnnouncer: true,
+            enableAria: true,
+          });
 
         // Inline demo
         new BW.BWDatePicker('#demo-inline', {

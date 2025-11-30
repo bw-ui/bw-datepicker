@@ -25,7 +25,7 @@ import {
 
 const CORE_DEFAULTS = {
   mode: 'popup',
-  placement: 'bottom-start',
+  placement: 'bottom',
   firstDayOfWeek: 0,
   showWeekdays: true,
   showFooter: true,
@@ -55,14 +55,19 @@ export class CoreController {
 
     let initialDate = null;
     if (this.#options.defaultDate) {
-      initialDate = this.#options.defaultDate instanceof Date
-        ? this.#options.defaultDate
-        : parseISO(this.#options.defaultDate);
+      initialDate =
+        this.#options.defaultDate instanceof Date
+          ? this.#options.defaultDate
+          : parseISO(this.#options.defaultDate);
     }
 
     this.#stateManager = new StateManager({
-      currentMonth: initialDate ? initialDate.getMonth() : new Date().getMonth(),
-      currentYear: initialDate ? initialDate.getFullYear() : new Date().getFullYear(),
+      currentMonth: initialDate
+        ? initialDate.getMonth()
+        : new Date().getMonth(),
+      currentYear: initialDate
+        ? initialDate.getFullYear()
+        : new Date().getFullYear(),
       selectedDate: initialDate,
       isOpen: false,
     });
@@ -119,18 +124,29 @@ export class CoreController {
         this.#modeHandler = new ModalMode(this.#pickerElement, modeOpts);
         break;
       case 'inline':
-        this.#modeHandler = new InlineMode(this.#pickerElement, this.#inputElement, modeOpts);
+        this.#modeHandler = new InlineMode(
+          this.#pickerElement,
+          this.#inputElement,
+          modeOpts
+        );
         break;
       default:
-        this.#modeHandler = new PopupMode(this.#pickerElement, this.#inputElement, modeOpts);
+        this.#modeHandler = new PopupMode(
+          this.#pickerElement,
+          this.#inputElement,
+          modeOpts
+        );
     }
     this.#modeHandler.init();
   }
 
   #setupStateObservers() {
-    this.#stateManager.observeMany(['currentMonth', 'currentYear', 'selectedDate'], () => {
-      if (this.#stateManager.get('isOpen')) this.render();
-    });
+    this.#stateManager.observeMany(
+      ['currentMonth', 'currentYear', 'selectedDate'],
+      () => {
+        if (this.#stateManager.get('isOpen')) this.render();
+      }
+    );
   }
 
   #attachInputEvents() {
@@ -147,12 +163,18 @@ export class CoreController {
 
     this.#eventBus.on('picker:closed', () => {
       justClosed = true;
-      setTimeout(() => { justClosed = false; }, 100);
+      setTimeout(() => {
+        justClosed = false;
+      }, 100);
     });
 
     // Input events
-    this.#inputElement.addEventListener('blur', () => this.#eventBus.emit('input:blur', {}));
-    this.#inputElement.addEventListener('change', (e) => this.#eventBus.emit('input:change', { value: e.target.value }));
+    this.#inputElement.addEventListener('blur', () =>
+      this.#eventBus.emit('input:blur', {})
+    );
+    this.#inputElement.addEventListener('change', (e) =>
+      this.#eventBus.emit('input:change', { value: e.target.value })
+    );
   }
 
   #attachPickerEvents() {
@@ -169,7 +191,12 @@ export class CoreController {
       const target = e.target.closest('[data-action]');
       if (target) {
         const action = target.getAttribute('data-action');
-        this.#eventBus.emit('action', { action, target, value: target.value, event: e });
+        this.#eventBus.emit('action', {
+          action,
+          target,
+          value: target.value,
+          event: e,
+        });
       }
     });
 
@@ -177,11 +204,16 @@ export class CoreController {
       this._outsideClick = (e) => {
         if (!this.#stateManager.get('isOpen')) return;
         const path = e.composedPath();
-        if (!path.includes(this.#pickerElement) && !path.includes(this.#inputElement)) {
+        if (
+          !path.includes(this.#pickerElement) &&
+          !path.includes(this.#inputElement)
+        ) {
           this.close();
         }
       };
-      document.addEventListener('click', this._outsideClick, { capture: false });
+      document.addEventListener('click', this._outsideClick, {
+        capture: false,
+      });
     }
 
     this.#pickerElement.addEventListener('keydown', (e) => {
@@ -194,13 +226,27 @@ export class CoreController {
     this.#eventBus.emit('action', { action, target, event });
 
     switch (action) {
-      case 'prev-year': this.changeYear(-1); break;
-      case 'next-year': this.changeYear(1); break;
-      case 'prev-month': this.changeMonth(-1); break;
-      case 'next-month': this.changeMonth(1); break;
-      case 'select-date': this.selectDate(target.getAttribute('data-date')); break;
-      case 'today': this.selectToday(); break;
-      case 'clear': this.clearDate(); break;
+      case 'prev-year':
+        this.changeYear(-1);
+        break;
+      case 'next-year':
+        this.changeYear(1);
+        break;
+      case 'prev-month':
+        this.changeMonth(-1);
+        break;
+      case 'next-month':
+        this.changeMonth(1);
+        break;
+      case 'select-date':
+        this.selectDate(target.getAttribute('data-date'));
+        break;
+      case 'today':
+        this.selectToday();
+        break;
+      case 'clear':
+        this.clearDate();
+        break;
       default:
         // Unknown action - emit for plugins
         this.#eventBus.emit('action:unknown', { action, target, event });
@@ -244,9 +290,13 @@ export class CoreController {
   }
 
   #generateWeeks(month, year) {
-    const dateGrid = generateCalendarMonth(year, month, this.#options.firstDayOfWeek);
-    return dateGrid.map(week =>
-      week.map(date => ({
+    const dateGrid = generateCalendarMonth(
+      year,
+      month,
+      this.#options.firstDayOfWeek
+    );
+    return dateGrid.map((week) =>
+      week.map((date) => ({
         date,
         isCurrentMonth: date.getMonth() === month,
         isDisabled: this.#isDateDisabled(date),
@@ -268,7 +318,12 @@ export class CoreController {
   open() {
     if (this.#stateManager.get('isOpen')) return;
 
-    const eventData = { cancelled: false, cancel: () => { eventData.cancelled = true; } };
+    const eventData = {
+      cancelled: false,
+      cancel: () => {
+        eventData.cancelled = true;
+      },
+    };
     this.#eventBus.emit('picker:beforeOpen', eventData);
     if (eventData.cancelled) return;
 
@@ -277,14 +332,21 @@ export class CoreController {
     this.render();
 
     this.#eventBus.emit('picker:opened', {});
-    this.#inputElement.dispatchEvent(new CustomEvent('bw-datepicker:open', { bubbles: true }));
+    this.#inputElement.dispatchEvent(
+      new CustomEvent('bw-datepicker:open', { bubbles: true })
+    );
   }
 
   close() {
     if (!this.#stateManager.get('isOpen')) return;
     if (this.#options.mode === 'inline') return;
 
-    const eventData = { cancelled: false, cancel: () => { eventData.cancelled = true; } };
+    const eventData = {
+      cancelled: false,
+      cancel: () => {
+        eventData.cancelled = true;
+      },
+    };
     this.#eventBus.emit('picker:beforeClose', eventData);
     if (eventData.cancelled) return;
 
@@ -292,24 +354,37 @@ export class CoreController {
     this.#modeHandler.hide();
 
     this.#eventBus.emit('picker:closed', {});
-    this.#inputElement.dispatchEvent(new CustomEvent('bw-datepicker:close', { bubbles: true }));
+    this.#inputElement.dispatchEvent(
+      new CustomEvent('bw-datepicker:close', { bubbles: true })
+    );
   }
 
   selectDate(dateInput) {
-    const date = typeof dateInput === 'string' ? parseISO(dateInput) : dateInput;
+    const date =
+      typeof dateInput === 'string' ? parseISO(dateInput) : dateInput;
     if (!date || !isValidDate(date)) return;
     if (this.#isDateDisabled(date)) return;
 
     const currentSelected = this.#stateManager.get('selectedDate');
 
     // Allow deselect
-    if (this.#options.allowDeselect && currentSelected && isSameDay(date, currentSelected)) {
+    if (
+      this.#options.allowDeselect &&
+      currentSelected &&
+      isSameDay(date, currentSelected)
+    ) {
       this.clearDate();
       return;
     }
 
     // Before select - cancellable
-    const eventData = { date, cancelled: false, cancel: () => { eventData.cancelled = true; } };
+    const eventData = {
+      date,
+      cancelled: false,
+      cancel: () => {
+        eventData.cancelled = true;
+      },
+    };
     this.#eventBus.emit('date:beforeSelect', eventData);
     if (eventData.cancelled) return;
 
@@ -326,7 +401,12 @@ export class CoreController {
     this.#eventBus.emit('date:selected', { date });
     this.#eventBus.emit('date:changed', { date, oldDate });
     this.#inputElement.dispatchEvent(new Event('change', { bubbles: true }));
-    this.#inputElement.dispatchEvent(new CustomEvent('bw-datepicker:change', { detail: { date }, bubbles: true }));
+    this.#inputElement.dispatchEvent(
+      new CustomEvent('bw-datepicker:change', {
+        detail: { date },
+        bubbles: true,
+      })
+    );
 
     if (this.#options.closeOnSelect && this.#options.mode !== 'inline') {
       this.close();
@@ -346,17 +426,34 @@ export class CoreController {
     this.#eventBus.emit('date:cleared', {});
     this.#eventBus.emit('date:changed', { date: null, oldDate });
     this.#inputElement.dispatchEvent(new Event('change', { bubbles: true }));
-    this.#inputElement.dispatchEvent(new CustomEvent('bw-datepicker:change', { detail: { date: null }, bubbles: true }));
+    this.#inputElement.dispatchEvent(
+      new CustomEvent('bw-datepicker:change', {
+        detail: { date: null },
+        bubbles: true,
+      })
+    );
   }
 
   changeMonth(offset) {
     let month = this.#stateManager.get('currentMonth') + offset;
     let year = this.#stateManager.get('currentYear');
 
-    if (month > 11) { month = 0; year++; }
-    else if (month < 0) { month = 11; year--; }
+    if (month > 11) {
+      month = 0;
+      year++;
+    } else if (month < 0) {
+      month = 11;
+      year--;
+    }
 
-    const eventData = { month, year, cancelled: false, cancel: () => { eventData.cancelled = true; } };
+    const eventData = {
+      month,
+      year,
+      cancelled: false,
+      cancel: () => {
+        eventData.cancelled = true;
+      },
+    };
     this.#eventBus.emit('nav:beforeMonth', eventData);
     if (eventData.cancelled) return;
 
@@ -367,7 +464,13 @@ export class CoreController {
   changeYear(offset) {
     const year = this.#stateManager.get('currentYear') + offset;
 
-    const eventData = { year, cancelled: false, cancel: () => { eventData.cancelled = true; } };
+    const eventData = {
+      year,
+      cancelled: false,
+      cancel: () => {
+        eventData.cancelled = true;
+      },
+    };
     this.#eventBus.emit('nav:beforeYear', eventData);
     if (eventData.cancelled) return;
 
@@ -376,7 +479,10 @@ export class CoreController {
   }
 
   setDate(date) {
-    if (!date) { this.clearDate(); return; }
+    if (!date) {
+      this.clearDate();
+      return;
+    }
     this.selectDate(date);
   }
 
@@ -385,18 +491,34 @@ export class CoreController {
   }
 
   #updateInputValue(date) {
-    this.#inputElement.value = date ? formatDate(date, this.#options.format) : '';
+    this.#inputElement.value = date
+      ? formatDate(date, this.#options.format)
+      : '';
   }
 
   // PLUGIN API
 
-  getEventBus() { return this.#eventBus; }
-  getStateManager() { return this.#stateManager; }
-  getPickerElement() { return this.#pickerElement; }
-  getInputElement() { return this.#inputElement; }
-  getOptions() { return { ...this.#options }; }
-  setPlugin(name, instance) { this.#plugins.set(name, instance); }
-  getPlugin(name) { return this.#plugins.get(name); }
+  getEventBus() {
+    return this.#eventBus;
+  }
+  getStateManager() {
+    return this.#stateManager;
+  }
+  getPickerElement() {
+    return this.#pickerElement;
+  }
+  getInputElement() {
+    return this.#inputElement;
+  }
+  getOptions() {
+    return { ...this.#options };
+  }
+  setPlugin(name, instance) {
+    this.#plugins.set(name, instance);
+  }
+  getPlugin(name) {
+    return this.#plugins.get(name);
+  }
 
   destroy() {
     this.#eventBus.emit('picker:destroy', {});
@@ -407,8 +529,14 @@ export class CoreController {
     }
 
     if (this._inputHandlers) {
-      this.#inputElement.removeEventListener('click', this._inputHandlers.click);
-      this.#inputElement.removeEventListener('focus', this._inputHandlers.focus);
+      this.#inputElement.removeEventListener(
+        'click',
+        this._inputHandlers.click
+      );
+      this.#inputElement.removeEventListener(
+        'focus',
+        this._inputHandlers.focus
+      );
     }
     if (this._outsideClick) {
       document.removeEventListener('click', this._outsideClick);

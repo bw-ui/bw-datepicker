@@ -1,12 +1,13 @@
 /**
  * ============================================================================
  * Black & White: UI Engineering
- * PopupMode - Basic Popup Setup
+ * PopupMode - Basic Popup Positioning
  * ============================================================================
  *
- * Handles popup setup only. Positioning is handled by positioning plugin.
+ * Handles basic popup positioning without advanced features.
+ * Advanced positioning (auto-flip, collision) is in bw-positioning plugin.
  *
- * @version 0.3.0
+ * @version 0.2.0
  * @license MIT
  * ============================================================================
  */
@@ -15,6 +16,8 @@ export class PopupMode {
   #pickerElement;
   #inputElement;
   #options;
+  #scrollHandler;
+  #resizeHandler;
 
   /**
    * @param {HTMLElement} pickerElement
@@ -26,6 +29,7 @@ export class PopupMode {
     this.#inputElement = inputElement;
     this.#options = {
       offset: { x: 0, y: 4 },
+      placement: 'top', // bottom-start | bottom-end | top-start | top-end
       ...options,
     };
   }
@@ -34,8 +38,10 @@ export class PopupMode {
    * Initialize popup mode
    */
   init() {
+    // Set popup-specific classes
     this.#pickerElement.classList.add('bw-datepicker--popup');
 
+    // Append to body for proper stacking
     if (
       !this.#pickerElement.parentNode ||
       this.#pickerElement.parentNode !== document.body
@@ -45,10 +51,19 @@ export class PopupMode {
   }
 
   /**
-   * Position - no-op, handled by positioning plugin
+   * Position the picker relative to input
    */
   position() {
-    // Positioning handled by @bw-ui/datepicker-positioning plugin
+    const inputRect = this.#inputElement.getBoundingClientRect();
+    const { offset } = this.#options;
+
+    this.#pickerElement.style.position = 'absolute';
+    this.#pickerElement.style.left = `${
+      inputRect.left + window.scrollX + offset.x
+    }px`;
+    this.#pickerElement.style.top = `${
+      inputRect.bottom + window.scrollY + offset.y
+    }px`;
   }
 
   /**
@@ -57,6 +72,7 @@ export class PopupMode {
   show() {
     this.#pickerElement.removeAttribute('hidden');
     this.#pickerElement.style.display = '';
+    this.position();
   }
 
   /**
@@ -64,6 +80,16 @@ export class PopupMode {
    */
   hide() {
     this.#pickerElement.setAttribute('hidden', '');
+
+    // Remove listeners
+    if (this.#scrollHandler) {
+      window.removeEventListener('scroll', this.#scrollHandler);
+      this.#scrollHandler = null;
+    }
+    if (this.#resizeHandler) {
+      window.removeEventListener('resize', this.#resizeHandler);
+      this.#resizeHandler = null;
+    }
   }
 
   /**

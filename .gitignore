@@ -3,4 +3,5 @@ dist/
 package-lock.json
 .DS_Store
 *.log
-test-app
+test-react-app/node_modules
+test-vue-app/node_modules

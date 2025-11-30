@@ -16,7 +16,7 @@ export const PositioningPlugin = {
       alignment: options.alignment || 'left',
       autoFlip: options.autoFlip === true,
       offset: options.offset || { x: 0, y: 8 },
-      constrainToViewport: options.constrainToViewport !== false,
+      constrainToViewport: options.constrainToViewport || false,
       margin: options.margin || 8,
       zIndex: options.zIndex || 1000,
       onPosition: options.onPosition || null,
