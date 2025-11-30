@@ -1,6 +1,6 @@
 {
   "name": "@bw-ui/datepicker-vue",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Vue bindings for @bw-ui/datepicker - Component and composables for Vue 3 applications",
   "main": "dist/bw-vue.min.js",
   "module": "dist/bw-vue.esm.min.js",

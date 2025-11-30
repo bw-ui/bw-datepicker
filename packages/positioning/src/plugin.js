@@ -1,5 +1,13 @@
 /**
  * @bw-ui/datepicker-positioning
+ * Positioning Plugin - Smart positioning relative to input element
+ *
+ * Compatible with slot-based architecture (v1.1.0):
+ * - Uses core events (picker:opened, picker:closed)
+ * - No dependencies on other plugins
+ * - Works with any picker size (including DualCalendar)
+ *
+ * @version 1.1.0
  */
 
 import { Positioner } from './Positioner.js';

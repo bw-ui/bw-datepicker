@@ -122,7 +122,10 @@ export declare class StyleInjector {
   /** Inject CSS string */
   inject(css: string, id?: string): HTMLStyleElement;
   /** Inject CSS variables */
-  injectVariables(variables: Record<string, string>, id?: string): HTMLStyleElement;
+  injectVariables(
+    variables: Record<string, string>,
+    id?: string
+  ): HTMLStyleElement;
   /** Remove injected style by ID */
   remove(id: string): void;
   /** Remove all injected styles */

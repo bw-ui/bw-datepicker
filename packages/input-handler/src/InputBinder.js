@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * Black & White UI – Input Binder
+ * Black & White UI — Input Binder
  * Coordinates all input interactions: masking, validation, sync
  * ============================================================================
  */
@@ -10,9 +10,10 @@ import { ValidationHandler } from './ValidationHandler.js';
 import { ValueSync } from './ValueSync.js';
 
 export class InputBinder {
-  constructor(inputElement, controller, options = {}) {
+  constructor(inputElement, controller, eventBus, options = {}) {
     this.inputElement = inputElement;
     this.controller = controller;
+    this.eventBus = eventBus;
     this.options = {
       format: 'DD/MM/YYYY',
       autoCorrect: true,
@@ -35,6 +36,7 @@ export class InputBinder {
 
     this.previousValue = '';
     this.listeners = {};
+    this.eventHandlers = {};
 
     this.attachListeners();
     this.setPlaceholder();
@@ -231,21 +233,31 @@ export class InputBinder {
   }
 
   listenToPickerChanges() {
-    if (this.controller && this.controller.on) {
-      this.controller.on('date:changed', ({ date }) => {
-        if (date) {
-          const formatted = this.maskHandler.formatDate(date);
-          this.inputElement.value = formatted;
-          this.previousValue = formatted;
-        }
-      });
-    }
+    if (!this.eventBus) return;
+
+    // Listen for date changes using correct core v0.3.0 event name
+    this.eventHandlers.dateChanged = ({ date }) => {
+      if (date) {
+        const formatted = this.maskHandler.formatDate(date);
+        this.inputElement.value = formatted;
+        this.previousValue = formatted;
+      }
+    };
+
+    this.eventBus.on('date:changed', this.eventHandlers.dateChanged);
   }
 
   destroy() {
+    // Remove input listeners
     Object.keys(this.listeners).forEach((key) => {
       this.inputElement.removeEventListener(key, this.listeners[key]);
     });
+
+    // Remove event bus listeners
+    if (this.eventBus && this.eventHandlers.dateChanged) {
+      this.eventBus.off('date:changed', this.eventHandlers.dateChanged);
+    }
+
     this.clearError();
   }
 }

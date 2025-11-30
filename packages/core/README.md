@@ -14,8 +14,10 @@ Lightweight, zero-dependency datepicker with plugin architecture.
 - 🚀 **Zero dependencies** - No bloat
 - 🔌 **Plugin system** - Extend as needed
 - 📅 **3 modes** - Popup, modal, inline
+- 📆 **4 view modes** - Calendar, month, year, week
 - 🎯 **Event-driven** - Full control
 - 🌍 **Localization** - Custom month/day names
+- 🎨 **Slot-based architecture** - Plugins can intercept rendering
 
 ## 📦 Installation
 
@@ -59,20 +61,39 @@ picker.on('date:changed', ({ date, dateISO }) => {
 
 ```javascript
 new BWDatePicker('#date', {
+  // Display
   mode: 'popup',
   format: 'YYYY-MM-DD',
+
+  // Calendar
   firstDayOfWeek: 0,
   showWeekdays: true,
   showFooter: true,
-  closeOnSelect: true,
-  allowDeselect: true,
+  showOtherMonths: true,
   selectOtherMonths: true,
+
+  // Date constraints
   minDate: null,
   maxDate: null,
   disabledDates: [],
   defaultDate: null,
+
+  // Behavior
+  closeOnSelect: true,
+  allowDeselect: true,
+
+  // Localization
   monthNames: null,
   dayNames: null,
+
+  // View modes
+  defaultViewMode: 'calendar',
+  showMonthPicker: true,
+  showYearPicker: true,
+  showYearNavigation: true,
+  showMonthNavigation: true,
+  showWeekNavigation: true,
+  resetViewOnClose: true,
 });
 ```
 
@@ -87,6 +108,7 @@ new BWDatePicker('#date', {
 | `showFooter`        | `boolean`     | `true`         | Show footer with Today/Clear buttons           |
 | `closeOnSelect`     | `boolean`     | `true`         | Close picker after selecting date              |
 | `allowDeselect`     | `boolean`     | `true`         | Allow clicking selected date to deselect       |
+| `showOtherMonths`   | `boolean`     | `true`         | Show days from adjacent months                 |
 | `selectOtherMonths` | `boolean`     | `true`         | Allow selecting days from adjacent months      |
 | `minDate`           | `Date\|null`  | `null`         | Minimum selectable date                        |
 | `maxDate`           | `Date\|null`  | `null`         | Maximum selectable date                        |
@@ -94,6 +116,76 @@ new BWDatePicker('#date', {
 | `defaultDate`       | `Date\|null`  | `null`         | Initial selected date                          |
 | `monthNames`        | `array\|null` | `null`         | Custom month names (12 items)                  |
 | `dayNames`          | `array\|null` | `null`         | Custom day names (7 items, starting Sunday)    |
+
+### View Mode Options
+
+| Option                | Type      | Default      | Description                                               |
+| --------------------- | --------- | ------------ | --------------------------------------------------------- |
+| `defaultViewMode`     | `string`  | `'calendar'` | Initial view: `'calendar'`, `'month'`, `'year'`, `'week'` |
+| `showMonthPicker`     | `boolean` | `true`       | Enable clicking month to show month picker                |
+| `showYearPicker`      | `boolean` | `true`       | Enable clicking year to show year picker                  |
+| `showYearNavigation`  | `boolean` | `true`       | Show « » year navigation buttons                          |
+| `showMonthNavigation` | `boolean` | `true`       | Show ‹ › month navigation buttons                         |
+| `showWeekNavigation`  | `boolean` | `true`       | Show ← → week navigation buttons (week view)              |
+| `resetViewOnClose`    | `boolean` | `true`       | Reset to defaultViewMode when picker closes               |
+
+## 📆 View Modes
+
+### Calendar View (Default)
+
+Standard month calendar with days grid.
+
+```javascript
+new BWDatePicker('#date', { defaultViewMode: 'calendar' });
+```
+
+### Month View
+
+4x3 grid of months for quick month selection.
+
+```javascript
+new BWDatePicker('#date', { defaultViewMode: 'month' });
+
+// Or switch programmatically
+picker.setViewMode('month');
+```
+
+### Year View
+
+4x3 grid of years (12 years at a time).
+
+```javascript
+new BWDatePicker('#date', { defaultViewMode: 'year' });
+
+// Or switch programmatically
+picker.setViewMode('year');
+```
+
+### Week View
+
+Single week display with week-by-week navigation.
+
+```javascript
+new BWDatePicker('#date', { defaultViewMode: 'week' });
+
+// Navigate weeks
+picker.changeWeek(1); // Next week
+picker.changeWeek(-1); // Previous week
+```
+
+### Minimal Navigation Example
+
+```javascript
+// Only week navigation, no pickers
+new BWDatePicker('#date', {
+  defaultViewMode: 'week',
+  showMonthPicker: false,
+  showYearPicker: false,
+  showYearNavigation: false,
+  showMonthNavigation: false,
+  // showWeekNavigation: true (default)
+});
+```
 
 ## 📖 Display Modes
 
@@ -232,6 +324,8 @@ picker.on('picker:opened', () => {});
 picker.on('picker:closed', () => {});
 picker.on('nav:monthChanged', ({ month, year }) => {});
 picker.on('nav:yearChanged', ({ year }) => {});
+picker.on('nav:weekChanged', ({ date }) => {});
+picker.on('view:changed', ({ viewMode }) => {});
 ```
 
 ### Events Reference
@@ -245,41 +339,73 @@ picker.on('nav:yearChanged', ({ year }) => {});
 | `picker:closed`    | -                            | Picker closed            |
 | `nav:monthChanged` | `{ month, year }`            | Month navigation changed |
 | `nav:yearChanged`  | `{ year }`                   | Year navigation changed  |
+| `nav:weekChanged`  | `{ date }`                   | Week navigation changed  |
+| `view:changed`     | `{ viewMode }`               | View mode changed        |
+
+### Render Events (for Plugins)
+
+| Event             | Payload                    | Description                  |
+| ----------------- | -------------------------- | ---------------------------- |
+| `render:before`   | `{ data, slots }`          | Before render, modify data   |
+| `render:header`   | `{ data, slot }`           | Intercept header rendering   |
+| `render:calendar` | `{ data, slot, viewMode }` | Intercept calendar rendering |
+| `render:footer`   | `{ data, slot }`           | Intercept footer rendering   |
+| `render:after`    | `{ data, slots, element }` | After render, add classes    |
+| `render:day`      | `{ dayData, html }`        | Customize day cell           |
+| `render:weekdays` | `{ dayNames, html }`       | Customize weekday headers    |
 
 ## 🛠️ Methods
 
 ```javascript
-picker.open(); // Open picker
-picker.close(); // Close picker
-picker.setDate(date); // Set date
-picker.getDate(); // Get date
-picker.clear(); // Clear selection
-picker.destroy(); // Destroy instance
+// Open/Close
+picker.open();
+picker.close();
 
-picker.prevMonth(); // Previous month
-picker.nextMonth(); // Next month
-picker.prevYear(); // Previous year
-picker.nextYear(); // Next year
-picker.today(); // Select today
-picker.refresh(); // Re-render
+// Date manipulation
+picker.setDate(date);
+picker.getDate();
+picker.clear();
+
+// Navigation
+picker.changeMonth(-1); // Previous month
+picker.changeMonth(1); // Next month
+picker.changeYear(-1); // Previous year
+picker.changeYear(1); // Next year
+picker.changeWeek(-1); // Previous week
+picker.changeWeek(1); // Next week
+picker.goToDate(date); // Navigate to date without selecting
+picker.goToToday(); // Navigate to today
+
+// View modes
+picker.setViewMode('calendar'); // Switch to calendar view
+picker.setViewMode('month'); // Switch to month picker
+picker.setViewMode('year'); // Switch to year picker
+picker.setViewMode('week'); // Switch to week view
+picker.getViewMode(); // Get current view mode
+
+// Utility
+picker.refresh(); // Force re-render
+picker.destroy(); // Destroy instance
 ```
 
 ### Methods Reference
 
-| Method          | Parameters | Returns      | Description          |
-| --------------- | ---------- | ------------ | -------------------- |
-| `open()`        | -          | `this`       | Open the picker      |
-| `close()`       | -          | `this`       | Close the picker     |
-| `setDate(date)` | `Date`     | `this`       | Set selected date    |
-| `getDate()`     | -          | `Date\|null` | Get selected date    |
-| `clear()`       | -          | `this`       | Clear selection      |
-| `destroy()`     | -          | `void`       | Destroy instance     |
-| `prevMonth()`   | -          | `this`       | Go to previous month |
-| `nextMonth()`   | -          | `this`       | Go to next month     |
-| `prevYear()`    | -          | `this`       | Go to previous year  |
-| `nextYear()`    | -          | `this`       | Go to next year      |
-| `today()`       | -          | `this`       | Select today         |
-| `refresh()`     | -          | `this`       | Re-render picker     |
+| Method                | Parameters | Returns      | Description                |
+| --------------------- | ---------- | ------------ | -------------------------- |
+| `open()`              | -          | `this`       | Open the picker            |
+| `close()`             | -          | `this`       | Close the picker           |
+| `setDate(date)`       | `Date`     | `this`       | Set selected date          |
+| `getDate()`           | -          | `Date\|null` | Get selected date          |
+| `clear()`             | -          | `this`       | Clear selection            |
+| `changeMonth(offset)` | `number`   | `this`       | Navigate months            |
+| `changeYear(offset)`  | `number`   | `this`       | Navigate years             |
+| `changeWeek(offset)`  | `number`   | `this`       | Navigate weeks             |
+| `goToDate(date)`      | `Date`     | `this`       | Navigate without selecting |
+| `goToToday()`         | -          | `this`       | Navigate to today          |
+| `setViewMode(mode)`   | `string`   | `this`       | Set view mode              |
+| `getViewMode()`       | -          | `string`     | Get current view mode      |
+| `refresh()`           | -          | `this`       | Re-render picker           |
+| `destroy()`           | -          | `void`       | Destroy instance           |
 
 ## 🔌 Plugins
 
@@ -288,23 +414,71 @@ Extend functionality with official plugins:
 ```javascript
 import { BWDatePicker } from '@bw-ui/datepicker';
 import { ThemingPlugin } from '@bw-ui/datepicker-theming';
-import { AccessibilityPlugin } from '@bw-ui/datepicker-accessibility';
+import { RangePlugin } from '@bw-ui/datepicker-range';
 
 const picker = new BWDatePicker('#date')
   .use(ThemingPlugin, { theme: 'dark' })
-  .use(AccessibilityPlugin);
+  .use(RangePlugin);
+```
+
+### Plugin Architecture
+
+Plugins can intercept rendering using the slot-based event system:
+
+```javascript
+// Example: Custom day rendering
+eventBus.on('render:day', (eventData) => {
+  const { dayData } = eventData;
+  if (isHoliday(dayData.date)) {
+    eventData.html = `<span class="holiday">${dayData.day}</span>`;
+  }
+});
+
+// Example: Replace entire calendar slot
+eventBus.on('render:calendar', ({ slot, data }) => {
+  slot.innerHTML = renderDualCalendar(data);
+  return true; // Intercept - skip default rendering
+});
 ```
 
 ### Available Plugins
 
-| Plugin                            | Description              | Links                                                                |
-| --------------------------------- | ------------------------ | -------------------------------------------------------------------- |
-| `@bw-ui/datepicker-theming`       | Dark mode, CSS variables | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-theming)       |
-| `@bw-ui/datepicker-accessibility` | Keyboard nav, ARIA       | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-accessibility) |
-| `@bw-ui/datepicker-positioning`   | Auto-flip, collision     | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-positioning)   |
-| `@bw-ui/datepicker-mobile`        | Touch, swipe             | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-mobile)        |
-| `@bw-ui/datepicker-input-handler` | Input masking            | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-input-handler) |
-| `@bw-ui/datepicker-date-utils`    | Date utilities           | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-date-utils)    |
+| Plugin                            | Description                | Links                                                                |
+| --------------------------------- | -------------------------- | -------------------------------------------------------------------- |
+| `@bw-ui/datepicker-theming`       | Dark mode, CSS variables   | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-theming)       |
+| `@bw-ui/datepicker-accessibility` | Keyboard nav, ARIA         | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-accessibility) |
+| `@bw-ui/datepicker-positioning`   | Auto-flip, collision       | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-positioning)   |
+| `@bw-ui/datepicker-mobile`        | Touch, swipe               | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-mobile)        |
+| `@bw-ui/datepicker-range`         | Date range selection       | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-range)         |
+| `@bw-ui/datepicker-dual-calendar` | Two calendars side by side | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-dual-calendar) |
+
+## 🎨 CSS Classes
+
+### View Mode Classes
+
+The picker element gets a class based on current view mode:
+
+```css
+.bw-datepicker--view-calendar {
+}
+.bw-datepicker--view-month {
+}
+.bw-datepicker--view-year {
+}
+.bw-datepicker--view-week {
+}
+```
+
+### Slot Classes
+
+```css
+.bw-datepicker__slot--header {
+}
+.bw-datepicker__slot--calendar {
+}
+.bw-datepicker__slot--footer {
+}
+```
 
 ## 📁 What's Included
 

@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * Black & White UI – Engineered with Precision
+ * Black & White UI â€“ Engineered with Precision
  * Dark Mode: System Preference Detection
  * ============================================================================
  *

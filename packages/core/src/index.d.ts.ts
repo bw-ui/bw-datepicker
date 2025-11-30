@@ -1,6 +1,13 @@
 /**
  * @bw-ui/datepicker - TypeScript Definitions
+ * @version 0.3.0
  */
+
+// ============================================================================
+// View Modes
+// ============================================================================
+
+export type ViewMode = 'calendar' | 'month' | 'year' | 'week';
 
 // ============================================================================
 // Options
@@ -21,6 +28,8 @@ export interface BWDatePickerOptions {
   closeOnSelect?: boolean;
   /** Allow clicking selected date to deselect */
   allowDeselect?: boolean;
+  /** Show days from adjacent months */
+  showOtherMonths?: boolean;
   /** Allow selecting days from adjacent months */
   selectOtherMonths?: boolean;
   /** Minimum selectable date */
@@ -37,6 +46,20 @@ export interface BWDatePickerOptions {
   dayNames?: string[] | null;
   /** Theme */
   theme?: 'light' | 'dark';
+  /** Default view mode */
+  defaultViewMode?: ViewMode;
+  /** Enable month picker on click */
+  showMonthPicker?: boolean;
+  /** Enable year picker on click */
+  showYearPicker?: boolean;
+  /** Show year navigation arrows */
+  showYearNavigation?: boolean;
+  /** Show month navigation arrows */
+  showMonthNavigation?: boolean;
+  /** Show week navigation arrows */
+  showWeekNavigation?: boolean;
+  /** Reset to default view on close */
+  resetViewOnClose?: boolean;
 }
 
 // ============================================================================
@@ -63,9 +86,76 @@ export interface YearChangedPayload {
   year: number;
 }
 
+export interface WeekChangedPayload {
+  date: Date;
+}
+
+export interface ViewChangedPayload {
+  viewMode: ViewMode;
+}
+
 export interface BeforeOpenPayload {
   cancelled: boolean;
   cancel: () => void;
+}
+
+// Slot-based render events
+export interface RenderSlot {
+  header: HTMLElement;
+  calendar: HTMLElement;
+  footer: HTMLElement;
+}
+
+export interface RenderData {
+  currentMonth: number;
+  currentYear: number;
+  selectedDate: Date | null;
+  viewMode: ViewMode;
+  weeks: Date[][];
+  options: BWDatePickerOptions;
+}
+
+export interface RenderBeforePayload {
+  data: RenderData;
+  slots: RenderSlot;
+}
+
+export interface RenderHeaderPayload {
+  data: RenderData;
+  slot: HTMLElement;
+}
+
+export interface RenderCalendarPayload {
+  data: RenderData;
+  slot: HTMLElement;
+  viewMode: ViewMode;
+}
+
+export interface RenderFooterPayload {
+  data: RenderData;
+  slot: HTMLElement;
+}
+
+export interface RenderAfterPayload {
+  data: RenderData;
+  slots: RenderSlot;
+  element: HTMLElement;
+}
+
+export interface RenderDayPayload {
+  dayData: {
+    date: Date;
+    dateISO: string;
+    day: number;
+    dayOfWeek: number;
+    dayName: string;
+    isToday: boolean;
+    isSelected: boolean;
+    isWeekend: boolean;
+    isCurrentMonth: boolean;
+    isDisabled: boolean;
+  };
+  html: string | null;
 }
 
 // ============================================================================
@@ -76,14 +166,25 @@ export type BWDatePickerEventMap = {
   'date:changed': DateChangedPayload;
   'date:selected': DateSelectedPayload;
   'date:cleared': void;
+  'date:beforeSelect': { date: Date; cancelled: boolean; cancel: () => void };
   'picker:opened': void;
   'picker:closed': void;
   'picker:beforeOpen': BeforeOpenPayload;
+  'picker:beforeClose': { cancelled: boolean; cancel: () => void };
+  'picker:init': { options: BWDatePickerOptions };
+  'picker:ready': void;
+  'picker:destroy': void;
   'nav:monthChanged': MonthChangedPayload;
   'nav:yearChanged': YearChangedPayload;
-  'render:before': { html: string; data: unknown };
-  'render:header': { month: number; year: number; monthName: string };
-  'render:after': { html: string };
+  'nav:weekChanged': WeekChangedPayload;
+  'view:changed': ViewChangedPayload;
+  // Slot-based render events
+  'render:before': RenderBeforePayload;
+  'render:header': RenderHeaderPayload;
+  'render:calendar': RenderCalendarPayload;
+  'render:footer': RenderFooterPayload;
+  'render:after': RenderAfterPayload;
+  'render:day': RenderDayPayload;
 };
 
 export type BWDatePickerEvent = keyof BWDatePickerEventMap;
@@ -99,10 +200,50 @@ export interface PluginAPI {
   getInputElement(): HTMLInputElement;
   /** Get current options */
   getOptions(): BWDatePickerOptions;
+  /** Set option */
+  setOption(key: string, value: unknown): void;
   /** Get event bus */
   getEventBus(): EventBus;
+  /** Get state manager */
+  getStateManager(): StateManager;
+  /** Get selected date */
+  getDate(): Date | null;
+  /** Set selected date */
+  setDate(date: Date | null): void;
+  /** Open picker */
+  open(): void;
+  /** Close picker */
+  close(): void;
+  /** Force re-render */
+  refresh(): void;
+  /** Get plugin instance */
+  getPlugin<T = unknown>(name: string): T | null;
+  /** Check if plugin exists */
+  hasPlugin(name: string): boolean;
   /** Reference to datepicker instance */
   datepicker: BWDatePicker;
+  /** Utility functions */
+  utils: {
+    generateCalendarMonth: (
+      year: number,
+      month: number,
+      firstDayOfWeek?: number
+    ) => Date[][];
+    MONTH_NAMES: string[];
+    DAY_NAMES: string[];
+  };
+}
+
+export interface StateManager {
+  /** Get state value */
+  get(key: string): unknown;
+  /** Set state value(s) */
+  set(keyOrObject: string | Record<string, unknown>, value?: unknown): void;
+  /** Observe state changes */
+  observe(
+    key: string,
+    callback: (payload: { key: string; value: unknown }) => void
+  ): () => void;
 }
 
 export interface Plugin<T = unknown> {
@@ -146,7 +287,10 @@ export declare class BWDatePicker {
    * @param selector - CSS selector or HTMLInputElement
    * @param options - Configuration options
    */
-  constructor(selector: string | HTMLInputElement, options?: BWDatePickerOptions);
+  constructor(
+    selector: string | HTMLInputElement,
+    options?: BWDatePickerOptions
+  );
 
   // Lifecycle methods
   /** Open the picker */
@@ -165,29 +309,35 @@ export declare class BWDatePicker {
   clear(): this;
 
   // Navigation methods
-  /** Go to previous month */
-  prevMonth(): this;
-  /** Go to next month */
-  nextMonth(): this;
-  /** Go to previous year */
-  prevYear(): this;
-  /** Go to next year */
-  nextYear(): this;
-  /** Select today */
-  today(): this;
+  /** Change month by offset */
+  changeMonth(offset: number): this;
+  /** Change year by offset */
+  changeYear(offset: number): this;
+  /** Change week by offset */
+  changeWeek(offset: number): this;
+  /** Navigate to specific date */
+  goToDate(date: Date): this;
+  /** Navigate to today */
+  goToToday(): this;
   /** Re-render picker */
   refresh(): this;
 
+  // View mode methods
+  /** Set view mode */
+  setViewMode(mode: ViewMode): this;
+  /** Get current view mode */
+  getViewMode(): ViewMode;
+
   // Event methods
   /** Subscribe to event */
-  on<K extends BWDatePickerEvent>(
+  on<K extends keyof BWDatePickerEventMap>(
     event: K,
-    callback: (payload: BWDatePickerEventMap[K]) => void
+    callback: (payload: BWDatePickerEventMap[K]) => void | boolean
   ): this;
   /** Unsubscribe from event */
-  off<K extends BWDatePickerEvent>(
+  off<K extends keyof BWDatePickerEventMap>(
     event: K,
-    callback: (payload: BWDatePickerEventMap[K]) => void
+    callback: (payload: BWDatePickerEventMap[K]) => void | boolean
   ): this;
 
   // Plugin methods
@@ -195,6 +345,8 @@ export declare class BWDatePicker {
   use<T>(plugin: Plugin<T>, options?: unknown): this;
   /** Get plugin instance by name */
   getPlugin<T = unknown>(name: string): T | null;
+  /** Check if plugin exists */
+  hasPlugin(name: string): boolean;
 
   // Getters
   /** Get picker element */
@@ -203,6 +355,10 @@ export declare class BWDatePicker {
   getInputElement(): HTMLInputElement;
   /** Get current options */
   getOptions(): BWDatePickerOptions;
+  /** Get state manager */
+  getStateManager(): StateManager;
+  /** Get event bus */
+  getEventBus(): EventBus;
   /** Check if picker is open */
   isOpen(): boolean;
 }

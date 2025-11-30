@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * Black & White UI – Mask Handler
+ * Black & White UI — Mask Handler
  * Formats input as user types (DD/MM/YYYY, MM/DD/YYYY, etc)
  * ============================================================================
  */

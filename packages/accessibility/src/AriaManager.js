@@ -60,26 +60,30 @@ export class AriaManager {
     gridElement.setAttribute('role', 'grid');
     gridElement.setAttribute('aria-labelledby', 'calendar-heading');
 
-    // Set row roles
-    const rows = gridElement.querySelectorAll('.bw-calendar-week');
+    // Set row roles (support both core and dual calendar)
+    const rows = gridElement.querySelectorAll(
+      '.bw-datepicker__week, .bw-dual-week'
+    );
     rows.forEach((row, index) => {
       row.setAttribute('role', 'row');
       row.setAttribute('aria-rowindex', String(index + 1));
     });
 
-    // Set gridcell roles
-    const cells = gridElement.querySelectorAll('.bw-day');
+    // Set gridcell roles (support both core and dual calendar)
+    const cells = gridElement.querySelectorAll(
+      '.bw-datepicker__day, .bw-dual-day'
+    );
     cells.forEach((cell, index) => {
       cell.setAttribute('role', 'gridcell');
       cell.setAttribute('aria-colindex', String((index % 7) + 1));
 
       // Add button role for interactive cells
-      if (!cell.classList.contains('bw-day--disabled')) {
+      if (!cell.classList.contains('bw-datepicker__day--disabled')) {
         const button = cell.querySelector('button') || cell;
         button.setAttribute('role', 'button');
         button.setAttribute(
           'tabindex',
-          cell.classList.contains('bw-day--focused') ? '0' : '-1'
+          cell.classList.contains('bw-datepicker__day--selected') ? '0' : '-1'
         );
       }
     });

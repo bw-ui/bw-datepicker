@@ -47,12 +47,24 @@ export class KeyboardNav {
     // Make picker focusable
     this.pickerElement.setAttribute('tabindex', '-1');
 
-    // Make all day buttons focusable
-    const days = this.pickerElement.querySelectorAll('.bw-datepicker__day');
+    // Make all visible day buttons focusable (support both core and dual calendar)
+    const days = this.pickerElement.querySelectorAll(
+      '.bw-datepicker__day, .bw-dual-day'
+    );
     days.forEach((day) => {
-      if (!day.disabled) {
-        day.setAttribute('tabindex', '0');
+      // Skip disabled, empty, and hidden days
+      if (
+        day.classList.contains('bw-datepicker__day--disabled') ||
+        day.classList.contains('bw-datepicker__day--empty') ||
+        day.classList.contains('bw-dual-day--disabled')
+      ) {
+        return;
       }
+      // Skip days with no content (empty cells from showOtherMonths: false)
+      if (!day.textContent.trim()) {
+        return;
+      }
+      day.setAttribute('tabindex', '0');
     });
 
     // Make nav buttons focusable
@@ -100,7 +112,10 @@ export class KeyboardNav {
 
     // Get focused element
     const focused = document.activeElement;
-    const isOnDay = focused && focused.classList.contains('bw-datepicker__day');
+    const isOnDay =
+      focused &&
+      (focused.classList.contains('bw-datepicker__day') ||
+        focused.classList.contains('bw-dual-day'));
 
     if (!isOnDay) {
       // If not on a day, try to focus first day on arrow keys
@@ -153,9 +168,19 @@ export class KeyboardNav {
       case KEYS.PAGE_UP:
         e.preventDefault();
         if (e.shiftKey) {
-          this.controller.prevYear();
+          // Use prevYear if available, otherwise call changeYear on controller
+          if (typeof this.controller.prevYear === 'function') {
+            this.controller.prevYear();
+          } else if (typeof this.controller.changeYear === 'function') {
+            this.controller.changeYear(-1);
+          }
         } else {
-          this.controller.prevMonth();
+          // Use prevMonth if available, otherwise call changeMonth on controller
+          if (typeof this.controller.prevMonth === 'function') {
+            this.controller.prevMonth();
+          } else if (typeof this.controller.changeMonth === 'function') {
+            this.controller.changeMonth(-1);
+          }
         }
         setTimeout(() => this.focusFirstAvailableDay(), 50);
         break;
@@ -163,9 +188,17 @@ export class KeyboardNav {
       case KEYS.PAGE_DOWN:
         e.preventDefault();
         if (e.shiftKey) {
-          this.controller.nextYear();
+          if (typeof this.controller.nextYear === 'function') {
+            this.controller.nextYear();
+          } else if (typeof this.controller.changeYear === 'function') {
+            this.controller.changeYear(1);
+          }
         } else {
-          this.controller.nextMonth();
+          if (typeof this.controller.nextMonth === 'function') {
+            this.controller.nextMonth();
+          } else if (typeof this.controller.changeMonth === 'function') {
+            this.controller.changeMonth(1);
+          }
         }
         setTimeout(() => this.focusFirstAvailableDay(), 50);
         break;
@@ -180,7 +213,9 @@ export class KeyboardNav {
 
   handleTabKey(e) {
     const focusableElements = this.pickerElement.querySelectorAll(
-      'button:not(:disabled), [tabindex="0"]:not(:disabled), .bw-datepicker__day:not(:disabled)'
+      'button:not(:disabled), [tabindex="0"]:not(:disabled), ' +
+        '.bw-datepicker__day:not(.bw-datepicker__day--disabled):not(.bw-datepicker__day--empty), ' +
+        '.bw-dual-day:not(.bw-dual-day--disabled)'
     );
 
     if (focusableElements.length === 0) return;
@@ -204,9 +239,22 @@ export class KeyboardNav {
   }
 
   navigateDay(currentDay, offset) {
+    // Get only visible, non-disabled days (exclude empty and other-month when hidden)
     const allDays = Array.from(
-      this.pickerElement.querySelectorAll('.bw-datepicker__day:not(:disabled)')
-    );
+      this.pickerElement.querySelectorAll(
+        '.bw-datepicker__day:not(.bw-datepicker__day--disabled):not(.bw-datepicker__day--empty):not([style*="visibility: hidden"]), ' +
+          '.bw-dual-day:not(.bw-dual-day--disabled):not([style*="visibility: hidden"])'
+      )
+    ).filter((day) => {
+      // Also filter out days that have no text content (truly empty cells)
+      const text = day.textContent.trim();
+      if (!text) return false;
+      // Filter out "other month" days that are hidden via CSS
+      const style = window.getComputedStyle(day);
+      if (style.visibility === 'hidden' || style.display === 'none')
+        return false;
+      return true;
+    });
 
     const currentIndex = allDays.indexOf(currentDay);
     if (currentIndex === -1) return;
@@ -215,13 +263,21 @@ export class KeyboardNav {
 
     // Wrap around or change month
     if (targetIndex < 0) {
-      this.controller.prevMonth();
+      if (typeof this.controller.prevMonth === 'function') {
+        this.controller.prevMonth();
+      } else if (typeof this.controller.changeMonth === 'function') {
+        this.controller.changeMonth(-1);
+      }
       setTimeout(() => this.goToLastDay(), 50);
       return;
     }
 
     if (targetIndex >= allDays.length) {
-      this.controller.nextMonth();
+      if (typeof this.controller.nextMonth === 'function') {
+        this.controller.nextMonth();
+      } else if (typeof this.controller.changeMonth === 'function') {
+        this.controller.changeMonth(1);
+      }
       setTimeout(() => this.goToFirstDay(), 50);
       return;
     }
@@ -233,10 +289,36 @@ export class KeyboardNav {
     }
   }
 
+  /**
+   * Helper to get all visible, focusable days
+   */
+  getVisibleDays() {
+    return Array.from(
+      this.pickerElement.querySelectorAll(
+        '.bw-datepicker__day:not(.bw-datepicker__day--disabled):not(.bw-datepicker__day--empty), ' +
+          '.bw-dual-day:not(.bw-dual-day--disabled)'
+      )
+    ).filter((day) => {
+      // Filter out days that have no text content (truly empty cells)
+      const text = day.textContent.trim();
+      if (!text) return false;
+      // Filter out days that are hidden via CSS (showOtherMonths: false)
+      const style = window.getComputedStyle(day);
+      if (style.visibility === 'hidden' || style.display === 'none')
+        return false;
+      return true;
+    });
+  }
+
   goToFirstDay() {
-    const firstDay = this.pickerElement.querySelector(
-      '.bw-datepicker__day:not(:disabled):not(.bw-datepicker__day--other-month)'
+    const days = this.getVisibleDays();
+    // Prefer current month days
+    const currentMonthDay = days.find(
+      (day) =>
+        !day.classList.contains('bw-datepicker__day--other-month') &&
+        !day.classList.contains('bw-dual-day--other')
     );
+    const firstDay = currentMonthDay || days[0];
     if (firstDay) {
       firstDay.focus();
       this.announceFocusedDate(firstDay);
@@ -244,12 +326,17 @@ export class KeyboardNav {
   }
 
   goToLastDay() {
-    const days = Array.from(
-      this.pickerElement.querySelectorAll(
-        '.bw-datepicker__day:not(:disabled):not(.bw-datepicker__day--other-month)'
-      )
+    const days = this.getVisibleDays();
+    // Prefer current month days
+    const currentMonthDays = days.filter(
+      (day) =>
+        !day.classList.contains('bw-datepicker__day--other-month') &&
+        !day.classList.contains('bw-dual-day--other')
     );
-    const lastDay = days[days.length - 1];
+    const lastDay =
+      currentMonthDays.length > 0
+        ? currentMonthDays[currentMonthDays.length - 1]
+        : days[days.length - 1];
     if (lastDay) {
       lastDay.focus();
       this.announceFocusedDate(lastDay);
@@ -257,9 +344,8 @@ export class KeyboardNav {
   }
 
   focusFirstAvailableDay() {
-    const firstDay = this.pickerElement.querySelector(
-      '.bw-datepicker__day:not(:disabled)'
-    );
+    const days = this.getVisibleDays();
+    const firstDay = days[0];
     if (firstDay) {
       firstDay.focus();
       this.announceFocusedDate(firstDay);
@@ -269,7 +355,9 @@ export class KeyboardNav {
   selectFocusedDay(dayElement) {
     const date = dayElement.getAttribute('data-date');
     if (date) {
-      this.controller.setDate(new Date(date));
+      // Click the element instead of calling setDate directly
+      // This allows Range plugin and other plugins to handle the selection properly
+      dayElement.click();
       this.announcer.announce(`Selected ${date}`);
     }
   }
@@ -282,9 +370,13 @@ export class KeyboardNav {
   }
 
   setInitialFocus() {
+    const visibleDays = this.getVisibleDays();
+
     // Focus selected date if exists
-    const selectedDay = this.pickerElement.querySelector(
-      '.bw-datepicker__day--selected:not(:disabled)'
+    const selectedDay = visibleDays.find(
+      (day) =>
+        day.classList.contains('bw-datepicker__day--selected') ||
+        day.classList.contains('bw-dual-day--selected')
     );
     if (selectedDay) {
       selectedDay.setAttribute('tabindex', '0');
@@ -293,8 +385,10 @@ export class KeyboardNav {
     }
 
     // Focus today
-    const today = this.pickerElement.querySelector(
-      '.bw-datepicker__day--today:not(:disabled)'
+    const today = visibleDays.find(
+      (day) =>
+        day.classList.contains('bw-datepicker__day--today') ||
+        day.classList.contains('bw-dual-day--today')
     );
     if (today) {
       today.setAttribute('tabindex', '0');

@@ -4,7 +4,10 @@
  *
  * Composable for programmatic control of BW DatePicker
  *
- * @version 1.0.0
+ * Updated for slot-based architecture (v1.1.0):
+ * - Fixed event names to match core v0.3.0
+ *
+ * @version 1.1.0
  * @license MIT
  */
 
@@ -76,7 +79,8 @@ export function useBWDatePicker(options = {}) {
 
     try {
       const module = await import('@bw-ui/datepicker');
-      const DatePickerCore = module.DatePickerCore || module.default;
+      const DatePickerCore =
+        module.BWDatePicker || module.DatePickerCore || module.default;
 
       if (!DatePickerCore) {
         console.error('useBWDatePicker: Could not load @bw-ui/datepicker');
@@ -104,35 +108,36 @@ export function useBWDatePicker(options = {}) {
 
       // Register plugins
       plugins.forEach((plugin) => {
-        const pluginName = typeof plugin === 'object' ? plugin.name : plugin.name;
+        const pluginName =
+          typeof plugin === 'object' ? plugin.name : plugin.name;
         const opts = pluginOptions[pluginName] || {};
         picker.use(plugin, opts);
       });
 
-      // Setup event listeners
+      // Setup event listeners (using correct core v0.3.0 event names)
       const eventBus = picker.getEventBus();
 
-      eventBus.on('date:select', (data) => {
+      eventBus.on('date:selected', (data) => {
         date.value = data.date;
         onChange?.(data.date, data);
       });
 
-      eventBus.on('picker:open', (data) => {
+      eventBus.on('picker:opened', (data) => {
         isOpen.value = true;
         onOpen?.(data);
       });
 
-      eventBus.on('picker:close', (data) => {
+      eventBus.on('picker:closed', (data) => {
         isOpen.value = false;
         onClose?.(data);
       });
 
       if (onMonthChange) {
-        eventBus.on('month:change', onMonthChange);
+        eventBus.on('nav:monthChanged', onMonthChange);
       }
 
       if (onYearChange) {
-        eventBus.on('year:change', onYearChange);
+        eventBus.on('nav:yearChanged', onYearChange);
       }
     } catch (error) {
       console.error('useBWDatePicker: Initialization error', error);

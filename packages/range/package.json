@@ -1,0 +1,48 @@
+{
+  "name": "@bw-ui/datepicker-range",
+  "version": "1.1.2",
+  "description": "Range plugin for @bw-ui/datepicker - Date range selection with presets and dual calendar",
+  "main": "dist/bw-range.min.js",
+  "module": "dist/bw-range.esm.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/bw-range.esm.min.js",
+      "require": "./dist/bw-range.min.js"
+    },
+    "./css": "./dist/bw-range.min.css"
+  },
+  "types": "src/index.d.ts",
+  "files": [
+    "dist",
+    "src/index.d.ts"
+  ],
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": [
+    "datepicker",
+    "range",
+    "daterange",
+    "calendar",
+    "presets",
+    "dual-calendar",
+    "bw-ui"
+  ],
+  "author": "BW UI",
+  "license": "MIT",
+  "peerDependencies": {
+    "@bw-ui/datepicker": "^1.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bw-ui/bw-datepicker"
+  },
+  "bugs": {
+    "url": "https://github.com/bw-ui/bw-datepicker/issues"
+  },
+  "homepage": "https://github.com/bw-ui/bw-datepicker",
+  "type": "module"
+}

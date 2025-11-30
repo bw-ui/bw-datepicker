@@ -3,7 +3,7 @@
  * @bw-ui/datepicker - Core Package
  * Lightweight, zero-dependency datepicker
  * ============================================================================
- * @version 0.2.0
+ * @version 0.3.0
  * @license MIT
  * ============================================================================
  */
@@ -15,6 +15,13 @@ export { EventBus } from './BWEventBus.js';
 export { CoreRenderer } from './CoreRenderer.js';
 export { PluginSystem } from './CorePluginSystem.js';
 export { PopupMode, ModalMode, InlineMode } from './modes/index.js';
+
+// NEW: Slot system
+export { SlotManager } from './slots/index.js';
+
+// NEW: View modes
+export { CalendarView, MonthView, YearView, WeekView } from './views/index.js';
+
 export {
   isValidDate,
   isSameDay,

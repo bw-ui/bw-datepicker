@@ -5,3 +5,6 @@ package-lock.json
 *.log
 test-react-app/node_modules
 test-vue-app/node_modules
+demo.html
+chunks/
+demos/

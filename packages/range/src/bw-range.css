@@ -1,0 +1,416 @@
+/**
+ * @bw-ui/datepicker-range
+ * Range Plugin Styles
+ */
+
+/* Range mode */
+.bw-datepicker--range .bw-datepicker__day {
+  position: relative;
+}
+
+.bw-datepicker--range .bw-dual-day {
+  position: relative;
+}
+
+/* Start date */
+.bw-range-start {
+  background-color: #3b82f6 !important;
+  color: #fff !important;
+  border-radius: 50% 0 0 50%;
+}
+
+/* End date */
+.bw-range-end {
+  background-color: #3b82f6 !important;
+  color: #fff !important;
+  border-radius: 0 50% 50% 0;
+}
+
+/* Start and end same day */
+.bw-range-start.bw-range-end {
+  border-radius: 50%;
+}
+
+/* In range */
+.bw-range-in {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+  border-radius: 0;
+}
+
+/* Hover preview */
+.bw-range-hover {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+/* ================================
+   ERROR MESSAGE - Always at bottom
+   ================================ */
+
+.bw-range-error {
+  color: #dc2626;
+  font-size: 12px;
+  padding: 6px 8px;
+  text-align: center;
+  background: #fee2e2;
+  border-top: 1px solid #fecaca;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ================================
+   DUAL CALENDAR
+   ================================ */
+
+.bw-datepicker--dual .bw-datepicker__container {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.bw-datepicker--dual .bw-calendar-wrapper {
+  flex: 1;
+}
+
+/* ================================
+   PRESETS WRAPPER (for left/right)
+   ================================ */
+
+.bw-range-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.bw-range-wrapper--hidden {
+  display: block;
+}
+
+.bw-range-wrapper--hidden .bw-presets {
+  display: none;
+}
+
+.bw-range-wrapper--left .bw-presets {
+  order: -1;
+}
+
+.bw-range-wrapper--right .bw-presets {
+  order: 1;
+}
+
+/* Calendar inside wrapper takes remaining space */
+.bw-range-wrapper .bw-datepicker__calendar {
+  flex: 1;
+}
+
+.bw-range-wrapper .bw-dual-wrapper {
+  flex: 1;
+}
+
+.bw-range-calendar-inner {
+  flex: 1;
+}
+
+/* ================================
+   PRESETS BASE
+   ================================ */
+
+.bw-presets {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  background: #f9fafb;
+}
+
+.bw-preset-btn {
+  padding: 6px 10px;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.bw-preset-btn:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.bw-preset-btn:active {
+  background: #dbeafe;
+}
+
+.bw-preset-btn.selected {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #fff;
+}
+
+.bw-preset-btn.selected:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+/* ================================
+   PRESETS - LEFT / RIGHT
+   ================================ */
+
+.bw-presets--left,
+.bw-presets--right {
+  flex-direction: column;
+  min-width: 100px;
+  max-height: 250px;
+  overflow-y: auto;
+  align-self: stretch;
+}
+
+.bw-presets--left {
+  border-right: 1px solid #e5e7eb;
+}
+
+.bw-presets--right {
+  border-left: 1px solid #e5e7eb;
+}
+
+.bw-presets--left .bw-preset-btn,
+.bw-presets--right .bw-preset-btn {
+  text-align: left;
+  font-size: 11px;
+  padding: 5px 8px;
+}
+
+/* ================================
+   PRESETS - TOP
+   ================================ */
+
+.bw-presets--top {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 6px 8px;
+  gap: 6px;
+  max-width: 280px;
+  box-sizing: border-box;
+}
+
+.bw-presets--top .bw-preset-btn {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+/* Thin scrollbar */
+.bw-presets--top::-webkit-scrollbar {
+  height: 3px;
+}
+
+.bw-presets--top::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bw-presets--top::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+/* ================================
+   PRESETS - BOTTOM
+   ================================ */
+
+.bw-presets--bottom {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  border-top: 1px solid #e5e7eb;
+  padding: 6px 8px;
+  gap: 6px;
+  max-width: 280px;
+  box-sizing: border-box;
+}
+
+.bw-presets--bottom .bw-preset-btn {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.bw-presets--bottom::-webkit-scrollbar {
+  height: 3px;
+}
+
+.bw-presets--bottom::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bw-presets--bottom::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+/* ================================
+   PRESETS - DROPDOWN
+   ================================ */
+
+.bw-presets--dropdown {
+  position: relative;
+  flex-direction: column;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.bw-presets--dropdown .bw-preset-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 8px;
+  min-width: 120px;
+}
+
+.bw-presets--dropdown .bw-preset-dropdown-toggle:hover {
+  border-color: #3b82f6;
+}
+
+.bw-presets--dropdown .bw-preset-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 8px;
+  right: 8px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.bw-presets--dropdown.open .bw-preset-dropdown-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.bw-presets--dropdown .bw-preset-btn {
+  border: none;
+  border-radius: 0;
+  text-align: left;
+  padding: 8px 12px;
+}
+
+.bw-presets--dropdown .bw-preset-btn:first-child {
+  border-radius: 6px 6px 0 0;
+}
+
+.bw-presets--dropdown .bw-preset-btn:last-child {
+  border-radius: 0 0 6px 6px;
+}
+
+.bw-presets--dropdown .bw-preset-btn:hover {
+  background: #eff6ff;
+}
+
+/* ================================
+   DARK THEME
+   ================================ */
+
+.bw-datepicker--dark .bw-range-start,
+.bw-datepicker--dark .bw-range-end {
+  background-color: #3b82f6 !important;
+  color: #fff !important;
+}
+
+.bw-datepicker--dark .bw-range-in {
+  background-color: rgba(59, 130, 246, 0.25);
+}
+
+.bw-datepicker--dark .bw-range-hover {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+
+.bw-datepicker--dark .bw-range-error {
+  background: #450a0a;
+  color: #fca5a5;
+  border-color: #7f1d1d;
+}
+
+.bw-datepicker--dark .bw-presets {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.bw-datepicker--dark .bw-preset-btn {
+  background: #374151;
+  border-color: #4b5563;
+  color: #e5e7eb;
+}
+
+.bw-datepicker--dark .bw-preset-btn:hover {
+  background: #1e3a5f;
+  border-color: #3b82f6;
+  color: #60a5fa;
+}
+
+.bw-datepicker--dark .bw-preset-btn.selected {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #fff;
+}
+
+.bw-datepicker--dark .bw-preset-btn.selected:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.bw-datepicker--dark .bw-presets--dropdown .bw-preset-dropdown-toggle {
+  background: #374151;
+  border-color: #4b5563;
+  color: #e5e7eb;
+}
+
+.bw-datepicker--dark .bw-presets--dropdown .bw-preset-dropdown-menu {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.bw-datepicker--dark .bw-presets--dropdown .bw-preset-btn {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+
+@media (max-width: 600px) {
+  .bw-range-wrapper {
+    flex-direction: column;
+  }
+
+  .bw-presets--left,
+  .bw-presets--right {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+    max-height: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid #e5e7eb;
+    min-width: auto;
+  }
+}

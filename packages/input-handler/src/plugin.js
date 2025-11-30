@@ -1,6 +1,12 @@
 /**
  * @bw-ui/datepicker-input-handler
  * Input Handler Plugin - Masking, validation, manual input
+ *
+ * Compatible with slot-based architecture (v1.1.0):
+ * - Uses core events (date:selected, date:changed)
+ * - No dependencies on other plugins
+ *
+ * @version 1.1.0
  */
 
 import { InputBinder } from './InputBinder.js';
@@ -14,8 +20,9 @@ export const InputHandlerPlugin = {
   init(api, options = {}) {
     const inputEl = api.getInputElement();
     const opts = api.getOptions();
+    const eventBus = api.getEventBus();
 
-    const binder = new InputBinder(inputEl, api.datepicker, {
+    const binder = new InputBinder(inputEl, api.datepicker, eventBus, {
       format: options.format || opts.format || 'DD/MM/YYYY',
       autoCorrect: options.autoCorrect !== false,
       validateOnBlur: options.validateOnBlur !== false,

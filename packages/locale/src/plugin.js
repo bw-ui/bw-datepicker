@@ -1,6 +1,12 @@
 /**
  * @bw-ui/datepicker-locale
  * Locale Plugin - Internationalization support
+ *
+ * Updated for slot-based architecture (v1.1.0):
+ * - Uses render:before to inject locale data into options
+ * - Compatible with DualCalendar (locale data flows through core options)
+ *
+ * @version 1.1.0
  */
 
 import { LocaleManager } from './LocaleManager.js';
@@ -57,21 +63,13 @@ export const LocalePlugin = {
       coreOpts.monthNames = localeManager.getMonthNames('long');
     }
 
-    // Hook into render:header event to override month name
-    eventBus.on('render:header', (data) => {
-      if (data.month !== undefined) {
-        data.monthName = localeManager.getMonthName(data.month, 'long');
-      }
-      return data;
-    });
-
     // Hook into render:before to ensure locale data is always present
-    eventBus.on('render:before', (data) => {
-      if (data.data && data.data.options) {
-        data.data.options.dayNames = localeManager.getDayNames('short', 0);
-        data.data.options.monthNames = localeManager.getMonthNames('long');
+    // This works for both core and DualCalendar since they both read from options
+    eventBus.on('render:before', ({ data }) => {
+      if (data && data.options) {
+        data.options.dayNames = localeManager.getDayNames('short', 0);
+        data.options.monthNames = localeManager.getMonthNames('long');
       }
-      return data;
     });
 
     // Return instance with methods
@@ -97,6 +95,13 @@ export const LocalePlugin = {
           }
         } else {
           localeManager.setLocale(locale);
+        }
+
+        // Update core options
+        const opts = api.getOptions();
+        if (opts) {
+          opts.dayNames = localeManager.getDayNames('short', 0);
+          opts.monthNames = localeManager.getMonthNames('long');
         }
 
         // Re-render picker
@@ -134,12 +139,14 @@ export const LocalePlugin = {
 
     // Emit locale applied event
     eventBus.emit('locale:applied', { locale: config.locale });
+
     // Force refresh to apply locale on first render
     setTimeout(() => {
       if (api.datepicker?.refresh) {
         api.datepicker.refresh();
       }
     }, 0);
+
     return instance;
   },
 

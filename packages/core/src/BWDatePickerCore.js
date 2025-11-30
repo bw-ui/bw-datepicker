@@ -235,6 +235,13 @@ export class DatePickerCore {
   }
 
   /**
+   * Set options
+   */
+  setOption(key, value) {
+    this.#controller.setOption(key, value);
+  }
+
+  /**
    * Get instance ID
    */
   getInstanceId() {

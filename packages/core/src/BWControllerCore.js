@@ -1,16 +1,38 @@
 /**
  * ============================================================================
  * Black & White: UI Engineering
- * CoreController - Slim Core Controller with Event Hooks
+ * CoreController - Slot-Based Architecture
  * ============================================================================
- * @version 0.2.0
+ *
+ * Refactored to use persistent slots and view modes.
+ *
+ * Slots (created once, never wiped):
+ * - header: month/year title + navigation
+ * - calendar: days/months/years/week grid
+ * - footer: today/clear buttons
+ *
+ * View Modes:
+ * - calendar: days grid (default)
+ * - month: months grid
+ * - year: years grid
+ * - week: single week
+ *
+ * Render Pipeline:
+ * - render:before - providers modify data
+ * - render:header - plugin can intercept (return true)
+ * - render:calendar - plugin can intercept (return true)
+ * - render:footer - plugin can intercept (return true)
+ * - render:after - decorators add classes
+ *
+ * @version 0.3.0
  * @license MIT
  * ============================================================================
  */
 
 import StateManager from './BWStateManager.js';
 import EventBus from './BWEventBus.js';
-import CoreRenderer from './CoreRenderer.js';
+import { SlotManager } from './slots/index.js';
+import { CalendarView, MonthView, YearView, WeekView } from './views/index.js';
 import { PopupMode, ModalMode, InlineMode } from './modes/index.js';
 import {
   isValidDate,
@@ -21,6 +43,7 @@ import {
   generateCalendarMonth,
   isDisabled,
   isWeekend,
+  MONTH_NAMES,
 } from './date-utils.js';
 
 const CORE_DEFAULTS = {
@@ -37,17 +60,29 @@ const CORE_DEFAULTS = {
   closeOnSelect: true,
   allowDeselect: true,
   format: 'YYYY-MM-DD',
+  defaultViewMode: 'calendar',
+
+  // View mode options
+  showMonthPicker: true, // Click month → month grid
+  showYearPicker: true, // Click year → year grid
+  showYearNavigation: true, // Show « » buttons
+  showMonthNavigation: true, // Show ‹ › month buttons (calendar view)
+  showWeekNavigation: true, // Show ‹ › week buttons (week view)
+  resetViewOnClose: true, // Reset to defaultViewMode on close
 };
 
 export class CoreController {
   #stateManager;
   #eventBus;
-  #renderer;
+  #slotManager;
   #modeHandler;
   #inputElement;
   #pickerElement;
   #options;
   #plugins = new Map();
+
+  // View renderers
+  #views = {};
 
   constructor(inputElement, options = {}) {
     this.#inputElement = inputElement;
@@ -61,6 +96,7 @@ export class CoreController {
           : parseISO(this.#options.defaultDate);
     }
 
+    // Initialize state with viewMode
     this.#stateManager = new StateManager({
       currentMonth: initialDate
         ? initialDate.getMonth()
@@ -70,11 +106,24 @@ export class CoreController {
         : new Date().getFullYear(),
       selectedDate: initialDate,
       isOpen: false,
+      viewMode: this.#options.defaultViewMode,
+      weekReferenceDate: initialDate || new Date(), // For week navigation
     });
 
     this.#eventBus = new EventBus();
-    this.#renderer = new CoreRenderer();
-    this.#renderer.setEventBus(this.#eventBus);
+    this.#slotManager = new SlotManager();
+
+    // Initialize views
+    this.#views = {
+      calendar: new CalendarView(),
+      month: new MonthView(),
+      year: new YearView(),
+      week: new WeekView(),
+    };
+
+    // Set eventBus on views that need it
+    this.#views.calendar.setEventBus(this.#eventBus);
+    this.#views.week.setEventBus(this.#eventBus);
 
     // Emit init event - plugins can modify options
     this.#eventBus.emit('picker:init', { options: this.#options });
@@ -113,6 +162,10 @@ export class CoreController {
     }
 
     this.#pickerElement = picker;
+
+    // Create slots (ONCE - never wiped)
+    this.#slotManager.createSlots(picker);
+
     this.#attachPickerEvents();
   }
 
@@ -141,8 +194,15 @@ export class CoreController {
   }
 
   #setupStateObservers() {
+    // Re-render on state changes
     this.#stateManager.observeMany(
-      ['currentMonth', 'currentYear', 'selectedDate'],
+      [
+        'currentMonth',
+        'currentYear',
+        'selectedDate',
+        'viewMode',
+        'weekReferenceDate',
+      ],
       () => {
         if (this.#stateManager.get('isOpen')) this.render();
       }
@@ -168,7 +228,6 @@ export class CoreController {
       }, 100);
     });
 
-    // Input events
     this.#inputElement.addEventListener('blur', () =>
       this.#eventBus.emit('input:blur', {})
     );
@@ -186,7 +245,7 @@ export class CoreController {
       this.#handleAction(action, target, e);
     });
 
-    // Handle select/input changes for custom elements
+    // Handle select/input changes
     this.#pickerElement.addEventListener('change', (e) => {
       const target = e.target.closest('[data-action]');
       if (target) {
@@ -227,16 +286,16 @@ export class CoreController {
 
     switch (action) {
       case 'prev-year':
-        this.changeYear(-1);
+        if (this.#options.showYearNavigation) this.changeYear(-1);
         break;
       case 'next-year':
-        this.changeYear(1);
+        if (this.#options.showYearNavigation) this.changeYear(1);
         break;
       case 'prev-month':
-        this.changeMonth(-1);
+        if (this.#options.showMonthNavigation) this.changeMonth(-1);
         break;
       case 'next-month':
-        this.changeMonth(1);
+        if (this.#options.showMonthNavigation) this.changeMonth(1);
         break;
       case 'select-date':
         this.selectDate(target.getAttribute('data-date'));
@@ -247,10 +306,50 @@ export class CoreController {
       case 'clear':
         this.clearDate();
         break;
+
+      // View mode actions - check options
+      case 'show-months':
+        if (this.#options.showMonthPicker) this.setViewMode('month');
+        break;
+      case 'show-years':
+        if (this.#options.showYearPicker) this.setViewMode('year');
+        break;
+      case 'select-month':
+        this.#handleMonthSelect(
+          parseInt(target.getAttribute('data-month'), 10)
+        );
+        break;
+      case 'select-year':
+        this.#handleYearSelect(parseInt(target.getAttribute('data-year'), 10));
+        break;
+      case 'prev-year-range':
+        this.changeYear(-12);
+        break;
+      case 'next-year-range':
+        this.changeYear(12);
+        break;
+
+      // Week navigation
+      case 'prev-week':
+        this.changeWeek(-1);
+        break;
+      case 'next-week':
+        this.changeWeek(1);
+        break;
+
       default:
-        // Unknown action - emit for plugins
         this.#eventBus.emit('action:unknown', { action, target, event });
     }
+  }
+
+  #handleMonthSelect(month) {
+    this.#stateManager.set({ currentMonth: month, viewMode: 'calendar' });
+    this.#eventBus.emit('nav:monthSelected', { month });
+  }
+
+  #handleYearSelect(year) {
+    this.#stateManager.set({ currentYear: year, viewMode: 'month' });
+    this.#eventBus.emit('nav:yearSelected', { year });
   }
 
   #parseInputValue() {
@@ -267,26 +366,254 @@ export class CoreController {
     }
   }
 
+  /**
+   * Main render method - uses slots and view modes
+   */
   render() {
     if (!this.#pickerElement) return;
 
     const currentMonth = this.#stateManager.get('currentMonth');
     const currentYear = this.#stateManager.get('currentYear');
     const selectedDate = this.#stateManager.get('selectedDate');
-    const weeks = this.#generateWeeks(currentMonth, currentYear);
+    const viewMode = this.#stateManager.get('viewMode');
+    const weekReferenceDate = this.#stateManager.get('weekReferenceDate');
 
-    const html = this.#renderer.render({
+    // Update view mode class on picker element
+    this.#pickerElement.className = this.#pickerElement.className
+      .replace(/bw-datepicker--view-\w+/g, '')
+      .trim();
+    this.#pickerElement.classList.add(`bw-datepicker--view-${viewMode}`);
+
+    const weeks = this.#generateWeeks(currentMonth, currentYear);
+    const slots = this.#slotManager.getAllSlots();
+
+    const renderData = {
       currentMonth,
       currentYear,
       selectedDate,
+      viewMode,
+      weekReferenceDate,
       weeks,
       options: this.#options,
+    };
+
+    // 1. Emit render:before - providers can modify data
+    this.#eventBus.emit('render:before', { data: renderData, slots });
+
+    // 2. Render header slot
+    const headerIntercepted = this.#eventBus.emit('render:header', {
+      data: renderData,
+      slot: slots.header,
     });
+    if (!headerIntercepted) {
+      this.#renderDefaultHeader(renderData, slots.header);
+    }
 
-    this.#pickerElement.innerHTML = html;
+    // 3. Render calendar slot (based on viewMode)
+    const calendarIntercepted = this.#eventBus.emit('render:calendar', {
+      data: renderData,
+      slot: slots.calendar,
+      viewMode,
+    });
+    if (!calendarIntercepted) {
+      this.#renderDefaultCalendar(renderData, slots.calendar);
+    }
 
-    // Emit after render - plugins can manipulate DOM
-    this.#eventBus.emit('render:after', { element: this.#pickerElement });
+    // 4. Render footer slot
+    const footerIntercepted = this.#eventBus.emit('render:footer', {
+      data: renderData,
+      slot: slots.footer,
+    });
+    if (!footerIntercepted) {
+      this.#renderDefaultFooter(renderData, slots.footer);
+    }
+
+    // 5. Emit render:after - decorators can add classes
+    this.#eventBus.emit('render:after', {
+      data: renderData,
+      slots,
+      element: this.#pickerElement,
+    });
+  }
+
+  #renderDefaultHeader(data, slot) {
+    const { currentMonth, currentYear, viewMode, options } = data;
+    const monthName =
+      options.monthNames?.[currentMonth] || MONTH_NAMES[currentMonth];
+
+    const showYearNav = options.showYearNavigation !== false;
+    const showMonthNav = options.showMonthNavigation !== false;
+    const showMonthPicker = options.showMonthPicker !== false;
+    const showYearPicker = options.showYearPicker !== false;
+
+    let titleHtml;
+    let navHtml;
+
+    if (viewMode === 'year') {
+      // Year view: show year range
+      const yearView = this.#views.year;
+      const range = yearView.getYearRange(currentYear);
+      titleHtml = `<span class="bw-datepicker__title-text">${range.start} - ${range.end}</span>`;
+      navHtml = `
+        ${
+          showYearNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="prev-year-range" aria-label="Previous years">«</button>'
+            : '<span></span>'
+        }
+        <div class="bw-datepicker__title">${titleHtml}</div>
+        ${
+          showYearNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="next-year-range" aria-label="Next years">»</button>'
+            : '<span></span>'
+        }
+      `;
+    } else if (viewMode === 'month') {
+      // Month view: show year (clickable if yearPicker enabled)
+      if (showYearPicker) {
+        titleHtml = `<button type="button" class="bw-datepicker__title-btn" data-action="show-years">${currentYear}</button>`;
+      } else {
+        titleHtml = `<span class="bw-datepicker__title-text">${currentYear}</span>`;
+      }
+      navHtml = `
+        ${
+          showYearNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="prev-year" aria-label="Previous year">«</button>'
+            : '<span></span>'
+        }
+        <div class="bw-datepicker__title">${titleHtml}</div>
+        ${
+          showYearNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="next-year" aria-label="Next year">»</button>'
+            : '<span></span>'
+        }
+      `;
+    } else if (viewMode === 'week') {
+      // Week view: show month + year with ALL navigation
+      const showWeekNav = options.showWeekNavigation !== false;
+
+      const monthEl = showMonthPicker
+        ? `<button type="button" class="bw-datepicker__title-btn" data-action="show-months">${monthName}</button>`
+        : `<span class="bw-datepicker__title-text">${monthName}</span>`;
+
+      const yearEl = showYearPicker
+        ? `<button type="button" class="bw-datepicker__title-btn" data-action="show-years">${currentYear}</button>`
+        : `<span class="bw-datepicker__title-text">${currentYear}</span>`;
+
+      titleHtml = `${monthEl} ${yearEl}`;
+
+      // Week view: year nav (« ») + month nav (‹ ›) + week nav (← →)
+      navHtml = `
+        ${
+          showYearNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="prev-year" aria-label="Previous year">«</button>'
+            : ''
+        }
+        ${
+          showMonthNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="prev-month" aria-label="Previous month">‹</button>'
+            : ''
+        }
+        ${
+          showWeekNav
+            ? '<button type="button" class="bw-datepicker__nav-btn bw-datepicker__nav-btn--week" data-action="prev-week" aria-label="Previous week">←</button>'
+            : ''
+        }
+        <div class="bw-datepicker__title">${titleHtml}</div>
+        ${
+          showWeekNav
+            ? '<button type="button" class="bw-datepicker__nav-btn bw-datepicker__nav-btn--week" data-action="next-week" aria-label="Next week">→</button>'
+            : ''
+        }
+        ${
+          showMonthNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="next-month" aria-label="Next month">›</button>'
+            : ''
+        }
+        ${
+          showYearNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="next-year" aria-label="Next year">»</button>'
+            : ''
+        }
+      `;
+    } else {
+      // Calendar view: month + year
+      const monthEl = showMonthPicker
+        ? `<button type="button" class="bw-datepicker__title-btn" data-action="show-months">${monthName}</button>`
+        : `<span class="bw-datepicker__title-text">${monthName}</span>`;
+
+      const yearEl = showYearPicker
+        ? `<button type="button" class="bw-datepicker__title-btn" data-action="show-years">${currentYear}</button>`
+        : `<span class="bw-datepicker__title-text">${currentYear}</span>`;
+
+      titleHtml = `${monthEl} ${yearEl}`;
+
+      navHtml = `
+        ${
+          showYearNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="prev-year" aria-label="Previous year">«</button>'
+            : ''
+        }
+        ${
+          showMonthNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="prev-month" aria-label="Previous month">‹</button>'
+            : ''
+        }
+        <div class="bw-datepicker__title">${titleHtml}</div>
+        ${
+          showMonthNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="next-month" aria-label="Next month">›</button>'
+            : ''
+        }
+        ${
+          showYearNav
+            ? '<button type="button" class="bw-datepicker__nav-btn" data-action="next-year" aria-label="Next year">»</button>'
+            : ''
+        }
+      `;
+    }
+
+    slot.innerHTML = `<div class="bw-datepicker__header">${navHtml}</div>`;
+  }
+
+  #renderDefaultCalendar(data, slot) {
+    const viewMode = data.viewMode || 'calendar';
+    const view = this.#views[viewMode];
+
+    if (view) {
+      slot.innerHTML = view.render(data);
+    }
+  }
+
+  #renderDefaultFooter(data, slot) {
+    const { options } = data;
+
+    if (options.showFooter === false) {
+      slot.innerHTML = '';
+      return;
+    }
+
+    const showToday = options.showTodayButton !== false;
+    const showClear = options.showClearButton !== false;
+
+    if (!showToday && !showClear) {
+      slot.innerHTML = '';
+      return;
+    }
+
+    slot.innerHTML = `
+      <div class="bw-datepicker__footer">
+        ${
+          showToday
+            ? '<button type="button" class="bw-datepicker__btn" data-action="today">Today</button>'
+            : ''
+        }
+        ${
+          showClear
+            ? '<button type="button" class="bw-datepicker__btn" data-action="clear">Clear</button>'
+            : ''
+        }
+      </div>
+    `;
   }
 
   #generateWeeks(month, year) {
@@ -313,7 +640,9 @@ export class CoreController {
     });
   }
 
+  // =====================================================================
   // PUBLIC API
+  // =====================================================================
 
   open() {
     if (this.#stateManager.get('isOpen')) return;
@@ -352,6 +681,11 @@ export class CoreController {
 
     this.#stateManager.set('isOpen', false);
     this.#modeHandler.hide();
+
+    // Reset to default view on close (if enabled)
+    if (this.#options.resetViewOnClose !== false) {
+      this.#stateManager.set('viewMode', this.#options.defaultViewMode);
+    }
 
     this.#eventBus.emit('picker:closed', {});
     this.#inputElement.dispatchEvent(
@@ -478,6 +812,54 @@ export class CoreController {
     this.#eventBus.emit('nav:yearChanged', { year });
   }
 
+  /**
+   * Change week by offset (for week view navigation)
+   * @param {number} offset - Number of weeks to move (negative = previous)
+   */
+  changeWeek(offset) {
+    const currentRef =
+      this.#stateManager.get('weekReferenceDate') || new Date();
+    const newDate = new Date(currentRef);
+    newDate.setDate(newDate.getDate() + offset * 7);
+
+    const eventData = {
+      date: newDate,
+      cancelled: false,
+      cancel: () => {
+        eventData.cancelled = true;
+      },
+    };
+    this.#eventBus.emit('nav:beforeWeek', eventData);
+    if (eventData.cancelled) return;
+
+    this.#stateManager.set({
+      weekReferenceDate: newDate,
+      currentMonth: newDate.getMonth(),
+      currentYear: newDate.getFullYear(),
+    });
+    this.#eventBus.emit('nav:weekChanged', { date: newDate });
+  }
+
+  /**
+   * Set view mode
+   * @param {string} mode - 'calendar' | 'month' | 'year' | 'week'
+   */
+  setViewMode(mode) {
+    const validModes = ['calendar', 'month', 'year', 'week'];
+    if (!validModes.includes(mode)) return;
+
+    this.#stateManager.set('viewMode', mode);
+    this.#eventBus.emit('view:changed', { viewMode: mode });
+  }
+
+  /**
+   * Get current view mode
+   * @returns {string}
+   */
+  getViewMode() {
+    return this.#stateManager.get('viewMode');
+  }
+
   setDate(date) {
     if (!date) {
       this.clearDate();
@@ -490,19 +872,56 @@ export class CoreController {
     return this.#stateManager.get('selectedDate');
   }
 
+  /**
+   * Navigate to a date without selecting it
+   * @param {Date|string} date - Date to navigate to
+   */
+  goToDate(date) {
+    const d = typeof date === 'string' ? parseISO(date) : date;
+    if (!d || !isValidDate(d)) return;
+
+    this.#stateManager.set({
+      currentMonth: d.getMonth(),
+      currentYear: d.getFullYear(),
+    });
+  }
+
+  /**
+   * Force re-render
+   */
+  refresh() {
+    this.render();
+  }
+
+  /**
+   * Navigate to today
+   */
+  goToToday() {
+    const today = new Date();
+    this.#stateManager.set({
+      currentMonth: today.getMonth(),
+      currentYear: today.getFullYear(),
+    });
+  }
+
   #updateInputValue(date) {
     this.#inputElement.value = date
       ? formatDate(date, this.#options.format)
       : '';
   }
 
+  // =====================================================================
   // PLUGIN API
+  // =====================================================================
 
   getEventBus() {
     return this.#eventBus;
   }
   getStateManager() {
     return this.#stateManager;
+  }
+  getSlotManager() {
+    return this.#slotManager;
   }
   getPickerElement() {
     return this.#pickerElement;
@@ -512,6 +931,9 @@ export class CoreController {
   }
   getOptions() {
     return { ...this.#options };
+  }
+  setOption(key, value) {
+    this.#options[key] = value;
   }
   setPlugin(name, instance) {
     this.#plugins.set(name, instance);
@@ -542,6 +964,7 @@ export class CoreController {
       document.removeEventListener('click', this._outsideClick);
     }
 
+    this.#slotManager.destroy();
     this.#eventBus.clear();
     this.#stateManager.clearObservers();
     this.#plugins.clear();

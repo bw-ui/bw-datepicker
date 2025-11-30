@@ -2,7 +2,11 @@
  * @bw-ui/datepicker-react
  * React wrapper for BW DatePicker
  *
- * @version 1.0.0
+ * Updated for slot-based architecture (v1.1.0):
+ * - Fixed event names to match core v0.3.0
+ * - Works with all plugins (DualCalendar, Range, Data, etc.)
+ *
+ * @version 1.1.0
  * @license MIT
  */
 
@@ -143,7 +147,8 @@ const BWDatePicker = forwardRef(function BWDatePicker(props, ref) {
       try {
         // Import core dynamically
         const module = await import('@bw-ui/datepicker');
-        DatePickerCore = module.DatePickerCore || module.default;
+        DatePickerCore =
+          module.BWDatePicker || module.DatePickerCore || module.default;
 
         if (!DatePickerCore) {
           console.error('BWDatePicker: Could not load @bw-ui/datepicker');
@@ -178,29 +183,29 @@ const BWDatePicker = forwardRef(function BWDatePicker(props, ref) {
           pickerRef.current.use(plugin, options);
         });
 
-        // Setup event listeners
+        // Setup event listeners (using correct core v0.3.0 event names)
         const eventBus = pickerRef.current.getEventBus();
 
         if (onChange) {
-          eventBus.on('date:select', (data) => {
+          eventBus.on('date:selected', (data) => {
             onChange(data.date, data);
           });
         }
 
         if (onOpen) {
-          eventBus.on('picker:open', onOpen);
+          eventBus.on('picker:opened', onOpen);
         }
 
         if (onClose) {
-          eventBus.on('picker:close', onClose);
+          eventBus.on('picker:closed', onClose);
         }
 
         if (onMonthChange) {
-          eventBus.on('month:change', onMonthChange);
+          eventBus.on('nav:monthChanged', onMonthChange);
         }
 
         if (onYearChange) {
-          eventBus.on('year:change', onYearChange);
+          eventBus.on('nav:yearChanged', onYearChange);
         }
       } catch (error) {
         console.error('BWDatePicker: Initialization error', error);

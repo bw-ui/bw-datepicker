@@ -1,0 +1,48 @@
+{
+  "name": "@bw-ui/datepicker-data",
+  "version": "1.1.0",
+  "description": "Data plugin for @bw-ui/datepicker - API integration for prices, availability, events",
+  "main": "dist/bw-data.min.js",
+  "module": "dist/bw-data.esm.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/bw-data.esm.min.js",
+      "require": "./dist/bw-data.min.js"
+    },
+    "./css": "./dist/bw-data.min.css"
+  },
+  "types": "src/index.d.ts",
+  "files": [
+    "dist",
+    "src/index.d.ts"
+  ],
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": [
+    "datepicker",
+    "data",
+    "api",
+    "prices",
+    "availability",
+    "calendar",
+    "bw-ui"
+  ],
+  "author": "BW UI",
+  "license": "MIT",
+  "peerDependencies": {
+    "@bw-ui/datepicker": "^1.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bw-ui/bw-datepicker"
+  },
+  "bugs": {
+    "url": "https://github.com/bw-ui/bw-datepicker/issues"
+  },
+  "homepage": "https://github.com/bw-ui/bw-datepicker",
+  "type": "module"
+}

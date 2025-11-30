@@ -1,5 +1,6 @@
 /**
  * @bw-ui/datepicker-input-handler - TypeScript Definitions
+ * @version 1.1.0
  */
 
 import { Plugin } from '@bw-ui/datepicker';
@@ -73,59 +74,45 @@ export interface InputHandlerInstance {
 // ============================================================================
 
 export declare class MaskHandler {
-  constructor(options?: {
-    element?: HTMLInputElement;
-    format?: string;
-    maskChar?: string;
-    onComplete?: (value: string) => void;
-  });
+  constructor(format?: string);
 
   /** Apply mask to input */
-  apply(): void;
-  /** Remove mask */
-  remove(): void;
-  /** Get unmasked value */
-  getUnmaskedValue(): string;
-  /** Get masked value */
-  getMaskedValue(): string;
-  /** Set value */
-  setValue(value: string): void;
+  applyMask(input: string, previousValue?: string): string;
+  /** Parse input to parts */
+  parse(input: string): { day: string; month: string; year: string } | null;
+  /** Format date */
+  formatDate(date: Date): string;
   /** Check if complete */
-  isComplete(): boolean;
-  /** Destroy and cleanup */
-  destroy(): void;
+  isComplete(input: string): boolean;
+  /** Get placeholder */
+  getPlaceholder(): string;
 }
 
 // ============================================================================
 // Validation Handler
 // ============================================================================
 
-export interface ValidationResult {
-  valid: boolean;
-  error: string | null;
-  date: Date | null;
-}
-
 export declare class ValidationHandler {
   constructor(options?: {
-    format?: string;
     minDate?: Date | null;
     maxDate?: Date | null;
-    customValidator?: (value: string, date: Date | null) => boolean | string;
+    disabledDates?: Array<Date | ((date: Date) => boolean)>;
   });
 
-  /** Validate value */
-  validate(value: string): ValidationResult;
-  /** Check if value is valid date format */
-  isValidFormat(value: string): boolean;
-  /** Parse value to date */
-  parse(value: string): Date | null;
-  /** Set min date */
-  setMinDate(date: Date | null): void;
-  /** Set max date */
-  setMaxDate(date: Date | null): void;
-  /** Destroy and cleanup */
-  destroy(): void;
+  /** Validate parts and return date or null */
+  validate(parts: { day: string; month: string; year: string }): Date | null;
+  /** Auto-correct input */
+  autoCorrect(input: string): string;
+  /** Validate partial input */
+  validatePartial(input: string): boolean;
+  /** Get error message */
+  getErrorMessage(date: Date | null): string | null;
+  /** Update options */
+  updateOptions(options: {
+    minDate?: Date | null;
+    maxDate?: Date | null;
+    disabledDates?: Array<Date | ((date: Date) => boolean)>;
+  }): void;
 }
 
 // ============================================================================
@@ -133,24 +120,21 @@ export declare class ValidationHandler {
 // ============================================================================
 
 export declare class InputBinder {
-  constructor(options?: {
-    element?: HTMLInputElement;
-    onInput?: (value: string) => void;
-    onBlur?: (value: string) => void;
-    onFocus?: () => void;
-    onKeyDown?: (event: KeyboardEvent) => void;
-  });
+  constructor(
+    inputElement: HTMLInputElement,
+    controller: unknown,
+    eventBus: unknown,
+    options?: InputHandlerOptions
+  );
 
-  /** Bind events */
-  bind(): void;
-  /** Unbind events */
-  unbind(): void;
-  /** Focus input */
-  focus(): void;
-  /** Blur input */
-  blur(): void;
-  /** Select all text */
-  selectAll(): void;
+  /** Update input value from date */
+  updateValue(date: Date | null): void;
+  /** Update options */
+  updateOptions(options: Partial<InputHandlerOptions>): void;
+  /** Show error message */
+  showError(message: string): void;
+  /** Clear error */
+  clearError(): void;
   /** Destroy and cleanup */
   destroy(): void;
 }
@@ -160,32 +144,33 @@ export declare class InputBinder {
 // ============================================================================
 
 export declare class ValueSync {
-  constructor(options?: {
-    input?: HTMLInputElement;
-    format?: string;
-    onSync?: (date: Date | null) => void;
-  });
+  constructor(
+    inputElement: HTMLInputElement,
+    controller: unknown,
+    options?: {
+      format?: string;
+      onChange?: (date: Date) => void;
+    }
+  );
 
-  /** Sync value from date */
-  fromDate(date: Date | null): void;
-  /** Sync value to date */
-  toDate(): Date | null;
-  /** Get formatted value */
-  getFormatted(): string;
-  /** Set format */
-  setFormat(format: string): void;
-  /** Destroy and cleanup */
-  destroy(): void;
+  /** Sync value to picker */
+  syncToPicker(date: Date): void;
+  /** Sync value from picker */
+  syncFromPicker(date: Date | null): void;
+  /** Clear input */
+  clear(): void;
+  /** Update format */
+  updateFormat(format: string): void;
 }
 
 // ============================================================================
 // Plugin
 // ============================================================================
 
-export declare const InputHandlerPlugin: Plugin<InputHandlerInstance> & {
+export declare const InputHandlerPlugin: Plugin<InputBinder> & {
   name: 'input-handler';
-  init(api: unknown, options?: InputHandlerOptions): InputHandlerInstance;
-  destroy(instance: InputHandlerInstance): void;
+  init(api: unknown, options?: InputHandlerOptions): InputBinder;
+  destroy(instance: InputBinder): void;
 };
 
 // ============================================================================

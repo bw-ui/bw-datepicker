@@ -7,7 +7,13 @@
  * Centralized state with explicit observers
  * No magic, no Proxy, full control
  *
- * @version 1.0.0
+ * Core State:
+ * - currentMonth, currentYear: Navigation state
+ * - selectedDate: Currently selected date
+ * - isOpen: Picker visibility
+ * - viewMode: 'calendar' | 'month' | 'year' | 'week'
+ *
+ * @version 1.1.0
  * @license MIT
  * ============================================================================
  */

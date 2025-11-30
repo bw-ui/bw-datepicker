@@ -1,0 +1,42 @@
+{
+  "name": "@bw-ui/datepicker-dual-calendar",
+  "version": "1.1.0",
+  "description": "Dual calendar plugin for BW DatePicker - Two months side by side",
+  "main": "dist/bw-dual-calendar.min.js",
+  "module": "dist/bw-dual-calendar.esm.min.js",
+  "types": "index.d.ts",
+  "style": "dist/bw-dual-calendar.min.css",
+  "exports": {
+    ".": {
+      "import": "./dist/bw-dual-calendar.esm.min.js",
+      "require": "./dist/bw-dual-calendar.min.js",
+      "types": "./index.d.ts"
+    },
+    "./css": "./dist/bw-dual-calendar.min.css"
+  },
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "build": "node build.js"
+  },
+  "peerDependencies": {
+    "@bw-ui/datepicker": ">=0.2.0"
+  },
+  "keywords": [
+    "datepicker",
+    "dual-calendar",
+    "two-months",
+    "side-by-side",
+    "hotel-booking",
+    "bw-ui"
+  ],
+  "author": "BW UI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bw-ui/bw-datepicker.git",
+    "directory": "packages/dual-calendar"
+  }
+}

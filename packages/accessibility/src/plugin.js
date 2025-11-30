@@ -2,7 +2,13 @@
  * @bw-ui/datepicker-accessibility
  * Accessibility Plugin - Keyboard nav, ARIA, focus trap, screen readers
  *
- * @version 1.0.1
+ * Updated for slot-based architecture (v1.1.0):
+ * - Supports both core and DualCalendar day elements
+ * - View mode awareness (calendar/week only)
+ * - Uses render:after to setup tabindex after DOM changes
+ * - Clicks day elements for selection (Range plugin compatible)
+ *
+ * @version 1.1.0
  */
 
 import { KeyboardNav } from './KeyboardNav.js';
@@ -41,6 +47,7 @@ export const AccessibilityPlugin = {
     const pickerEl = api.getPickerElement();
     const inputEl = api.getInputElement();
     const eventBus = api.getEventBus();
+    const stateManager = api.getStateManager();
 
     // Store instances (only create if enabled)
     const instances = {
@@ -49,6 +56,12 @@ export const AccessibilityPlugin = {
       announcer: null,
       aria: null,
       highContrast: null,
+    };
+
+    // Helper to check if in calendar/week view mode
+    const isNavigableViewMode = () => {
+      const viewMode = stateManager.get('viewMode');
+      return !viewMode || viewMode === 'calendar' || viewMode === 'week';
     };
 
     // Initialize Keyboard Navigation
@@ -89,7 +102,7 @@ export const AccessibilityPlugin = {
     // Event: Picker Opened
     eventBus.on('picker:opened', () => {
       // Keyboard navigation
-      if (instances.keyboard) {
+      if (instances.keyboard && isNavigableViewMode()) {
         instances.keyboard.initialized = false;
         instances.keyboard.init(pickerEl);
 
@@ -138,6 +151,62 @@ export const AccessibilityPlugin = {
           `${monthName} ${year}`,
           options.announcerDelay
         );
+      }
+
+      // Re-init keyboard after month change
+      if (instances.keyboard && isNavigableViewMode()) {
+        setTimeout(() => {
+          instances.keyboard.initialized = false;
+          instances.keyboard.init(pickerEl);
+        }, 50);
+      }
+    });
+
+    // Event: View Changed
+    eventBus.on('view:changed', ({ viewMode }) => {
+      if (instances.announcer) {
+        const viewNames = {
+          calendar: 'Calendar view',
+          month: 'Month picker',
+          year: 'Year picker',
+          week: 'Week view',
+        };
+        instances.announcer.announce(
+          viewNames[viewMode] || viewMode,
+          options.announcerDelay
+        );
+      }
+
+      // Re-init keyboard when returning to calendar/week view
+      if (
+        instances.keyboard &&
+        (viewMode === 'calendar' || viewMode === 'week')
+      ) {
+        setTimeout(() => {
+          instances.keyboard.initialized = false;
+          instances.keyboard.init(pickerEl);
+        }, 50);
+      }
+    });
+
+    // Event: Render After - reinit keyboard nav after DOM changes
+    // Event: Render After - reinit keyboard nav after DOM changes
+    eventBus.on('render:after', () => {
+      if (instances.keyboard && isNavigableViewMode()) {
+        // Re-setup tabindex on all day elements (supports both core and dual calendar)
+        const days = pickerEl.querySelectorAll(
+          '.bw-datepicker__day, .bw-dual-day'
+        );
+        days.forEach((day) => {
+          if (
+            !day.classList.contains('bw-datepicker__day--disabled') &&
+            !day.classList.contains('bw-datepicker__day--empty') &&
+            !day.classList.contains('bw-dual-day--disabled') &&
+            day.textContent.trim()
+          ) {
+            day.setAttribute('tabindex', '0');
+          }
+        });
       }
     });
 

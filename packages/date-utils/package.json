@@ -1,6 +1,6 @@
 {
   "name": "@bw-ui/datepicker-date-utils",
-  "version": "1.0.3",
+  "version": "1.1.3",
   "description": "Date utilities plugin - Advanced parsing, formatting, calculations",
   "main": "dist/bw-date-utils.min.js",
   "module": "dist/bw-date-utils.esm.min.js",

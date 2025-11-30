@@ -1,0 +1,293 @@
+/**
+ * @bw-ui/datepicker-dual-calendar
+ * Dual Calendar Plugin Styles
+ */
+
+/* ================================
+   DUAL CALENDAR WRAPPER
+   ================================ */
+
+.bw-datepicker--dual .bw-dual-wrapper {
+  width: 100%;
+}
+
+/* ================================
+   NAVIGATION - OUTSIDE MODE
+   ================================ */
+
+.bw-dual-nav--outside {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--bw-dual-border, #e5e7eb);
+}
+
+.bw-dual-nav__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: var(--bw-dual-btn-bg, #fff);
+  border: 1px solid var(--bw-dual-border, #e5e7eb);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--bw-dual-btn-color, #374151);
+  transition: all 0.15s ease;
+}
+
+.bw-dual-nav__btn:hover {
+  background: var(--bw-dual-btn-hover-bg, #f3f4f6);
+  border-color: var(--bw-dual-btn-hover-border, #d1d5db);
+}
+
+.bw-dual-nav__btn:active {
+  background: var(--bw-dual-btn-active-bg, #e5e7eb);
+}
+
+.bw-dual-titles {
+  display: flex;
+  gap: 24px;
+  flex: 1;
+  justify-content: center;
+}
+
+.bw-dual-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bw-dual-title-color, #111827);
+  min-width: 120px;
+  text-align: center;
+}
+
+/* ================================
+   CALENDARS CONTAINER
+   ================================ */
+
+.bw-dual-calendars {
+  display: flex;
+  gap: var(--bw-dual-gap, 16px);
+  padding: 12px;
+}
+
+.bw-dual-calendar {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ================================
+   NAVIGATION - BOTH MODE (each calendar has nav)
+   ================================ */
+
+.bw-dual-calendars--both-nav {
+  padding: 12px;
+}
+
+.bw-dual-calendar--with-nav .bw-dual-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 8px 0;
+}
+
+.bw-dual-calendar--with-nav .bw-dual-calendar__header .bw-dual-title {
+  flex: 1;
+  min-width: auto;
+}
+
+.bw-dual-calendar--with-nav .bw-dual-calendar__header .bw-dual-nav__btn {
+  width: 28px;
+  height: 28px;
+}
+
+/* ================================
+   NAVIGATION - LEFT MODE
+   ================================ */
+
+.bw-dual-calendars--left-nav {
+  padding: 12px;
+}
+
+.bw-dual-calendar__header--no-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 8px 0;
+  height: 28px;
+}
+
+/* ================================
+   WEEKDAYS
+   ================================ */
+
+.bw-dual-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.bw-dual-weekday {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--bw-dual-weekday-color, #6b7280);
+  text-align: center;
+  padding: 4px 0;
+  text-transform: uppercase;
+}
+
+/* ================================
+   DAYS GRID
+   ================================ */
+
+.bw-dual-days {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bw-dual-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.bw-dual-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-size: 13px;
+  color: var(--bw-dual-day-color, #111827);
+  background: var(--bw-dual-day-bg, transparent);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bw-dual-day:hover:not(.bw-dual-day--empty):not(.bw-dual-day--other) {
+  background: var(--bw-dual-day-hover-bg, #f3f4f6);
+}
+
+.bw-dual-day--empty {
+  cursor: default;
+}
+
+.bw-dual-day--other {
+  color: var(--bw-dual-day-other-color, #d1d5db);
+  cursor: default;
+}
+
+.bw-dual-day--today {
+  font-weight: 600;
+  color: var(--bw-dual-today-color, #3b82f6);
+}
+
+.bw-dual-day--selected {
+  background: var(--bw-dual-selected-bg, #3b82f6) !important;
+  color: #fff !important;
+  font-weight: 500;
+}
+
+/* ================================
+   MULTIPLE MONTHS (3-4)
+   ================================ */
+
+.bw-datepicker--dual-3 .bw-dual-titles,
+.bw-datepicker--dual-4 .bw-dual-titles {
+  gap: 16px;
+}
+
+.bw-datepicker--dual-3 .bw-dual-title,
+.bw-datepicker--dual-4 .bw-dual-title {
+  font-size: 13px;
+  min-width: 90px;
+}
+
+.bw-datepicker--dual-3 .bw-dual-day,
+.bw-datepicker--dual-4 .bw-dual-day {
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+}
+
+.bw-datepicker--dual-3 .bw-dual-weekday,
+.bw-datepicker--dual-4 .bw-dual-weekday {
+  font-size: 10px;
+}
+
+/* ================================
+   DARK THEME
+   ================================ */
+
+[data-bw-theme='dark'],
+.bw-datepicker--dark {
+  --bw-dual-border: #374151;
+  --bw-dual-btn-bg: #374151;
+  --bw-dual-btn-color: #e5e7eb;
+  --bw-dual-btn-hover-bg: #4b5563;
+  --bw-dual-btn-hover-border: #4b5563;
+  --bw-dual-btn-active-bg: #6b7280;
+  --bw-dual-title-color: #f3f4f6;
+  --bw-dual-weekday-color: #9ca3af;
+  --bw-dual-day-color: #e5e7eb;
+  --bw-dual-day-bg: transparent;
+  --bw-dual-day-hover-bg: #374151;
+  --bw-dual-day-other-color: #4b5563;
+  --bw-dual-today-color: #60a5fa;
+  --bw-dual-selected-bg: #3b82f6;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+
+@media (max-width: 768px) {
+  /* 3-4 months stack to 2 per row */
+  .bw-datepicker--dual-3 .bw-dual-calendars,
+  .bw-datepicker--dual-4 .bw-dual-calendars {
+    flex-wrap: wrap;
+  }
+
+  .bw-datepicker--dual-3 .bw-dual-calendar,
+  .bw-datepicker--dual-4 .bw-dual-calendar {
+    flex: 1 1 45%;
+    min-width: 140px;
+  }
+
+  .bw-datepicker--dual-3 .bw-dual-titles,
+  .bw-datepicker--dual-4 .bw-dual-titles {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  /* All stack vertically */
+  .bw-dual-calendars {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .bw-dual-titles {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .bw-dual-title {
+    min-width: auto;
+  }
+
+  .bw-dual-day {
+    width: 100%;
+    height: 40px;
+  }
+
+  .bw-datepicker--dual-3 .bw-dual-calendar,
+  .bw-datepicker--dual-4 .bw-dual-calendar {
+    flex: 1 1 100%;
+  }
+}

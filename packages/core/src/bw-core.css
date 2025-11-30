@@ -47,7 +47,6 @@
   box-shadow: var(--bw-picker-shadow);
   color: var(--bw-text-primary);
   width: max-content;
-  max-width: 400px;
   user-select: none;
   z-index: 1000;
 }
@@ -272,4 +271,151 @@ button.bw-datepicker__day:focus-visible {
   to {
     opacity: 1;
   }
+}
+
+/* ============================================================================
+   VIEW MODES - Month, Year, Week
+   ============================================================================ */
+
+/* Slot containers */
+.bw-datepicker__slot {
+  /* Slots persist - only contents update */
+}
+
+/* Title buttons (clickable month/year) */
+.bw-datepicker__title-btn {
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  border-radius: var(--bw-btn-radius);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--bw-text-primary);
+  transition: background-color 0.15s;
+}
+
+.bw-datepicker__title-btn:hover {
+  background: var(--bw-btn-hover-bg);
+}
+
+.bw-datepicker__title-btn:focus-visible {
+  outline: 2px solid var(--bw-day-selected-bg);
+  outline-offset: 2px;
+}
+
+.bw-datepicker__title-text {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Month View - 4x3 grid */
+.bw-datepicker__months {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.bw-datepicker__month-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--bw-btn-radius);
+  background: transparent;
+  color: var(--bw-text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+button.bw-datepicker__month-cell:hover {
+  background: var(--bw-day-hover-bg);
+}
+
+button.bw-datepicker__month-cell:focus-visible {
+  outline: 2px solid var(--bw-day-selected-bg);
+  outline-offset: 2px;
+}
+
+.bw-datepicker__month-cell--current {
+  background: var(--bw-day-selected-bg);
+  color: var(--bw-day-selected-text);
+  font-weight: 600;
+}
+
+.bw-datepicker__month-cell--selected {
+  border-color: var(--bw-day-today-border);
+  font-weight: 600;
+}
+
+.bw-datepicker__month-cell--disabled {
+  color: var(--bw-text-disabled);
+  cursor: not-allowed;
+}
+
+/* Year View - 4x3 grid */
+.bw-datepicker__years {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.bw-datepicker__year-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--bw-btn-radius);
+  background: transparent;
+  color: var(--bw-text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+button.bw-datepicker__year-cell:hover {
+  background: var(--bw-day-hover-bg);
+}
+
+button.bw-datepicker__year-cell:focus-visible {
+  outline: 2px solid var(--bw-day-selected-bg);
+  outline-offset: 2px;
+}
+
+.bw-datepicker__year-cell--current {
+  background: var(--bw-day-selected-bg);
+  color: var(--bw-day-selected-text);
+  font-weight: 600;
+}
+
+.bw-datepicker__year-cell--selected {
+  border-color: var(--bw-day-today-border);
+  font-weight: 600;
+}
+
+.bw-datepicker__year-cell--disabled {
+  color: var(--bw-text-disabled);
+  cursor: not-allowed;
+}
+
+/* Week View - single row */
+.bw-datepicker__view--week {
+  /* Same as calendar but single row */
+}
+
+/* View mode classes for styling hooks */
+.bw-datepicker__view--calendar,
+.bw-datepicker__view--month,
+.bw-datepicker__view--year,
+.bw-datepicker__view--week {
+  /* Plugins can target specific views */
 }

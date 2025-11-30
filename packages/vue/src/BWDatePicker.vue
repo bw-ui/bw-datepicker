@@ -1,4 +1,6 @@
-/** * @bw-ui/datepicker-vue * Vue wrapper for BW DatePicker * * @version 1.0.0 *
+/** * @bw-ui/datepicker-vue * Vue wrapper for BW DatePicker * * Updated for
+slot-based architecture (v1.1.0): * - Fixed event names to match core v0.3.0 * -
+Works with all plugins (DualCalendar, Range, Data, etc.) * * @version 1.1.0 *
 @license MIT */
 
 <template>
@@ -168,7 +170,8 @@ export default defineComponent({
 
       try {
         const module = await import('@bw-ui/datepicker');
-        const DatePickerCore = module.DatePickerCore || module.default;
+        const DatePickerCore =
+          module.BWDatePicker || module.DatePickerCore || module.default;
 
         if (!DatePickerCore) {
           console.error('BWDatePicker: Could not load @bw-ui/datepicker');
@@ -203,27 +206,27 @@ export default defineComponent({
           picker.use(plugin, opts);
         });
 
-        // Setup event listeners
+        // Setup event listeners (using correct core v0.3.0 event names)
         const eventBus = picker.getEventBus();
 
-        eventBus.on('date:select', (data) => {
+        eventBus.on('date:selected', (data) => {
           emit('update:modelValue', data.date);
           emit('change', data.date, data);
         });
 
-        eventBus.on('picker:open', (data) => {
+        eventBus.on('picker:opened', (data) => {
           emit('open', data);
         });
 
-        eventBus.on('picker:close', (data) => {
+        eventBus.on('picker:closed', (data) => {
           emit('close', data);
         });
 
-        eventBus.on('month:change', (data) => {
+        eventBus.on('nav:monthChanged', (data) => {
           emit('month-change', data);
         });
 
-        eventBus.on('year:change', (data) => {
+        eventBus.on('nav:yearChanged', (data) => {
           emit('year-change', data);
         });
       } catch (error) {

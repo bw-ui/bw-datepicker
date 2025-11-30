@@ -7,7 +7,10 @@
  * Decoupled communication between components
  * No tight coupling, easy to extend
  *
- * @version 1.0.0
+ * Supports interception: if listener returns true, event is intercepted
+ * and subsequent listeners won't run.
+ *
+ * @version 1.1.0
  * @license MIT
  * ============================================================================
  */
@@ -72,19 +75,28 @@ export class EventBus {
    * Publish an event
    * @param {string} eventName - Event to emit
    * @param {*} data - Event data/payload
+   * @returns {boolean} True if event was intercepted by a listener
    */
   emit(eventName, data = null) {
     const listeners = this.#listeners.get(eventName);
+    let intercepted = false;
 
     if (listeners) {
-      listeners.forEach((callback) => {
+      for (const callback of listeners) {
         try {
-          callback(data, eventName);
+          const result = callback(data, eventName);
+          // If listener returns true, event is intercepted
+          if (result === true) {
+            intercepted = true;
+            break;
+          }
         } catch (error) {
           console.error(`EventBus error in "${eventName}" listener:`, error);
         }
-      });
+      }
     }
+
+    return intercepted;
   }
 
   /**

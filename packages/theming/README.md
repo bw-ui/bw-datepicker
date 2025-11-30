@@ -6,26 +6,26 @@ Theming plugin for BW DatePicker - Dark mode, light mode, and CSS variable custo
 ![License](https://img.shields.io/npm/l/@bw-ui/datepicker-theming)
 ![Size](https://img.shields.io/bundlephobia/minzip/@bw-ui/datepicker-theming)
 
-[Live Demo](https://bw-ui.github.io/bw-datepicker) • [Documentation](https://www.npmjs.com/package/@bw-ui/datepicker-theming) • [Core Package](https://www.npmjs.com/package/@bw-ui/datepicker)
+[Live Demo](https://bw-ui.github.io/bw-datepicker) â€¢ [Documentation](https://www.npmjs.com/package/@bw-ui/datepicker-theming) â€¢ [Core Package](https://www.npmjs.com/package/@bw-ui/datepicker)
 
-## ✨ Features
+## âœ¨ Features
 
-- 🌙 **Dark Mode** - Built-in dark theme
-- ☀️ **Light Mode** - Clean light theme
-- 🎨 **CSS Variables** - Full customization
-- 🔄 **Runtime Switching** - Change themes dynamically
-- 🖥️ **System Detection** - Auto-detect OS preference
-- 💾 **Persistence** - Remember theme choice
+- ðŸŒ™ **Dark Mode** - Built-in dark theme
+- â˜€ï¸ **Light Mode** - Clean light theme
+- ðŸŽ¨ **CSS Variables** - Full customization
+- ðŸ”„ **Runtime Switching** - Change themes dynamically
+- ðŸ–¥ï¸ **System Detection** - Auto-detect OS preference
+- ðŸ’¾ **Persistence** - Remember theme choice
 
-## 📦 Installation
+## ðŸ“¦ Installation
 
 ```bash
 npm install @bw-ui/datepicker @bw-ui/datepicker-theming
 ```
 
-> ⚠️ **Peer Dependency:** Requires `@bw-ui/datepicker` core package
+> âš ï¸ **Peer Dependency:** Requires `@bw-ui/datepicker` core package
 
-## 🚀 Quick Start
+## ðŸš€ Quick Start
 
 ### ES Modules
 
@@ -61,7 +61,7 @@ const picker = new BWDatePicker('#date-input', {
 </script>
 ```
 
-## ⚙️ Options
+## âš™ï¸ Options
 
 ```javascript
 .use(BWTheming.ThemingPlugin, {
@@ -83,7 +83,7 @@ const picker = new BWDatePicker('#date-input', {
 | `persist`    | `boolean` | `false`                 | `true`, `false`               | Persist theme to localStorage    |
 | `storageKey` | `string`  | `'bw-datepicker-theme'` | Any string                    | localStorage key for persistence |
 
-## 📖 Examples
+## ðŸ“– Examples
 
 ### Light Theme (Default)
 
@@ -142,7 +142,7 @@ const picker = new BWDatePicker('#date-input', {
 })
 ```
 
-## 🎨 CSS Variables
+## ðŸŽ¨ CSS Variables
 
 ### Picker Container
 
@@ -181,7 +181,7 @@ const picker = new BWDatePicker('#date-input', {
 | `--bw-btn-radius`   | `4px`      | Button border radius    |
 | `--bw-btn-hover-bg` | `#f0f0f0`  | Button hover background |
 
-## 🔄 Runtime Theme Switching
+## ðŸ”„ Runtime Theme Switching
 
 ```javascript
 const picker = new BWDatePicker('#date-input').use(BWTheming.ThemingPlugin, {
@@ -207,7 +207,7 @@ const current = theming.getTheme(); // 'dark' or 'light'
 const isDark = theming.isDark(); // true or false
 ```
 
-## 🖥️ System Theme Detection
+## ðŸ–¥ï¸ System Theme Detection
 
 When `autoDetect: true`, the plugin uses OS theme and listens for changes:
 
@@ -218,7 +218,7 @@ When `autoDetect: true`, the plugin uses OS theme and listens for changes:
 // Automatically switches when user changes OS dark/light mode
 ```
 
-## 🎨 Full Custom Theme Example
+## ðŸŽ¨ Full Custom Theme Example
 
 ```javascript
 .use(BWTheming.ThemingPlugin, {
@@ -239,7 +239,7 @@ When `autoDetect: true`, the plugin uses OS theme and listens for changes:
 })
 ```
 
-## 🔌 Combining with Other Plugins
+## ðŸ”Œ Combining with Other Plugins
 
 ```javascript
 import { BWDatePicker } from '@bw-ui/datepicker';
@@ -251,16 +251,16 @@ const picker = new BWDatePicker('#date-input')
   .use(AccessibilityPlugin);
 ```
 
-## 📁 What's Included
+## ðŸ“ What's Included
 
 ```
 dist/
-├── bw-theming.min.js      # IIFE build (for <script>)
-├── bw-theming.esm.min.js  # ESM build (for import)
-└── bw-theming.min.css     # Theme styles
+â”œâ”€â”€ bw-theming.min.js      # IIFE build (for <script>)
+â”œâ”€â”€ bw-theming.esm.min.js  # ESM build (for import)
+â””â”€â”€ bw-theming.min.css     # Theme styles
 ```
 
-## 🔗 Related Packages
+## ðŸ”— Related Packages
 
 | Package                                                                                          | Description      |
 | ------------------------------------------------------------------------------------------------ | ---------------- |
@@ -271,10 +271,10 @@ dist/
 | [@bw-ui/datepicker-input-handler](https://www.npmjs.com/package/@bw-ui/datepicker-input-handler) | Input masking    |
 | [@bw-ui/datepicker-date-utils](https://www.npmjs.com/package/@bw-ui/datepicker-date-utils)       | Date utilities   |
 
-## 📄 License
+## ðŸ“„ License
 
-MIT © [BW UI](https://github.com/bw-ui)
+MIT Â© [BW UI](https://github.com/bw-ui)
 
-## 🐛 Issues
+## ðŸ› Issues
 
 Found a bug? [Report it here](https://github.com/bw-ui/bw-datepicker/issues)

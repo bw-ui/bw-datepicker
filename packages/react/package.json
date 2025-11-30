@@ -1,6 +1,6 @@
 {
   "name": "@bw-ui/datepicker-react",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "React bindings for @bw-ui/datepicker - Component and hooks for React applications",
   "main": "dist/bw-react.min.js",
   "module": "dist/bw-react.esm.min.js",

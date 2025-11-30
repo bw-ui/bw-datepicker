@@ -10,7 +10,7 @@ const minifyCSS = (css) =>
     .trim();
 
 async function build() {
-  console.log('📦 Building @bw-ui/datepicker-theming...');
+  console.log('ðŸ“¦ Building @bw-ui/datepicker-theming...');
   if (!existsSync('dist')) mkdirSync('dist');
 
   await esbuild.build({
@@ -39,7 +39,7 @@ async function build() {
   const css = readFileSync('src/bw-themes.css', 'utf8');
   writeFileSync('dist/bw-theming.min.css', minifyCSS(css));
 
-  console.log('✅ Theming build complete!');
+  console.log('âœ… Theming build complete!');
 }
 
 build().catch(console.error);

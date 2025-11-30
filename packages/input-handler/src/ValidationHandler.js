@@ -1,19 +1,37 @@
 /**
  * ============================================================================
- * Black & White UI – Validation Handler
+ * Black & White UI — Validation Handler
  * Validates and auto-corrects date input
  * ============================================================================
  */
 
-import { isValidDate, isWithinRange } from '../../date-utils/src/index.js';
 const ERRORS = {
   INVALID_DATE: 'Invalid date',
   INCOMPLETE_DATE: 'Incomplete date',
+  DATE_DISABLED: 'This date is not available',
 };
+
 const RANGE_ERRORS = {
-  MIN_DATE: 'Date is before minimum',
-  MAX_DATE: 'Date is after maximum',
+  MIN_DATE: (date) => `Date must be after ${date}`,
+  MAX_DATE: (date) => `Date must be before ${date}`,
 };
+
+/**
+ * Check if date is valid
+ */
+function isValidDate(date) {
+  return date instanceof Date && !isNaN(date.getTime());
+}
+
+/**
+ * Check if date is within range
+ */
+function isWithinRange(date, minDate, maxDate) {
+  if (!isValidDate(date)) return false;
+  if (minDate && date < minDate) return false;
+  if (maxDate && date > maxDate) return false;
+  return true;
+}
 
 export class ValidationHandler {
   #minDate;
@@ -171,21 +189,17 @@ export class ValidationHandler {
    * Get validation error message
    */
   getErrorMessage(date) {
-    // if (!date) return 'Invalid date';
     if (!date) return ERRORS.INVALID_DATE;
 
     if (this.#minDate && date < this.#minDate) {
-      // return `Date must be after ${this.#formatDate(this.#minDate)}`;
-      return RANGE_ERRORS.BEFORE_MIN(this.#formatDate(this.#minDate));
+      return RANGE_ERRORS.MIN_DATE(this.#formatDate(this.#minDate));
     }
 
     if (this.#maxDate && date > this.#maxDate) {
-      // return `Date must be before ${this.#formatDate(this.#maxDate)}`;
-      return RANGE_ERRORS.AFTER_MAX(this.#formatDate(this.#maxDate));
+      return RANGE_ERRORS.MAX_DATE(this.#formatDate(this.#maxDate));
     }
 
     if (this.#isDateDisabled(date)) {
-      // return 'This date is not available';
       return ERRORS.DATE_DISABLED;
     }
 

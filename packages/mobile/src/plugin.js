@@ -1,6 +1,13 @@
 /**
  * @bw-ui/datepicker-mobile
  * Mobile Plugin - Touch support, swipe gestures, orientation handling
+ *
+ * Compatible with slot-based architecture (v1.1.0):
+ * - Uses core API (prevMonth/nextMonth) for swipe navigation
+ * - No dependencies on other plugins
+ * - Works with DualCalendar (swipe navigates all months)
+ *
+ * @version 1.1.0
  */
 
 import { MobileDetector } from './MobileDetector.js';

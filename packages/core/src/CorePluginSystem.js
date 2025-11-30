@@ -12,6 +12,8 @@
  * ============================================================================
  */
 
+import { generateCalendarMonth, MONTH_NAMES, DAY_NAMES } from './date-utils.js';
+
 export class PluginSystem {
   #plugins = new Map();
   #datepicker;
@@ -75,6 +77,7 @@ export class PluginSystem {
       getPickerElement: () => this.#datepicker.getPickerElement(),
       getInputElement: () => this.#datepicker.getInputElement(),
       getOptions: () => this.#datepicker.getOptions(),
+      setOption: (key, value) => this.#datepicker.setOption(key, value),
       getDate: () => this.#datepicker.getDate(),
       setDate: (date) => this.#datepicker.setDate(date),
       open: () => this.#datepicker.open(),
@@ -82,6 +85,12 @@ export class PluginSystem {
       refresh: () => this.#datepicker.refresh(),
       getPlugin: (name) => this.get(name),
       hasPlugin: (name) => this.has(name),
+      // Utility functions for plugins
+      utils: {
+        generateCalendarMonth,
+        MONTH_NAMES,
+        DAY_NAMES,
+      },
     };
   }
 

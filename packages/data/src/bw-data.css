@@ -1,0 +1,292 @@
+/**
+ * @bw-ui/datepicker-data
+ * Data Plugin Styles
+ * 
+ * Updated for slot-based architecture
+ */
+
+/* ================================
+   LOADING STATE - BASE
+   ================================ */
+
+.bw-datepicker--data-loading {
+  position: relative;
+}
+
+/* ================================
+   LOADER TYPE: OVERLAY (default)
+   Blocks all clicks, full picker overlay
+   ================================ */
+
+.bw-datepicker__loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  border-radius: inherit;
+}
+
+.bw-datepicker__loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: bw-data-spin 0.8s linear infinite;
+}
+
+@keyframes bw-data-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ================================
+   LOADER TYPE: CALENDAR
+   Only calendar slot has overlay
+   ================================ */
+
+.bw-datepicker--data-loading[data-loader-type='calendar']
+  .bw-datepicker__slot--calendar {
+  opacity: 0.6;
+  pointer-events: none;
+  position: relative;
+}
+
+.bw-datepicker--data-loading[data-loader-type='calendar']
+  .bw-datepicker__slot--calendar::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: bw-data-spin 0.8s linear infinite;
+}
+
+/* ================================
+   LOADER TYPE: SKELETON
+   Skeleton loaders on each day
+   ================================ */
+
+.bw-day-skeleton {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 10px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: bw-skeleton-shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes bw-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ================================
+   LOADER TYPE: SPINNER
+   Small spinner in corner, non-blocking
+   ================================ */
+
+.bw-datepicker--data-loading[data-loader-type='spinner']::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: bw-data-spin 0.8s linear infinite;
+  z-index: 100;
+}
+
+/* ================================
+   DAY DATA CONTENT
+   ================================ */
+
+.bw-day-data {
+  font-size: 10px;
+  line-height: 1;
+  margin-top: 2px;
+  text-align: center;
+}
+
+/* Price styling */
+.bw-day-data .price {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+/* ================================
+   STATUS CLASSES
+   ================================ */
+
+[data-date].available {
+  background-color: rgba(22, 163, 74, 0.1);
+}
+
+[data-date].limited {
+  background-color: rgba(234, 179, 8, 0.1);
+}
+
+[data-date].sold-out {
+  background-color: rgba(239, 68, 68, 0.1);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+[data-date].sold-out .bw-day-data .price {
+  color: #ef4444;
+  text-decoration: line-through;
+}
+
+/* ================================
+   BADGE STYLING
+   ================================ */
+
+.bw-day-data .badge {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-left: 2px;
+}
+
+.bw-day-data .badge.available {
+  background-color: #16a34a;
+}
+
+.bw-day-data .badge.limited {
+  background-color: #eab308;
+}
+
+.bw-day-data .badge.sold-out {
+  background-color: #ef4444;
+}
+
+/* ================================
+   EXPANDED MODE - Larger day cells
+   ================================ */
+
+.bw-datepicker--expanded .bw-datepicker__calendar {
+  gap: 4px;
+}
+
+.bw-datepicker--expanded .bw-datepicker__day {
+  width: auto;
+  min-width: 56px;
+  height: auto;
+  min-height: 56px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.bw-datepicker--expanded .bw-datepicker__day > span:first-child,
+.bw-datepicker--expanded .bw-datepicker__day::before {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.bw-datepicker--expanded .bw-day-data {
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.bw-datepicker--expanded .bw-day-data .price {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.bw-datepicker--expanded .bw-datepicker__weekdays {
+  gap: 4px;
+}
+
+.bw-datepicker--expanded .bw-datepicker__weekday {
+  width: 56px;
+  font-size: 12px;
+}
+
+/* Expanded mode - status indicators */
+.bw-datepicker--expanded [data-date].available {
+  border: 2px solid rgba(22, 163, 74, 0.3);
+}
+
+.bw-datepicker--expanded [data-date].limited {
+  border: 2px solid rgba(234, 179, 8, 0.3);
+}
+
+.bw-datepicker--expanded [data-date].sold-out {
+  border: 2px solid rgba(239, 68, 68, 0.3);
+}
+
+/* ================================
+   DARK THEME SUPPORT
+   ================================ */
+
+/* Overlay loader - dark */
+.bw-datepicker--dark .bw-datepicker__loading-overlay {
+  background: rgba(17, 24, 39, 0.8);
+}
+
+.bw-datepicker--dark .bw-datepicker__loading-spinner {
+  border-color: #374151;
+  border-top-color: #60a5fa;
+}
+
+/* Calendar loader - dark */
+.bw-datepicker--dark.bw-datepicker--data-loading[data-loader-type='calendar']
+  .bw-datepicker__slot--calendar::after {
+  border-color: #374151;
+  border-top-color: #60a5fa;
+}
+
+/* Skeleton loader - dark */
+.bw-datepicker--dark .bw-day-skeleton {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200% 100%;
+}
+
+/* Spinner loader - dark */
+.bw-datepicker--dark.bw-datepicker--data-loading[data-loader-type='spinner']::after {
+  border-color: #374151;
+  border-top-color: #60a5fa;
+}
+
+/* Status colors - dark */
+.bw-datepicker--dark [data-date].available {
+  background-color: rgba(22, 163, 74, 0.2);
+}
+
+.bw-datepicker--dark [data-date].limited {
+  background-color: rgba(234, 179, 8, 0.2);
+}
+
+.bw-datepicker--dark [data-date].sold-out {
+  background-color: rgba(239, 68, 68, 0.2);
+}

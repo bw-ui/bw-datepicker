@@ -1,6 +1,6 @@
 {
   "name": "@bw-ui/datepicker-accessibility",
-  "version": "1.0.4",
+  "version": "1.1.4",
   "description": "Accessibility plugin - Keyboard nav, ARIA, focus trap, screen readers",
   "main": "dist/bw-accessibility.min.js",
   "module": "dist/bw-accessibility.esm.min.js",
