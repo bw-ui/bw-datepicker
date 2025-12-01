@@ -38,6 +38,10 @@
       rel="stylesheet"
       href="https://unpkg.com/@bw-ui/datepicker-dual-calendar/dist/bw-dual-calendar.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@bw-ui/datepicker-multidate/dist/bw-multidate.min.css"
+    />
 
     <style>
       :root {
@@ -1720,6 +1724,66 @@ picker<span class="token-punctuation">.</span><span class="token-function">use</
             </div>
           </div>
         </div>
+      <div id="demo-multidate-container">
+  <div class="demo-card">
+    <div class="demo-card-header">
+      <div class="demo-card-title">
+        <div class="demo-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <circle cx="8" cy="14" r="1" fill="currentColor" />
+            <circle cx="12" cy="14" r="1" fill="currentColor" />
+            <circle cx="16" cy="18" r="1" fill="currentColor" />
+          </svg>
+        </div>
+        <div>
+          <h3>Multi-Date Selection</h3>
+          <p>Select multiple dates with validation</p>
+        </div>
+      </div>
+      <span class="demo-card-badge">Plugin</span>
+    </div>
+    <div class="demo-card-body">
+      <div class="demo-preview">
+        <input type="text" id="demo-multidate" placeholder="Select dates..." readonly />
+      </div>
+      <div class="demo-code">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots">
+              <span class="code-dot"></span>
+              <span class="code-dot"></span>
+              <span class="code-dot"></span>
+            </div>
+            <button class="code-copy" data-code="multidate">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" />
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+              </svg>
+              Copy
+            </button>
+          </div>
+          <div class="code-content">
+            <pre><code><span class="token-keyword">import</span> <span class="token-punctuation">{</span> <span class="token-class">MultiDatePlugin</span> <span class="token-punctuation">}</span> <span class="token-keyword">from</span> <span class="token-string">'@bw-ui/datepicker-multidate'</span><span class="token-punctuation">;</span>
+
+<span class="token-keyword">new</span> <span class="token-class">BWDatePicker</span><span class="token-punctuation">(</span><span class="token-string">'#date'</span><span class="token-punctuation">)</span>
+  <span class="token-punctuation">.</span><span class="token-function">use</span><span class="token-punctuation">(</span><span class="token-class">MultiDatePlugin</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span>
+    <span class="token-property">maxDates</span><span class="token-punctuation">:</span> <span class="token-number">2</span><span class="token-punctuation">,</span>
+    <span class="token-property">minDates</span><span class="token-punctuation">:</span> <span class="token-number">2</span><span class="token-punctuation">,</span>
+    <span class="token-property">format</span><span class="token-punctuation">:</span> <span class="token-string">'MM.DD.YYYY'</span><span class="token-punctuation">,</span>
+    <span class="token-property">separator</span><span class="token-punctuation">:</span> <span class="token-string">' | '</span><span class="token-punctuation">,</span>
+    <span class="token-property">showClearButton</span><span class="token-punctuation">:</span> <span class="token-boolean">true</span><span class="token-punctuation">,</span>
+    <span class="token-property">showCountBadge</span><span class="token-punctuation">:</span> <span class="token-boolean">true</span><span class="token-punctuation">,</span>
+  <span class="token-punctuation">}</span><span class="token-punctuation">)</span><span class="token-punctuation">;</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
       </div>
     </section>
     <!-- Packages Section -->
@@ -1884,7 +1948,7 @@ picker<span class="token-punctuation">.</span><span class="token-function">use</
             <span>~6.38KB</span>
             <span class="new-tag">New</span>
           </div>
-        </a>
+        </a>        
         <a
           href="https://www.npmjs.com/package/@bw-ui/datepicker-vue"
           target="_blank"
@@ -1894,6 +1958,18 @@ picker<span class="token-punctuation">.</span><span class="token-function">use</
           <div class="package-desc">Vue 3 bindings for the BW DatePicker library.</div>
           <div class="package-meta">
             <span>~6.58KB</span>
+            <span class="new-tag">New</span>
+          </div>
+        </a>
+        <a
+          href="https://www.npmjs.com/package/@bw-ui/datepicker-multidate"
+          target="_blank"
+          class="package-card package-new"
+        >
+          <div class="package-name">@bw-ui/datepicker-multidate</div>
+          <div class="package-desc">Multi-date selection plugin for @bw-ui/datepicker.</div>
+          <div class="package-meta">
+            <span>~2.8KB</span>
             <span class="new-tag">New</span>
           </div>
         </a>
@@ -1937,6 +2013,7 @@ picker<span class="token-punctuation">.</span><span class="token-function">use</
     <script src="https://unpkg.com/@bw-ui/datepicker-range/dist/bw-range.min.js"></script>
     <script src="https://unpkg.com/@bw-ui/datepicker-dual-calendar/dist/bw-dual-calendar.min.js"></script>
     <script src="https://unpkg.com/@bw-ui/datepicker-data/dist/bw-data.min.js"></script>
+    <script src="https://unpkg.com/@bw-ui/datepicker-multidate/dist/bw-multidate.min.js"></script>
 
     <script>
       // Code snippets for copy functionality
@@ -2338,6 +2415,32 @@ const picker = new BWDatePicker('#date')
         // Modal demo
         if (document.getElementById('demo-modal')) {
           new BW.BWDatePicker('#demo-modal', { mode: 'modal' });
+        }
+        // Modal demo
+        if (document.getElementById('demo-multidate')) {
+          new BW.BWDatePicker('#demo-multidate').use(BWMultiDate.MultiDatePlugin, {
+        maxDates: 5,
+        minDates: 2,
+        format: 'MM.DD.YYYY',
+        separator: ' -- ',
+        maxDisplayDates: 3,
+        closeOnSelect: false, // Close after every selection
+        closeOnMaxDates: false, // Close when maxDates reached (default)
+        showCountBadge: true, // Show "X selected" in footer
+        badgePosition: 'footer', // 'footer' | 'header'
+        showClearButton: true,
+        clearButtonText: 'Remove All',
+        errorTimeout: 500,
+        onSelect: (date, allDates) => {
+          console.log('Selected:', date, allDates);
+        },
+        onDeselect: (date, allDates) => {
+          console.log('Deselected:', date, allDates);
+        },
+        onChange: (allDates) => {
+          console.log('Changed:', allDates);
+        },
+      });;
         }
       }
 

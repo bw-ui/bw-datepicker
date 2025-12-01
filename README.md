@@ -33,6 +33,7 @@ A lightweight, zero-dependency datepicker with a modular plugin architecture.
 | `@bw-ui/datepicker-input-handler` | Input masking            | ~12.2KB | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-input-handler) |
 | `@bw-ui/datepicker-date-utils`    | Date parsing             | ~19KB   | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-date-utils)    |
 | `@bw-ui/datepicker-locale`        | Localization             | ~8KB    | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-locale)        |
+| `@bw-ui/datepicker-multidate`     | Multidate Selection      | ~8KB    | [npm](https://www.npmjs.com/package/@bw-ui/datepicker-multidate)     |
 
 ## 🚀 Installation
 
