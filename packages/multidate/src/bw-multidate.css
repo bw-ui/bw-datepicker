@@ -1,0 +1,251 @@
+/**
+ * @bw-ui/datepicker-multidate
+ * Multi-Date Plugin Styles
+ * 
+ * @version 1.1.0
+ */
+
+/* ================================
+   MULTIDATE MODE
+   ================================ */
+
+.bw-datepicker--multidate .bw-datepicker__day {
+  position: relative;
+}
+
+.bw-datepicker--multidate .bw-dual-day {
+  position: relative;
+}
+
+/* ================================
+   SELECTED DATE
+   ================================ */
+
+.bw-multidate-selected {
+  background-color: #3b82f6 !important;
+  color: #fff !important;
+  border-radius: 50%;
+  font-weight: 500;
+}
+
+.bw-multidate-selected:hover {
+  background-color: #2563eb !important;
+}
+
+/* ================================
+   FOOTER
+   ================================ */
+
+.bw-multidate-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+  gap: 8px;
+}
+
+/* When only button (no badge), center/right align */
+.bw-multidate-footer--button-only {
+  justify-content: flex-end;
+}
+
+/* ================================
+   COUNT BADGE - FOOTER
+   ================================ */
+
+.bw-multidate-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #eff6ff;
+  color: #3b82f6;
+  border-radius: 12px;
+  white-space: nowrap;
+  border: 1px solid #bfdbfe;
+}
+
+/* ================================
+   COUNT BADGE - HEADER
+   ================================ */
+
+.bw-multidate-badge--header {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 2px 8px;
+  font-size: 11px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+}
+
+/* ================================
+   CLEAR BUTTON
+   ================================ */
+
+.bw-multidate-clear {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.15s ease;
+}
+
+.bw-multidate-clear:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.bw-multidate-clear:active {
+  background: #fecaca;
+}
+
+/* ================================
+   ERROR MESSAGE
+   ================================ */
+
+.bw-multidate-error {
+  color: #dc2626;
+  font-size: 12px;
+  padding: 6px 8px;
+  text-align: center;
+  background: #fee2e2;
+  border-top: 1px solid #fecaca;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ================================
+   DARK THEME
+   ================================ */
+
+.bw-datepicker--dark .bw-multidate-selected {
+  background-color: #3b82f6 !important;
+  color: #fff !important;
+}
+
+.bw-datepicker--dark .bw-multidate-selected:hover {
+  background-color: #2563eb !important;
+}
+
+.bw-datepicker--dark .bw-multidate-badge {
+  background: #1e3a5f;
+  color: #60a5fa;
+  border-color: #2563eb;
+}
+
+.bw-datepicker--dark .bw-multidate-badge--header {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.bw-datepicker--dark .bw-multidate-clear {
+  background: #374151;
+  border-color: #4b5563;
+  color: #9ca3af;
+}
+
+.bw-datepicker--dark .bw-multidate-clear:hover {
+  background: #450a0a;
+  border-color: #7f1d1d;
+  color: #fca5a5;
+}
+
+.bw-datepicker--dark .bw-multidate-footer {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.bw-datepicker--dark .bw-multidate-error {
+  background: #450a0a;
+  color: #fca5a5;
+  border-color: #7f1d1d;
+}
+
+/* ================================
+   INTERACTION STATES
+   ================================ */
+
+/* Pulse animation on select */
+@keyframes bw-multidate-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bw-multidate-selected {
+  animation: bw-multidate-pulse 0.2s ease-out;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+
+@media (max-width: 600px) {
+  .bw-multidate-footer {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .bw-multidate-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .bw-multidate-badge--header {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}
+
+/* ================================
+   ACCESSIBILITY
+   ================================ */
+
+.bw-multidate-clear:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.bw-multidate-selected:focus {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+  box-shadow: 0 0 0 3px #3b82f6;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .bw-multidate-selected {
+    border: 2px solid #000;
+  }
+
+  .bw-multidate-clear {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bw-multidate-selected {
+    animation: none;
+  }
+}

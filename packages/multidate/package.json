@@ -1,0 +1,48 @@
+{
+  "name": "@bw-ui/datepicker-multidate",
+  "version": "1.0.1",
+  "description": "Multi-date selection plugin for @bw-ui/datepicker - Select multiple individual dates",
+  "main": "dist/bw-multidate.min.js",
+  "module": "dist/bw-multidate.esm.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/bw-multidate.esm.min.js",
+      "require": "./dist/bw-multidate.min.js"
+    },
+    "./css": "./dist/bw-multidate.min.css"
+  },
+  "types": "src/index.d.ts",
+  "files": [
+    "dist",
+    "src/index.d.ts"
+  ],
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": [
+    "datepicker",
+    "multidate",
+    "multi-date",
+    "multiple-dates",
+    "calendar",
+    "date-selection",
+    "bw-ui"
+  ],
+  "author": "BW UI",
+  "license": "MIT",
+  "peerDependencies": {
+    "@bw-ui/datepicker": "^1.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bw-ui/bw-datepicker"
+  },
+  "bugs": {
+    "url": "https://github.com/bw-ui/bw-datepicker/issues"
+  },
+  "homepage": "https://github.com/bw-ui/bw-datepicker",
+  "type": "module"
+}
