@@ -30,7 +30,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://bw-ui.github.io/bw-datepicker/"
+    "url": "https://github.com/bw-ui/bw-datepicker"
   },
   "devDependencies": {
     "esbuild": "^0.20.0"
