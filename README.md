@@ -199,6 +199,7 @@ The ecosystem is **fully modular**. Install the core and add only the plugins yo
 | Package                   | Description              | Size   | Links                                                                                                                                               |
 | ------------------------- | ------------------------ | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@bw-ui/datepicker-react` | React components & hooks | ~5.1KB | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-react?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-react) |
+| `@bw-ui/datepicker-vue`   | Vue 3 components         | ~4.8KB | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-vue?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-vue)     |
 
 <br />
 
@@ -209,11 +210,14 @@ The ecosystem is **fully modular**. Install the core and add only the plugins yo
 | `@bw-ui/datepicker-theming`       | Dark mode, light mode, CSS variables        | ~11.5KB | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-theming?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-theming)             |
 | `@bw-ui/datepicker-accessibility` | Keyboard navigation, ARIA, screen readers   | ~18.8KB | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-accessibility?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-accessibility) |
 | `@bw-ui/datepicker-positioning`   | Smart popup placement, auto-flip, collision | ~11.2KB | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-positioning?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-positioning)     |
-| `@bw-ui/datepicker-mobile`        | Touch gestures, swipe navigation            | ~7.49KB | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-mobile?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-mobile)               |
+| `@bw-ui/datepicker-mobile`        | Touch gestures, swipe navigation            | ~7.5KB  | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-mobile?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-mobile)               |
 | `@bw-ui/datepicker-input-handler` | Input masking, manual typing, validation    | ~12.2KB | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-input-handler?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-input-handler) |
 | `@bw-ui/datepicker-date-utils`    | Date parsing, formatting, manipulation      | ~19KB   | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-date-utils?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-date-utils)       |
 | `@bw-ui/datepicker-locale`        | i18n, localization, translations            | ~8KB    | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-locale?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-locale)               |
 | `@bw-ui/datepicker-multidate`     | Multiple date selection                     | ~8KB    | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-multidate?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-multidate)         |
+| `@bw-ui/datepicker-range`         | Date range selection                        | ~9KB    | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-range?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-range)                 |
+| `@bw-ui/datepicker-dual-calendar` | Side-by-side month view                     | ~10KB   | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-dual-calendar?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-dual-calendar) |
+| `@bw-ui/datepicker-data`          | Data binding & state management             | ~6KB    | [![npm](https://img.shields.io/npm/v/@bw-ui/datepicker-data?style=flat-square&color=black)](https://www.npmjs.com/package/@bw-ui/datepicker-data)                   |
 
 <br />
 
