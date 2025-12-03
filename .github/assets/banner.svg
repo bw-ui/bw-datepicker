@@ -1,0 +1,77 @@
+<svg width="1200" height="300" viewBox="0 0 1200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a"/>
+      <stop offset="100%" style="stop-color:#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f97316"/>
+      <stop offset="100%" style="stop-color:#fb923c"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="300" fill="url(#bg)"/>
+  
+  <!-- Grid pattern -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+  </pattern>
+  <rect width="1200" height="300" fill="url(#grid)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="100" cy="150" r="200" fill="rgba(249,115,22,0.05)"/>
+  <circle cx="1100" cy="150" r="150" fill="rgba(59,130,246,0.03)"/>
+  
+  <!-- Logo mark -->
+  <rect x="80" y="115" width="70" height="70" rx="14" fill="white"/>
+  <text x="115" y="162" font-family="monospace" font-size="28" font-weight="bold" fill="#0a0a0a" text-anchor="middle">BW</text>
+  
+  <!-- Main text -->
+  <text x="180" y="145" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="white">DatePicker</text>
+  <text x="180" y="175" font-family="monospace" font-size="14" fill="rgba(255,255,255,0.5)">@bw-ui/datepicker</text>
+  
+  <!-- Tagline -->
+  <text x="600" y="145" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="rgba(255,255,255,0.7)" text-anchor="middle">Zero-dependency datepicker with modular plugin architecture</text>
+  
+  <!-- Feature pills -->
+  <g transform="translate(350, 190)">
+    <rect x="0" y="0" width="100" height="28" rx="14" fill="rgba(255,255,255,0.1)"/>
+    <text x="50" y="19" font-family="monospace" font-size="11" fill="rgba(255,255,255,0.7)" text-anchor="middle">~27KB Core</text>
+  </g>
+  
+  <g transform="translate(470, 190)">
+    <rect x="0" y="0" width="90" height="28" rx="14" fill="rgba(255,255,255,0.1)"/>
+    <text x="45" y="19" font-family="monospace" font-size="11" fill="rgba(255,255,255,0.7)" text-anchor="middle">0 Deps</text>
+  </g>
+  
+  <g transform="translate(580, 190)">
+    <rect x="0" y="0" width="100" height="28" rx="14" fill="rgba(255,255,255,0.1)"/>
+    <text x="50" y="19" font-family="monospace" font-size="11" fill="rgba(255,255,255,0.7)" text-anchor="middle">TypeScript</text>
+  </g>
+  
+  <g transform="translate(700, 190)">
+    <rect x="0" y="0" width="70" height="28" rx="14" fill="rgba(255,255,255,0.1)"/>
+    <text x="35" y="19" font-family="monospace" font-size="11" fill="rgba(255,255,255,0.7)" text-anchor="middle">A11Y</text>
+  </g>
+  
+  <g transform="translate(790, 190)">
+    <rect x="0" y="0" width="80" height="28" rx="14" fill="rgba(255,255,255,0.1)"/>
+    <text x="40" y="19" font-family="monospace" font-size="11" fill="rgba(255,255,255,0.7)" text-anchor="middle">Plugins</text>
+  </g>
+  
+  <!-- Calendar icon decoration -->
+  <g transform="translate(1020, 100)">
+    <rect x="0" y="0" width="100" height="100" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    <rect x="0" y="0" width="100" height="28" rx="12" fill="rgba(249,115,22,0.3)"/>
+    <rect x="0" y="16" width="100" height="12" fill="rgba(249,115,22,0.3)"/>
+    
+    <!-- Calendar dots -->
+    <circle cx="25" cy="50" r="6" fill="rgba(255,255,255,0.1)"/>
+    <circle cx="50" cy="50" r="6" fill="rgba(255,255,255,0.1)"/>
+    <circle cx="75" cy="50" r="6" fill="rgba(255,255,255,0.1)"/>
+    <circle cx="25" cy="75" r="6" fill="rgba(255,255,255,0.1)"/>
+    <circle cx="50" cy="75" r="6" fill="url(#accent)"/>
+    <circle cx="75" cy="75" r="6" fill="rgba(255,255,255,0.1)"/>
+  </g>
+</svg>
